@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bloomline</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1c2a1d;          /* deep botanical near-black */
+    --green:#2f5233;        /* anchor green */
+    --paper:#eef0e6;        /* faint green-gray page */
+    --card:#f7f8f1;         /* card surface */
+    --line:#d3d8c4;         /* hairline */
+    --muted:#6a7560;        /* secondary text */
+    --coming:#5d8a2f;       /* rising bloom */
+    --peak:#c08a1c;         /* full bloom */
+    --ending:#a8542a;       /* fading bloom */
+    --invasive:#b23b2a;     /* alert */
+    --native:#3a6b3f;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Inter",system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    line-height:1.5;
+  }
+  .app{max-width:480px;margin:0 auto;padding:0 0 64px;min-height:100vh;
+       background:var(--paper)}
+
+  /* ---- header ---- */
+  header{padding:26px 20px 18px;background:var(--green);color:#f3f5ea;
+         border-bottom-left-radius:22px;border-bottom-right-radius:22px}
+  .wordmark{font-family:"Fraunces",serif;font-weight:600;font-size:30px;
+            letter-spacing:.2px;line-height:1}
+  .wordmark span{font-style:italic;font-weight:400;opacity:.85}
+  .tag{font-family:"Spline Sans Mono",monospace;font-size:11px;
+       letter-spacing:.14em;text-transform:uppercase;opacity:.72;margin-top:6px}
+  .route{display:flex;align-items:center;gap:8px;margin-top:18px;
+         background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);
+         padding:11px 13px;border-radius:13px;font-size:14.5px}
+  .route .dot{width:8px;height:8px;border-radius:50%;background:#cfe0a8;flex:none}
+  .route .arrow{opacity:.5;margin:0 2px}
+  .route .edit{margin-left:auto;font-family:"Spline Sans Mono",monospace;
+               font-size:10.5px;letter-spacing:.1em;opacity:.7;
+               border:1px solid rgba(255,255,255,.25);border-radius:7px;
+               padding:4px 7px}
+
+  /* ---- season ribbon ---- */
+  .season{padding:16px 20px 4px}
+  .season .when{font-family:"Spline Sans Mono",monospace;font-size:11px;
+                letter-spacing:.12em;text-transform:uppercase;color:var(--muted);
+                display:flex;justify-content:space-between;margin-bottom:7px}
+  .ribbon{position:relative;height:26px}
+  .ribbon .months{display:flex;height:100%;border-radius:7px;overflow:hidden;
+                  border:1px solid var(--line)}
+  .ribbon .m{flex:1;font-family:"Spline Sans Mono",monospace;font-size:9px;
+             color:var(--muted);display:flex;align-items:center;
+             justify-content:center;background:var(--card)}
+  .ribbon .m.on{background:#dfe7cb;color:var(--green);font-weight:500}
+  .ribbon .now{position:absolute;top:-3px;bottom:-3px;width:2px;
+               background:var(--ending);border-radius:2px}
+  .ribbon .now::after{content:"";position:absolute;top:-4px;left:-3px;
+               width:8px;height:8px;border-radius:50%;background:var(--ending)}
+
+  /* ---- stage sections ---- */
+  .stage{padding:20px 20px 4px}
+  .stage h2{font-family:"Spline Sans Mono",monospace;font-size:11.5px;
+            letter-spacing:.16em;text-transform:uppercase;margin:0 0 12px;
+            display:flex;align-items:center;gap:9px}
+  .stage h2 .pip{width:9px;height:9px;border-radius:50%}
+  .stage h2 .ct{margin-left:auto;color:var(--muted);font-size:11px;
+                letter-spacing:.08em}
+  .s-ending .pip{background:var(--ending)} .s-ending h2{color:var(--ending)}
+  .s-peak   .pip{background:var(--peak)}   .s-peak h2{color:var(--peak)}
+  .s-coming .pip{background:var(--coming)} .s-coming h2{color:var(--coming)}
+
+  /* ---- plant card ---- */
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;
+        margin-bottom:12px;overflow:hidden}
+  .head{display:flex;gap:13px;padding:14px;cursor:pointer;align-items:center}
+  .spark{flex:none;width:74px;height:46px}
+  .names{flex:1;min-width:0}
+  .common{font-family:"Fraunces",serif;font-size:19px;font-weight:600;
+          line-height:1.12}
+  .sci{font-style:italic;color:var(--muted);font-size:13px;margin-top:1px}
+  .badges{display:flex;gap:6px;margin-top:7px;flex-wrap:wrap}
+  .badge{font-family:"Spline Sans Mono",monospace;font-size:9.5px;
+         letter-spacing:.08em;text-transform:uppercase;padding:3px 7px;
+         border-radius:6px;border:1px solid}
+  .b-native{color:var(--native);border-color:#bcd2b0;background:#e7efdc}
+  .b-invasive{color:var(--invasive);border-color:#e6b6ac;background:#f6e2dd}
+  .b-fam{color:var(--muted);border-color:var(--line);background:#fff}
+  .chev{flex:none;color:var(--muted);transition:transform .25s ease}
+  .card.open .chev{transform:rotate(90deg)}
+
+  .body{max-height:0;overflow:hidden;transition:max-height .32s ease}
+  .card.open .body{max-height:760px}
+  .body-inner{padding:2px 14px 14px;border-top:1px solid var(--line);
+              margin-top:0}
+  .layer{padding:12px 0;border-bottom:1px solid var(--line)}
+  .layer:last-child{border-bottom:0}
+  .layer .lh{font-family:"Spline Sans Mono",monospace;font-size:10px;
+             letter-spacing:.13em;text-transform:uppercase;color:var(--green);
+             margin-bottom:5px}
+  .layer p{margin:0;font-size:14px;color:#36422f}
+  .kin{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px}
+  .kin span{font-size:12px;background:#e7efdc;color:var(--native);
+            border-radius:20px;padding:3px 9px}
+
+  /* ---- links / contribute ---- */
+  .links{display:flex;flex-direction:column;gap:7px;margin-top:7px}
+  .link{display:flex;align-items:center;gap:9px;text-decoration:none;
+        color:var(--ink);background:#fff;border:1px solid var(--line);
+        border-radius:10px;padding:9px 11px;font-size:13.5px}
+  .link .src{font-family:"Spline Sans Mono",monospace;font-size:9px;
+             letter-spacing:.07em;text-transform:uppercase;color:#fff;
+             padding:3px 6px;border-radius:5px;flex:none}
+  .src.yt{background:#c0392b} .src.art{background:#3a6b3f} .src.pdf{background:#6a7560}
+  .link .t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;
+           white-space:nowrap}
+  .empty{font-size:13px;color:var(--muted);font-style:italic;margin-top:6px}
+
+  .add{margin-top:10px}
+  .add-btn{font-family:"Spline Sans Mono",monospace;font-size:10.5px;
+           letter-spacing:.1em;text-transform:uppercase;color:var(--green);
+           background:#e7efdc;border:1px dashed #aac199;border-radius:10px;
+           padding:9px 12px;width:100%;cursor:pointer}
+  .add-form{display:none;gap:8px;margin-top:9px;flex-direction:column}
+  .add-form.show{display:flex}
+  .add-form input{font-family:"Inter",sans-serif;font-size:13.5px;
+           border:1px solid var(--line);border-radius:9px;padding:9px 11px;
+           background:#fff;color:var(--ink)}
+  .add-form input:focus{outline:2px solid var(--coming);outline-offset:1px}
+  .add-row{display:flex;gap:8px}
+  .add-row button{flex:1;font-family:"Spline Sans Mono",monospace;font-size:11px;
+           letter-spacing:.08em;text-transform:uppercase;border-radius:9px;
+           padding:9px;cursor:pointer;border:1px solid}
+  .submit{background:var(--green);color:#f3f5ea;border-color:var(--green)}
+  .cancel{background:#fff;color:var(--muted);border-color:var(--line)}
+  .pending{font-family:"Spline Sans Mono",monospace;font-size:10px;
+           letter-spacing:.08em;text-transform:uppercase;color:var(--peak);
+           background:#f6ecd2;border:1px solid #e6cf94;border-radius:7px;
+           padding:6px 9px;margin-top:8px;display:inline-block}
+
+  footer{text-align:center;padding:22px 20px;color:var(--muted);font-size:12px}
+  footer b{color:var(--green);font-weight:600}
+
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none!important}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="wordmark">Bloom<span>line</span></div>
+    <div class="tag">what's blooming on your drive</div>
+    <div class="route">
+      <span class="dot"></span> Sayreville
+      <span class="arrow">&rarr;</span>
+      <span class="dot"></span> New Brunswick, NJ
+      <span class="edit">EDIT</span>
+    </div>
+  </header>
+
+  <section class="season">
+    <div class="when"><span>Your route today</span><span>Sun · Jun 15</span></div>
+    <div class="ribbon">
+      <div class="months" id="months"></div>
+      <div class="now" id="nowmark"></div>
+    </div>
+  </section>
+
+  <main id="stages"></main>
+
+  <footer>
+    9 plants flowering along this route &middot; data from
+    <b>iNaturalist</b> &amp; contributors
+  </footer>
+</div>
+
+<script>
+const PLANTS = [
+ {stage:"ending", common:"Northern Catalpa", sci:"Catalpa speciosa",
+  fam:"Bignoniaceae", status:"native",
+  curve:[0,0,0,5,80,55,8,0,0,0,0,0],
+  why:"Tolerates rough, disturbed ground and city edges. Once planted everywhere for shade and fence posts, it now self-seeds along roads and rivers.",
+  uses:"Rot-resistant wood was prized for fence posts and railroad ties. The long dangling seed pods earn it the nickname \u201Ccigar tree.\u201D",
+  kin:["Trumpet Vine","Empress Tree"],
+  kinNote:"The big bell-shaped flowers are kin to the trumpet vine you see swallowing fences.",
+  links:[{src:"yt",label:"YouTube",t:"Identifying catalpa in 60 seconds"},
+         {src:"art",label:"Article",t:"Catalpa: the native bean tree"}]},
+
+ {stage:"ending", common:"Multiflora Rose", sci:"Rosa multiflora",
+  fam:"Rosaceae", status:"invasive",
+  curve:[0,0,0,10,70,50,5,0,0,0,0,0],
+  why:"Brought in as erosion control and a \u201Cliving fence,\u201D then escaped. It thrives in old fields and roadsides and spreads fast by birds eating the hips.",
+  uses:"Still used as hardy rootstock for grafted garden roses. The red hips feed wildlife through winter.",
+  kin:["Blackberry","Hawthorn","Apple"],
+  kinNote:"Shares the rose family with apples, hawthorns, and the brambles along the same shoulder.",
+  links:[{src:"yt",label:"YouTube",t:"Why this rose took over the Northeast"}]},
+
+ {stage:"peak", common:"Oxeye Daisy", sci:"Leucanthemum vulgare",
+  fam:"Asteraceae", status:"naturalized",
+  curve:[0,0,0,5,40,85,70,30,8,0,0,0],
+  why:"A meadow and roadside colonizer of poor soils, it arrived with European hay seed and never left.",
+  uses:"Young leaves are edible and a touch peppery; long used in folk remedies.",
+  kin:["Chicory","Black-eyed Susan"],
+  kinNote:"Each \u201Cflower\u201D is really a head of many tiny florets, the family trick it shares with chicory.",
+  links:[{src:"art",label:"Article",t:"Daisy or chamomile? Telling them apart"}]},
+
+ {stage:"peak", common:"Crown Vetch", sci:"Securigera varia",
+  fam:"Fabaceae", status:"invasive",
+  curve:[0,0,0,0,30,80,75,40,10,0,0,0],
+  why:"Mass-planted on highway embankments to hold soil. Those pink mats blanketing a cut slope are almost always this.",
+  uses:"Pure erosion control. It is toxic to horses, so it never became a forage crop.",
+  kin:["Bird's-foot Trefoil","Mimosa"],
+  kinNote:"A legume: like its pea-family cousins it fixes its own nitrogen, which is how it thrives on raw roadcut subsoil.",
+  links:[{src:"yt",label:"YouTube",t:"The pink flower on every highway bank"},
+         {src:"pdf",label:"Guide",t:"NJ roadside legumes (field key)"}]},
+
+ {stage:"peak", common:"Bird's-foot Trefoil", sci:"Lotus corniculatus",
+  fam:"Fabaceae", status:"naturalized",
+  curve:[0,0,0,0,25,75,80,55,25,5,0,0],
+  why:"Sown into roadside seed mixes for cover. The seed pods splay out like a small bird's foot, hence the name.",
+  uses:"Grown as livestock forage and a nitrogen-fixing ground cover.",
+  kin:["Crown Vetch","Clover"],
+  kinNote:"Another pea-family legume, same soil-building trick as crown vetch right beside it.",
+  links:[]},
+
+ {stage:"coming", common:"Common Milkweed", sci:"Asclepias syriaca",
+  fam:"Apocynaceae", status:"native",
+  curve:[0,0,0,0,5,35,80,55,15,0,0,0],
+  why:"Native to old fields, ditches, and untended margins. It spreads on wind-borne silk from its split pods.",
+  uses:"The only host plant for monarch caterpillars. In WWII the floss stuffed life jackets.",
+  kin:["Butterfly Weed","Dogbane"],
+  kinNote:"The milky sap that beads when you snap a leaf is the family signature.",
+  links:[{src:"yt",label:"YouTube",t:"Milkweed & the monarch life cycle"},
+         {src:"art",label:"Article",t:"Why milkweed matters"}]},
+
+ {stage:"coming", common:"Chicory", sci:"Cichorium intybus",
+  fam:"Asteraceae", status:"naturalized",
+  curve:[0,0,0,0,0,20,70,85,70,40,10,0],
+  why:"A roadside classic of compacted, gravelly verges. The sky-blue flowers open in the morning and close by afternoon.",
+  uses:"The roasted root is a coffee substitute and additive; young leaves are a bitter salad green.",
+  kin:["Oxeye Daisy","Dandelion"],
+  kinNote:"That blue head is built like the daisy's: many florets packed into one.",
+  links:[{src:"art",label:"Article",t:"Chicory in your coffee"}]},
+
+ {stage:"coming", common:"Mimosa (Silktree)", sci:"Albizia julibrissin",
+  fam:"Fabaceae", status:"invasive",
+  curve:[0,0,0,0,0,15,75,70,25,0,0,0],
+  why:"An ornamental escaped from yards. It favors warm, sunny road edges and disturbed ground.",
+  uses:"Planted for the pink powderpuff flowers and fern-like leaves; little use once it goes wild.",
+  kin:["Crown Vetch","Redbud"],
+  kinNote:"A legume, which is why it turns up so readily on poor roadside soils.",
+  links:[]},
+
+ {stage:"coming", common:"Tree of Heaven", sci:"Ailanthus altissima",
+  fam:"Simaroubaceae", status:"invasive",
+  curve:[0,0,0,0,5,25,70,55,15,0,0,0],
+  why:"The ultimate disturbance tree: sidewalk cracks, rail lines, road shoulders. It grows almost anywhere, fast.",
+  uses:"Few good ones. It is now the favored host of the spotted lanternfly, and crushed leaves smell rank.",
+  kin:["Sumac (look-alike)"],
+  kinNote:"Often mistaken for sumac or walnut, but the foul smell of a crushed leaf gives it away.",
+  links:[]},
+];
+
+const STAGES=[
+  {key:"ending",cls:"s-ending",title:"Last call",sub:"fading now"},
+  {key:"peak",  cls:"s-peak",  title:"At peak",  sub:"full bloom"},
+  {key:"coming",cls:"s-coming",title:"Coming up",sub:"watch for these"},
+];
+const STAGECOLOR={ending:"#a8542a",peak:"#c08a1c",coming:"#5d8a2f"};
+const MONTHS=["J","F","M","A","M","J","J","A","S","O","N","D"];
+const TODAY_M=5, TODAY_FRAC=0.5; // mid-June
+
+/* season ribbon */
+const mw=document.getElementById("months");
+MONTHS.forEach((m,i)=>{
+  const d=document.createElement("div");
+  d.className="m"+((i>=4&&i<=7)?" on":"");
+  d.textContent=m; mw.appendChild(d);
+});
+document.getElementById("nowmark").style.left=
+  (((TODAY_M+TODAY_FRAC)/12)*100)+"%";
+
+/* sparkline: bloom curve with today marker, shaded by stage */
+function spark(curve,color){
+  const W=74,H=46,pad=3,n=curve.length,max=Math.max(...curve,1);
+  const x=i=>pad+(i/(n-1))*(W-2*pad);
+  const y=v=>H-pad-(v/max)*(H-2*pad);
+  let d="M"+x(0)+" "+y(curve[0]);
+  for(let i=1;i<n;i++) d+=" L"+x(i)+" "+y(curve[i]);
+  const area=d+" L"+x(n-1)+" "+(H-pad)+" L"+x(0)+" "+(H-pad)+" Z";
+  const nx=x(TODAY_M+TODAY_FRAC);
+  return `<svg class="spark" viewBox="0 0 ${W} ${H}" aria-hidden="true">
+    <path d="${area}" fill="${color}" opacity=".14"/>
+    <path d="${d}" fill="none" stroke="${color}" stroke-width="1.6"
+          stroke-linejoin="round" stroke-linecap="round"/>
+    <line x1="${nx}" y1="2" x2="${nx}" y2="${H-2}" stroke="${color}"
+          stroke-width="1" stroke-dasharray="2 2" opacity=".7"/>
+    <circle cx="${nx}" cy="${y(curve[TODAY_M]+(curve[TODAY_M+1]-curve[TODAY_M])*TODAY_FRAC)}"
+            r="2.4" fill="${color}"/>
+  </svg>`;
+}
+
+function badge(status,fam){
+  const cls=status==="invasive"?"b-invasive":"b-native";
+  return `<span class="badge ${cls}">${status}</span>
+          <span class="badge b-fam">${fam}</span>`;
+}
+
+function links(arr){
+  if(!arr.length) return `<div class="empty">No links yet. Be the first to add one.</div>`;
+  return `<div class="links">`+arr.map(l=>
+    `<a class="link" href="#" onclick="return false">
+       <span class="src ${l.src}">${l.label}</span>
+       <span class="t">${l.t}</span></a>`).join("")+`</div>`;
+}
+
+function card(p,idx){
+  const c=STAGECOLOR[p.stage];
+  return `<div class="card" id="card${idx}">
+    <div class="head" onclick="toggle(${idx})" role="button" aria-expanded="false">
+      ${spark(p.curve,c)}
+      <div class="names">
+        <div class="common">${p.common}</div>
+        <div class="sci">${p.sci}</div>
+        <div class="badges">${badge(p.status,p.fam)}</div>
+      </div>
+      <div class="chev">&rsaquo;</div>
+    </div>
+    <div class="body"><div class="body-inner">
+      <div class="layer"><div class="lh">Why it grows here</div><p>${p.why}</p></div>
+      <div class="layer"><div class="lh">Uses</div><p>${p.uses}</p></div>
+      <div class="layer"><div class="lh">Related plants</div>
+        <p>${p.kinNote}</p>
+        <div class="kin">${p.kin.map(k=>`<span>${k}</span>`).join("")}</div></div>
+      <div class="layer"><div class="lh">Learn more</div>
+        ${links(p.links)}
+        <div class="add">
+          <button class="add-btn" onclick="showAdd(${idx})">+ Add a link</button>
+          <div class="add-form" id="form${idx}">
+            <input placeholder="Paste a YouTube or article link">
+            <input placeholder="Short title">
+            <div class="add-row">
+              <button class="submit" onclick="submitAdd(${idx})">Submit</button>
+              <button class="cancel" onclick="showAdd(${idx})">Cancel</button>
+            </div>
+          </div>
+          <div id="pend${idx}"></div>
+        </div>
+      </div>
+    </div></div>
+  </div>`;
+}
+
+/* render stages */
+const host=document.getElementById("stages");
+let idx=0;
+STAGES.forEach(s=>{
+  const items=PLANTS.filter(p=>p.stage===s.key);
+  let html=`<section class="stage ${s.cls}">
+    <h2><span class="pip"></span>${s.title}
+        <span class="ct">${items.length} &middot; ${s.sub}</span></h2>`;
+  items.forEach(p=>{ html+=card(p,idx); idx++; });
+  html+=`</section>`;
+  host.insertAdjacentHTML("beforeend",html);
+});
+
+/* interactions */
+function toggle(i){
+  const el=document.getElementById("card"+i);
+  const open=el.classList.toggle("open");
+  el.querySelector(".head").setAttribute("aria-expanded",open);
+}
+function showAdd(i){
+  document.getElementById("form"+i).classList.toggle("show");
+}
+function submitAdd(i){
+  const f=document.getElementById("form"+i);
+  f.classList.remove("show");
+  f.querySelectorAll("input").forEach(x=>x.value="");
+  document.getElementById("pend"+i).innerHTML=
+    `<span class="pending">&#10003; Submitted &middot; pending review</span>`;
+}
+</script>
+</body>
+</html>

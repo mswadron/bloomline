@@ -1,0 +1,28 @@
+# Secrets / local config
+.env
+*.env
+secrets.*
+**/config.local.*
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# Data dumps / shapefiles (don't commit large geo data)
+*.shp
+*.dbf
+*.shx
+*.prj
+*.geojson
+*.sql.gz
+data/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
