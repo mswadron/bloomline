@@ -189,6 +189,7 @@
     justify-content:center;flex-direction:column;gap:12px;z-index:200;padding:24px}
   #lightbox.show{display:flex}
   #lightbox img{max-width:100%;max-height:78vh;border-radius:12px;object-fit:contain;
+    touch-action:none;transform-origin:center center;will-change:transform;cursor:grab;
     box-shadow:0 12px 48px rgba(0,0,0,.55);background:#0d130c}
   #lightbox .lb-cap{color:#f3f5ea;font-family:"Spline Sans Mono",monospace;font-size:11px;
     letter-spacing:.07em;text-transform:uppercase;text-align:center;max-width:92%}
@@ -266,191 +267,203 @@
    status: native | invasive | naturalized
    curve: 12 monthly flowering-intensity values, Jan..Dec (0-100)         */
 const DEMO_PLANTS = [
- {common:"Skunk Cabbage", sci:"Symplocarpus foetidus", type:"ground", fam:"Araceae", status:"native",
-  curve:[12,80,70,15,0,0,0,0,0,0,0,4],
-  why:"The first bloom of the year in NJ wetlands and ditch bottoms — it generates its own heat to melt through snow and ice.",
-  uses:"That heat and a meaty smell draw the earliest flies for pollination. Foliage is acrid and best left uneaten.",
-  kin:["Jack-in-the-pulpit","Calla"], kinNote:"An arum: the hooded spathe around a knobby spadix is the family signature."},
-
+ // ---- TREES ----
  {common:"Silver Maple", sci:"Acer saccharinum", type:"tree", fam:"Sapindaceae", status:"native",
-  curve:[6,55,80,18,0,0,0,0,0,0,0,0],
+  bloom:{s:[2,20],p:[3,5],e:[3,25]},
   why:"A fast riverbank and floodplain tree that flowers before its leaves, dusting bare twigs red before anything else greens up.",
   uses:"Cheap, fast shade once planted everywhere; brittle wood drops limbs in storms.",
   kin:["Red Maple","Boxelder"], kinNote:"A maple — the paired winged ‘helicopter’ seeds give it away."},
-
  {common:"Red Maple", sci:"Acer rubrum", type:"tree", fam:"Sapindaceae", status:"native",
-  curve:[0,14,80,58,5,0,0,0,0,0,0,0],
-  why:"The most common tree in the eastern US, at home from swamp to roadcut. Tiny red flowers haze the canopy in March.",
+  bloom:{s:[3,10],p:[3,26],e:[4,15]},
+  why:"The most common tree in the eastern US, at home from swamp to roadcut. Tiny red flowers haze the canopy in late March.",
   uses:"Reliable shade and the first hit of red in fall. Sap can be tapped, though it runs weaker than sugar maple.",
   kin:["Silver Maple","Sugar Maple"], kinNote:"Maple kin — winged seed pairs and opposite buds."},
-
- {common:"Cornelian Cherry", sci:"Cornus mas", type:"shrub", fam:"Cornaceae", status:"naturalized",
-  curve:[0,5,80,40,0,0,0,0,0,0,0,0],
-  why:"An old-world dogwood planted as a hedge, flowering in a yellow froth in March before forsythia peaks.",
-  uses:"The tart red fruits make syrups and preserves in eastern Europe.",
-  kin:["Flowering Dogwood","Forsythia (look-alike)"], kinNote:"A true dogwood, though its bare yellow clusters mimic forsythia’s timing."},
-
- {common:"Forsythia", sci:"Forsythia x intermedia", type:"shrub", fam:"Oleaceae", status:"naturalized",
-  curve:[0,0,58,82,10,0,0,0,0,0,0,0],
-  why:"The classic suburban hedge, throwing arching yellow canes the moment frost loosens. Roots wherever a cane touches soil.",
-  uses:"Pure ornamental; cut branches force into bloom indoors in February.",
-  kin:["Lilac","Privet"], kinNote:"In the olive family with lilac — note the square-ish stems."},
-
  {common:"Saucer Magnolia", sci:"Magnolia x soulangeana", type:"tree", fam:"Magnoliaceae", status:"naturalized",
-  curve:[0,0,45,80,15,0,0,0,0,0,0,0],
+  bloom:{s:[3,25],p:[4,6],e:[4,20]},
   why:"A dooryard ornamental whose big pink goblets open on bare branches — and often get nipped by a late frost.",
   uses:"Showy spring display, nothing more. The flowers brown fast in a cold snap.",
   kin:["Star Magnolia","Tulip Tree"], kinNote:"An ancient lineage pollinated by beetles before bees existed."},
-
  {common:"Callery (Ornamental) Pear", sci:"Pyrus calleryana", type:"tree", fam:"Rosaceae", status:"invasive",
-  curve:[0,0,15,85,25,0,0,0,0,0,0,0],
+  bloom:{s:[4,1],p:[4,12],e:[4,26]},
   why:"Planted by the million as ‘Bradford’ pear, now escaping into every fallow field and roadside as dense thorny thickets.",
   uses:"Once prized for tidy shape and white spring bloom; the flowers smell foul and limbs split with age. Banned in several states.",
   kin:["Multiflora Rose","Crabapple"], kinNote:"A rose-family tree — five-petaled white flowers like apple and hawthorn."},
-
  {common:"Ornamental Cherry", sci:"Prunus x yedoensis", type:"tree", fam:"Rosaceae", status:"naturalized",
-  curve:[0,0,10,85,20,0,0,0,0,0,0,0],
+  bloom:{s:[4,4],p:[4,14],e:[4,27]},
   why:"The Yoshino cherry of avenue plantings and parks — a brief, spectacular pink-white cloud in early April.",
   uses:"Celebrated purely for the bloom; small bitter fruits feed birds.",
   kin:["Crabapple","Black Cherry"], kinNote:"A rose-family stone fruit — note the horizontal lenticels banding the bark."},
-
  {common:"Eastern Redbud", sci:"Cercis canadensis", type:"tree", fam:"Fabaceae", status:"native",
-  curve:[0,0,5,75,45,0,0,0,0,0,0,0],
+  bloom:{s:[4,12],p:[4,24],e:[5,8]},
   why:"A native understory tree that flowers magenta straight from its bare trunk and limbs at woodland edges.",
   uses:"The pea-like flowers are edible and tangy in salads; a favorite of early bees.",
   kin:["Black Locust","Crown Vetch"], kinNote:"A legume — those flowers are tiny sweet-pea blossoms; pods follow."},
-
- {common:"Flowering Dogwood", sci:"Cornus florida", type:"tree", fam:"Cornaceae", status:"native",
-  curve:[0,0,0,40,85,30,0,0,0,0,0,0],
-  why:"The signature native of NJ woodland edges, opening after the pears finish. Its white ‘petals’ are actually bracts.",
-  uses:"Hard wood once made shuttles and mallets; red fall berries feed migrating birds.",
-  kin:["Cornelian Cherry","Kousa Dogwood"], kinNote:"A dogwood — four bracts cradle the true cluster of tiny flowers."},
-
  {common:"Crabapple", sci:"Malus spp.", type:"tree", fam:"Rosaceae", status:"naturalized",
-  curve:[0,0,5,55,80,15,0,0,0,0,0,0],
+  bloom:{s:[4,18],p:[5,2],e:[5,16]},
   why:"Street and yard ornamentals that froth pink-to-white in late April and hold tiny apples into winter.",
   uses:"Fruit makes a sharp jelly and feeds birds; key pollination partner for orchard apples.",
   kin:["Apple","Hawthorn"], kinNote:"A true apple — five-petaled rose-family flowers, miniature fruit."},
-
- {common:"Lilac", sci:"Syringa vulgaris", type:"shrub", fam:"Oleaceae", status:"naturalized",
-  curve:[0,0,0,20,85,35,0,0,0,0,0,0],
-  why:"An old farmhouse shrub that long outlives the house, marking former homesteads with May fragrance.",
-  uses:"Beloved for scent and cut flowers; little wildlife value.",
-  kin:["Forsythia","Privet"], kinNote:"Olive-family kin of forsythia — opposite heart-shaped leaves."},
-
- {common:"Chinese Wisteria", sci:"Wisteria sinensis", type:"shrub", fam:"Fabaceae", status:"invasive",
-  curve:[0,0,0,30,80,25,0,0,0,0,0,0],
-  why:"An escaped ornamental vine that drapes roadside trees in lavender chains, then strangles them as the stems thicken to ropes.",
-  uses:"Planted for the spring curtain of bloom; seeds and pods are toxic.",
-  kin:["Black Locust","Redbud"], kinNote:"A woody legume — the hanging flower racemes are giant pea blossoms."},
-
+ {common:"Flowering Dogwood", sci:"Cornus florida", type:"tree", fam:"Cornaceae", status:"native",
+  bloom:{s:[4,26],p:[5,9],e:[5,24]},
+  why:"The signature native of NJ woodland edges, opening after the pears finish. Its white ‘petals’ are actually bracts.",
+  uses:"Hard wood once made shuttles and mallets; red fall berries feed migrating birds.",
+  kin:["Cornelian Cherry","Kousa Dogwood"], kinNote:"A dogwood — four bracts cradle the true cluster of tiny flowers."},
  {common:"Black Locust", sci:"Robinia pseudoacacia", type:"tree", fam:"Fabaceae", status:"native",
-  curve:[0,0,0,5,70,55,5,0,0,0,0,0],
+  bloom:{s:[5,14],p:[5,23],e:[6,5]},
   why:"A pioneer of poor, disturbed ground — it fixes nitrogen and races up any roadcut or old field in late May.",
   uses:"The hardest, most rot-proof native wood, prized for fence posts. White flowers are intensely fragrant and bee-loved.",
   kin:["Redbud","Wisteria"], kinNote:"A legume — drooping white pea-flowers, paired thorns at the twigs."},
-
- {common:"Multiflora Rose", sci:"Rosa multiflora", type:"shrub", fam:"Rosaceae", status:"invasive",
-  curve:[0,0,0,10,70,75,15,0,0,0,0,0],
-  why:"Brought in as a ‘living fence’ and erosion control, then escaped into a smothering thorny tangle in old fields.",
-  uses:"Hardy rootstock for garden roses; red hips feed wildlife into winter.",
-  kin:["Blackberry","Hawthorn","Apple"], kinNote:"A rose — five white petals; the fringed leaf-base separates it from natives."},
-
- {common:"Oxeye Daisy", sci:"Leucanthemum vulgare", type:"ground", fam:"Asteraceae", status:"naturalized",
-  curve:[0,0,0,5,45,85,70,30,8,0,0,0],
-  why:"A meadow and roadside colonizer of poor soils, arrived in European hay seed and never left.",
-  uses:"Young leaves are edible and a touch peppery; long used in folk remedies.",
-  kin:["Chicory","Black-eyed Susan"], kinNote:"Each ‘flower’ is a head of many florets — the daisy-family trick."},
-
- {common:"Common Milkweed", sci:"Asclepias syriaca", type:"ground", fam:"Apocynaceae", status:"native",
-  curve:[0,0,0,0,15,75,80,40,8,0,0,0],
-  why:"Native to old fields, ditches and untended margins; spreads on wind-borne silk from split pods.",
-  uses:"The only host plant for monarch caterpillars; WWII life jackets were stuffed with its floss.",
-  kin:["Butterfly Weed","Dogbane"], kinNote:"Milky sap beads when you snap a leaf — the family signature."},
-
- {common:"Black-eyed Susan", sci:"Rudbeckia hirta", type:"ground", fam:"Asteraceae", status:"native",
-  curve:[0,0,0,0,5,55,80,80,55,20,0,0],
-  why:"A sun-loving native of meadows and fresh roadcuts, often sown into wildflower mixes and quick to colonize bare soil.",
-  uses:"A pollinator magnet and cut flower; seed heads feed goldfinches in fall.",
-  kin:["Oxeye Daisy","Coneflower"], kinNote:"Daisy-family: a dark button of disk florets ringed by gold rays."},
-
- {common:"Crown Vetch", sci:"Securigera varia", type:"ground", fam:"Fabaceae", status:"invasive",
-  curve:[0,0,0,0,20,75,80,55,20,0,0,0],
-  why:"Mass-planted on highway embankments to hold soil. The pink mats blanketing a cut slope are almost always this.",
-  uses:"Pure erosion control; toxic to horses, so never a forage crop.",
-  kin:["Bird's-foot Trefoil","Mimosa"], kinNote:"A legume — it fixes its own nitrogen, thriving on raw roadcut subsoil."},
-
- {common:"Bird's-foot Trefoil", sci:"Lotus corniculatus", type:"ground", fam:"Fabaceae", status:"naturalized",
-  curve:[0,0,0,0,20,70,80,60,30,8,0,0],
-  why:"Sown into roadside seed mixes for cover. The seed pods splay like a small bird's foot, hence the name.",
-  uses:"Grown as livestock forage and a nitrogen-fixing ground cover.",
-  kin:["Crown Vetch","Clover"], kinNote:"A pea-family legume — same soil-building trick as crown vetch beside it."},
-
- {common:"Queen Anne's Lace", sci:"Daucus carota", type:"ground", fam:"Apiaceae", status:"naturalized",
-  curve:[0,0,0,0,5,55,85,80,55,20,0,0],
-  why:"Wild carrot of every sunny verge and old field, its flat white lace often holding one tiny dark floret at the center.",
-  uses:"The root is the ancestor of the cultivated carrot — edible young, woody later. Easily confused with deadly look-alikes.",
-  kin:["Wild Parsnip","Poison Hemlock"], kinNote:"A carrot-family umbel; learn the hairy stem to separate it from toxic cousins."},
-
- {common:"Chicory", sci:"Cichorium intybus", type:"ground", fam:"Asteraceae", status:"naturalized",
-  curve:[0,0,0,0,0,40,80,85,70,40,10,0],
-  why:"A roadside classic of compacted, gravelly verges. Sky-blue flowers open in the morning and close by afternoon.",
-  uses:"The roasted root is a coffee substitute; young leaves are a bitter salad green.",
-  kin:["Oxeye Daisy","Dandelion"], kinNote:"That blue head is built like the daisy’s — many florets in one."},
-
  {common:"Northern Catalpa", sci:"Catalpa speciosa", type:"tree", fam:"Bignoniaceae", status:"native",
-  curve:[0,0,0,0,30,85,40,5,0,0,0,0],
+  bloom:{s:[5,28],p:[6,12],e:[6,28]},
   why:"Tolerates rough, disturbed ground and city edges; once planted for shade and fence posts, now self-seeds along roads.",
   uses:"Rot-resistant wood for posts and ties; long dangling pods earn it the name ‘cigar tree.’",
   kin:["Trumpet Vine","Empress Tree"], kinNote:"Big bell flowers kin to the trumpet vine swallowing fences."},
-
  {common:"Tree of Heaven", sci:"Ailanthus altissima", type:"tree", fam:"Simaroubaceae", status:"invasive",
-  curve:[0,0,0,0,10,70,55,15,0,0,0,0],
+  bloom:{s:[6,1],p:[6,15],e:[7,3]},
   why:"The ultimate disturbance tree — sidewalk cracks, rail lines, road shoulders. It grows almost anywhere, fast.",
   uses:"Few good ones: it is the favored host of the spotted lanternfly, and crushed leaves smell rank.",
   kin:["Sumac (look-alike)"], kinNote:"Mistaken for sumac or walnut, but a crushed leaf’s foul smell gives it away."},
-
  {common:"Mimosa (Silktree)", sci:"Albizia julibrissin", type:"tree", fam:"Fabaceae", status:"invasive",
-  curve:[0,0,0,0,0,40,85,70,25,0,0,0],
+  bloom:{s:[6,20],p:[7,12],e:[8,18]},
   why:"An ornamental escaped from yards, favoring warm, sunny road edges and disturbed ground.",
   uses:"Planted for pink powderpuff flowers and fern-like leaves; little use once it goes wild.",
   kin:["Crown Vetch","Redbud"], kinNote:"A legume — which is why it turns up so readily on poor roadside soils."},
 
- {common:"Joe-Pye Weed", sci:"Eutrochium maculatum", type:"ground", fam:"Asteraceae", status:"native",
-  curve:[0,0,0,0,0,5,55,85,65,15,0,0],
-  why:"A tall native of wet ditches and stream margins, lifting dusty-rose flower domes to head height in late summer.",
-  uses:"A premier late-season nectar source for butterflies; used historically in folk fever remedies.",
-  kin:["Boneset","Goldenrod"], kinNote:"Aster-family — whorled leaves and big mauve flat-topped clusters."},
-
+ // ---- SHRUBS & VINES ----
+ {common:"Cornelian Cherry", sci:"Cornus mas", type:"shrub", fam:"Cornaceae", status:"naturalized",
+  bloom:{s:[3,10],p:[3,22],e:[4,5]},
+  why:"An old-world dogwood planted as a hedge, flowering in a yellow froth in March before forsythia peaks.",
+  uses:"The tart red fruits make syrups and preserves in eastern Europe.",
+  kin:["Flowering Dogwood","Forsythia (look-alike)"], kinNote:"A true dogwood, though its bare yellow clusters mimic forsythia’s timing."},
+ {common:"Forsythia", sci:"Forsythia x intermedia", type:"shrub", fam:"Oleaceae", status:"naturalized",
+  bloom:{s:[3,22],p:[4,3],e:[4,18]},
+  why:"The classic suburban hedge, throwing arching yellow canes the moment frost loosens. Roots wherever a cane touches soil.",
+  uses:"Pure ornamental; cut branches force into bloom indoors in February.",
+  kin:["Lilac","Privet"], kinNote:"In the olive family with lilac — note the square-ish stems."},
+ {common:"Chinese Wisteria", sci:"Wisteria sinensis", type:"shrub", fam:"Fabaceae", status:"invasive",
+  bloom:{s:[4,25],p:[5,6],e:[5,20]},
+  why:"An escaped ornamental vine that drapes roadside trees in lavender chains, then strangles them as the stems thicken to ropes.",
+  uses:"Planted for the spring curtain of bloom; seeds and pods are toxic.",
+  kin:["Black Locust","Redbud"], kinNote:"A woody legume — the hanging flower racemes are giant pea blossoms."},
+ {common:"Lilac", sci:"Syringa vulgaris", type:"shrub", fam:"Oleaceae", status:"naturalized",
+  bloom:{s:[5,1],p:[5,12],e:[5,26]},
+  why:"An old farmhouse shrub that long outlives the house, marking former homesteads with May fragrance.",
+  uses:"Beloved for scent and cut flowers; little wildlife value.",
+  kin:["Forsythia","Privet"], kinNote:"Olive-family kin of forsythia — opposite heart-shaped leaves."},
+ {common:"Multiflora Rose", sci:"Rosa multiflora", type:"shrub", fam:"Rosaceae", status:"invasive",
+  bloom:{s:[5,18],p:[6,2],e:[6,20]},
+  why:"Brought in as a ‘living fence’ and erosion control, then escaped into a smothering thorny tangle in old fields.",
+  uses:"Hardy rootstock for garden roses; red hips feed wildlife into winter.",
+  kin:["Blackberry","Hawthorn","Apple"], kinNote:"A rose — five white petals; the fringed leaf-base separates it from natives."},
  {common:"Japanese Knotweed", sci:"Reynoutria japonica", type:"shrub", fam:"Polygonaceae", status:"invasive",
-  curve:[0,0,0,0,0,0,0,30,85,40,0,0],
+  bloom:{s:[8,8],p:[9,5],e:[9,30]},
   why:"A bamboo-like invader that forms dense thickets along streams and road shoulders, shooting up 8 ft each year.",
   uses:"Edible tart spring shoots; a late nectar source — but so aggressive it cracks pavement and foundations.",
   kin:["Smartweed","Buckwheat"], kinNote:"In the buckwheat family — note swollen, jointed stem nodes."},
 
- {common:"Goldenrod", sci:"Solidago canadensis", type:"ground", fam:"Asteraceae", status:"native",
-  curve:[0,0,0,0,0,0,10,55,90,70,20,0],
+ // ---- ROADSIDE WILDFLOWERS ----
+ {common:"Skunk Cabbage", sci:"Symplocarpus foetidus", type:"wild", fam:"Araceae", status:"native",
+  bloom:{s:[2,12],p:[2,28],e:[3,28]},
+  why:"The first bloom of the year in NJ wetlands and ditch bottoms — it generates its own heat to melt through snow and ice.",
+  uses:"That heat and a meaty smell draw the earliest flies for pollination. Foliage is acrid and best left uneaten.",
+  kin:["Jack-in-the-pulpit","Calla"], kinNote:"An arum: the hooded spathe around a knobby spadix is the family signature."},
+ {common:"Garlic Mustard", sci:"Alliaria petiolata", type:"wild", fam:"Brassicaceae", status:"invasive",
+  bloom:{s:[4,22],p:[5,12],e:[5,30]},
+  why:"A shade-tolerant invader that carpets woodland edges and roadsides, poisoning the soil for native seedlings.",
+  uses:"Edible garlicky greens make a sharp pesto — foraging it is a small act of control.",
+  kin:["Field Mustard","Dame’s Rocket"], kinNote:"A mustard — four white petals in a cross; leaves smell of garlic when crushed."},
+ {common:"Oxeye Daisy", sci:"Leucanthemum vulgare", type:"wild", fam:"Asteraceae", status:"naturalized",
+  bloom:{s:[5,18],p:[6,12],e:[7,20]},
+  why:"A meadow and roadside colonizer of poor soils, arrived in European hay seed and never left.",
+  uses:"Young leaves are edible and a touch peppery; long used in folk remedies.",
+  kin:["Chicory","Black-eyed Susan"], kinNote:"Each ‘flower’ is a head of many florets — the daisy-family trick."},
+ {common:"Common Milkweed", sci:"Asclepias syriaca", type:"wild", fam:"Apocynaceae", status:"native",
+  bloom:{s:[6,5],p:[6,28],e:[7,22]},
+  why:"Native to old fields, ditches and untended margins; spreads on wind-borne silk from split pods.",
+  uses:"The only host plant for monarch caterpillars; WWII life jackets were stuffed with its floss.",
+  kin:["Butterfly Weed","Dogbane"], kinNote:"Milky sap beads when you snap a leaf — the family signature."},
+ {common:"Crown Vetch", sci:"Securigera varia", type:"wild", fam:"Fabaceae", status:"invasive",
+  bloom:{s:[6,1],p:[7,5],e:[8,20]},
+  why:"Mass-planted on highway embankments to hold soil. The pink mats blanketing a cut slope are almost always this.",
+  uses:"Pure erosion control; toxic to horses, so never a forage crop.",
+  kin:["Bird's-foot Trefoil","Mimosa"], kinNote:"A legume — it fixes its own nitrogen, thriving on raw roadcut subsoil."},
+ {common:"Bird's-foot Trefoil", sci:"Lotus corniculatus", type:"wild", fam:"Fabaceae", status:"naturalized",
+  bloom:{s:[5,28],p:[7,1],e:[9,8]},
+  why:"Sown into roadside seed mixes for cover. The seed pods splay like a small bird's foot, hence the name.",
+  uses:"Grown as livestock forage and a nitrogen-fixing ground cover.",
+  kin:["Crown Vetch","Clover"], kinNote:"A pea-family legume — same soil-building trick as crown vetch beside it."},
+ {common:"Black-eyed Susan", sci:"Rudbeckia hirta", type:"wild", fam:"Asteraceae", status:"native",
+  bloom:{s:[6,15],p:[7,25],e:[9,12]},
+  why:"A sun-loving native of meadows and fresh roadcuts, often sown into wildflower mixes and quick to colonize bare soil.",
+  uses:"A pollinator magnet and cut flower; seed heads feed goldfinches in fall.",
+  kin:["Oxeye Daisy","Coneflower"], kinNote:"Daisy-family: a dark button of disk florets ringed by gold rays."},
+ {common:"Queen Anne's Lace", sci:"Daucus carota", type:"wild", fam:"Apiaceae", status:"naturalized",
+  bloom:{s:[6,12],p:[7,25],e:[9,10]},
+  why:"Wild carrot of every sunny verge and old field, its flat white lace often holding one tiny dark floret at the center.",
+  uses:"The root is the ancestor of the cultivated carrot — edible young, woody later. Easily confused with deadly look-alikes.",
+  kin:["Wild Parsnip","Poison Hemlock"], kinNote:"A carrot-family umbel; learn the hairy stem to separate it from toxic cousins."},
+ {common:"Chicory", sci:"Cichorium intybus", type:"wild", fam:"Asteraceae", status:"naturalized",
+  bloom:{s:[6,25],p:[8,5],e:[9,28]},
+  why:"A roadside classic of compacted, gravelly verges. Sky-blue flowers open in the morning and close by afternoon.",
+  uses:"The roasted root is a coffee substitute; young leaves are a bitter salad green.",
+  kin:["Oxeye Daisy","Dandelion"], kinNote:"That blue head is built like the daisy’s — many florets in one."},
+ {common:"Joe-Pye Weed", sci:"Eutrochium maculatum", type:"wild", fam:"Asteraceae", status:"native",
+  bloom:{s:[7,12],p:[8,15],e:[9,20]},
+  why:"A tall native of wet ditches and stream margins, lifting dusty-rose flower domes to head height in late summer.",
+  uses:"A premier late-season nectar source for butterflies; used historically in folk fever remedies.",
+  kin:["Boneset","Goldenrod"], kinNote:"Aster-family — whorled leaves and big mauve flat-topped clusters."},
+ {common:"Goldenrod", sci:"Solidago canadensis", type:"wild", fam:"Asteraceae", status:"native",
+  bloom:{s:[8,12],p:[9,15],e:[10,18]},
   why:"The gold of every fall roadside and old field — wrongly blamed for hay fever, which is really ragweed beside it.",
   uses:"A vital last nectar and pollen source before frost; leaves were a traditional tea.",
   kin:["Aster","Joe-Pye Weed"], kinNote:"Aster-family plumes of tiny gold heads — insect-pollinated, not windborne."},
-
- {common:"New England Aster", sci:"Symphyotrichum novae-angliae", type:"ground", fam:"Asteraceae", status:"native",
-  curve:[0,0,0,0,0,0,0,15,75,85,25,0],
+ {common:"New England Aster", sci:"Symphyotrichum novae-angliae", type:"wild", fam:"Asteraceae", status:"native",
+  bloom:{s:[9,1],p:[9,28],e:[10,25]},
   why:"The closing act of the roadside year, opening purple rays alongside goldenrod as nights cool in October.",
   uses:"Crucial late fuel for migrating monarchs and the last bumblebees of the season.",
   kin:["Goldenrod","Oxeye Daisy"], kinNote:"Aster-family — purple rays around a yellow center, blooming latest of all."},
+
+ // ---- LAWN & LOW GROUND ----
+ {common:"Common Dandelion", sci:"Taraxacum officinale", type:"lawn", fam:"Asteraceae", status:"naturalized",
+  bloom:{s:[3,25],p:[4,28],e:[10,15]},
+  why:"The most familiar lawn and roadside weed of all — it colonizes any sunny disturbed ground and flowers from earliest spring into fall.",
+  uses:"Every part is edible: bitter greens, flower fritters, roasted-root coffee. A crucial early nectar source for bees.",
+  kin:["Chicory","Cat's-ear"], kinNote:"A composite — each yellow head is dozens of ray florets; the puffball is its parachute seeds."},
+ {common:"White Clover", sci:"Trifolium repens", type:"lawn", fam:"Fabaceae", status:"naturalized",
+  bloom:{s:[5,5],p:[6,15],e:[9,30]},
+  why:"A low creeping legume seeded into lawns and pastures, thriving in any mowed turf and damp ground.",
+  uses:"Fixes nitrogen to feed the lawn; a top honeybee plant; leaves and flowers are edible.",
+  kin:["Crown Vetch","Bird's-foot Trefoil"], kinNote:"A legume — three leaflets and a round white head of tiny pea flowers."},
+ {common:"Broadleaf Plantain", sci:"Plantago major", type:"lawn", fam:"Plantaginaceae", status:"naturalized",
+  bloom:{s:[6,1],p:[7,15],e:[9,15]},
+  why:"A flat rosette of tough oval leaves that shrugs off foot traffic and mowing, lining paths, driveways and lawns.",
+  uses:"Young leaves are edible; crushed leaves are a folk remedy for stings. Seeds feed birds.",
+  kin:["Buckhorn Plantain"], kinNote:"Note the slim greenish flower spike rising from a ground-hugging rosette."},
+ {common:"Ground Ivy", sci:"Glechoma hederacea", type:"lawn", fam:"Lamiaceae", status:"invasive",
+  bloom:{s:[4,5],p:[4,28],e:[5,25]},
+  why:"A mint that mats across shady lawns and damp ground, rooting at every node into a dense carpet.",
+  uses:"Once used to clarify and flavor beer (‘alehoof’) and as a folk tea; aromatic when crushed.",
+  kin:["Henbit","Self-heal"], kinNote:"A mint — square stems and small two-lipped violet flowers."},
+ {common:"Common Blue Violet", sci:"Viola sororia", type:"lawn", fam:"Violaceae", status:"native",
+  bloom:{s:[4,5],p:[4,22],e:[5,15]},
+  why:"A native of lawns, wood edges and damp ground that many leave unmowed for its early purple flowers.",
+  uses:"Flowers and heart-shaped leaves are edible; the larval host for fritillary butterflies.",
+  kin:["Johnny-jump-up","Pansy"], kinNote:"A true violet — five-petaled nodding flowers on leafless stalks."},
 ];
 
 const TYPES = [
-  {key:"tree",   label:"Trees",                  icon:"tree"},
-  {key:"shrub",  label:"Shrubs & vines",         icon:"shrub"},
-  {key:"ground", label:"Ground & wildflowers",   icon:"ground"},
+  {key:"tree",  label:"Trees",                icon:"tree"},
+  {key:"shrub", label:"Shrubs & vines",       icon:"shrub"},
+  {key:"wild",  label:"Roadside wildflowers", icon:"wild"},
+  {key:"lawn",  label:"Lawn & low ground",    icon:"lawn"},
 ];
 const TYPE_ICON = {
   tree:`<svg class="gi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22v-6"/><path d="M12 16c-3.5 0-6-2.4-6-5.6C6 7 8.4 4 12 4s6 3 6 6.4c0 3.2-2.5 5.6-6 5.6Z"/></svg>`,
   shrub:`<svg class="gi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21v-5"/><path d="M7 21v-3"/><path d="M17 21v-3"/><path d="M12 16c-4 0-7-2.3-7-5.5S8 5 12 5s7 2.3 7 5.5S16 16 12 16Z"/></svg>`,
-  ground:`<svg class="gi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V9"/><path d="M12 13c-3 0-5-1.6-5-4 2.8 0 5 1.2 5 4Z"/><path d="M12 11c0-2.6 2-4.5 5-4.5 0 2.6-2 4.5-5 4.5Z"/><path d="M5 21h14"/></svg>`,
+  wild:`<svg class="gi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="6" r="2.6"/><path d="M12 8.6V21"/><path d="M12 13.5c-2.3 0-3.6-1.4-3.6-3.1 2.1 0 3.6 1 3.6 3.1Z"/><path d="M12 16.5c2.3 0 3.6-1.4 3.6-3.1-2.1 0-3.6 1-3.6 3.1Z"/></svg>`,
+  lawn:`<svg class="gi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21c1.8-1.2 2.8-3.2 2.8-7"/><path d="M8.5 21c0-5 .8-8 1-11"/><path d="M12.5 21c.8-4 2-6 3.8-8"/><path d="M16.5 21c0-4 1-6 3.5-8"/><path d="M3 21h18"/></svg>`,
 };
+
 const STAGE_LABEL = {opening:"Just opening", peak:"At peak", fading:"Fading", coming:"Coming up"};
 const STAGECOLOR  = {opening:"#5d8a2f", peak:"#c08a1c", fading:"#a8542a", coming:"#5d8a2f", none:"#9aa789"};
 const MONTHS=["J","F","M","A","M","J","J","A","S","O","N","D"];
@@ -468,17 +481,37 @@ function daysInMonth(y,m){return new Date(y,m+1,0).getDate();}
 function sameDay(a,b){return a.getFullYear()===b.getFullYear()&&a.getMonth()===b.getMonth()&&a.getDate()===b.getDate();}
 function interp(curve,mf){mf=((mf%12)+12)%12;const i=Math.floor(mf),f=mf-i;const a=curve[i%12],b=curve[(i+1)%12];return a+(b-a)*f;}
 
-/* bloom stage on the selected date, from the monthly curve */
-function stageOf(curve, mf){
-  const max=Math.max(...curve,0);
-  if(max<=0) return "none";
-  const now=interp(curve,mf), prev=interp(curve,mf-0.7), next=interp(curve,mf+0.7);
-  const rel=now/max;
-  if(rel<0.12 && next<=now) return "none";                 // dormant / finished
-  if(rel<0.26)              return next>now ? "coming" : "none";
-  if(next>prev+max*0.05)    return "opening";              // open & rising
-  if(next<prev-max*0.05)    return "fading";               // open & declining
-  return "peak";                                           // holding near peak
+/* ---- accurate bloom windows: start / peak / end as day-of-year ---- */
+const CUM=[0,31,59,90,120,151,181,212,243,273,304,334];
+function doy(m,d){return CUM[m-1]+d;}
+function todayDOY(d){return CUM[d.getMonth()]+d.getDate();}
+function windowOf(p){
+  if(p._w) return p._w;
+  if(p.bloom) return (p._w={s:doy(p.bloom.s[0],p.bloom.s[1]),p:doy(p.bloom.p[0],p.bloom.p[1]),e:doy(p.bloom.e[0],p.bloom.e[1])});
+  if(p.curve) return (p._w=curveToWindow(p.curve));
+  return (p._w={s:0,p:0,e:0});
+}
+/* derive a window from a 12-pt monthly curve (used for live iNaturalist data) */
+function curveToWindow(c){
+  const max=Math.max(...c,1), th=max*0.25; let first=-1,last=-1,pk=0;
+  for(let i=0;i<12;i++){ if(c[i]>=th){ if(first<0)first=i; last=i; } if(c[i]>c[pk])pk=i; }
+  if(first<0){first=pk;last=pk;}
+  return {s:doy(first+1,3), p:doy(pk+1,15), e:doy(last+1,27)};
+}
+/* triangular bloom level 0..1 across the year (for the sparkline) */
+function levelAt(td,w){ if(td<=w.s||td>=w.e) return 0; return td<w.p ? (td-w.s)/Math.max(1,w.p-w.s) : (w.e-td)/Math.max(1,w.e-w.p); }
+/* a 12-pt monthly curve generated from a window, cached on the plant */
+function curveFor(p){ if(p.curve) return p.curve; const w=windowOf(p); const c=[]; for(let m=1;m<=12;m++) c.push(Math.round(levelAt(doy(m,15),w)*100)); return (p.curve=c); }
+
+/* bloom stage on a day-of-year, straight from the window — no early bleed */
+function stageOf(p, td){
+  const w=windowOf(p);
+  if(!w.e || td < w.s-18 || td > w.e+2) return "none";
+  if(td < w.s) return "coming";
+  const pw=Math.max(6, Math.min(22,(w.e-w.s)*0.20));
+  if(Math.abs(td-w.p)<=pw) return "peak";
+  if(td < w.p) return "opening";
+  return "fading";
 }
 const IN_BLOOM = new Set(["opening","peak","fading"]);
 
@@ -559,17 +592,18 @@ const PARTS=["Flower","Leaf","Seed / fruit"];
 function photosHTML(){
   return `<div class="photos">`+PARTS.map(part=>
     `<div class="photo shimmer" data-part="${part}"><div class="ph">&#127807;</div><span class="plabel">${part}</span></div>`).join("")
-    +`</div><div class="photo-credit">photos: iNaturalist + Wikimedia · tap to enlarge</div>`;
+    +`</div><div class="photo-credit">photos: iNaturalist + Wikimedia · tap to enlarge & zoom</div>`;
 }
 
 let CARD_PLANT={};
 function card(p,idx,mf){
-  const stage=stageOf(p.curve,mf);
+  const td=todayDOY(selDate);
+  const stage=stageOf(p, td);
   const c=STAGECOLOR[stage]||"#6a7560";
   CARD_PLANT[idx]=p;
   return `<div class="card" id="card${idx}">
     <div class="head" onclick="toggle(${idx})" role="button" aria-expanded="false">
-      ${spark(p.curve,c,mf)}
+      ${spark(curveFor(p),c,mf)}
       <div class="names">
         <div class="common">${esc(p.common)}</div>
         <div class="sci">${esc(p.sci)}</div>
@@ -614,14 +648,15 @@ function typeGroup(items, mf, startIdx){
 const host=document.getElementById("stages");
 function renderList(){
   const mf=monthFloat(selDate);
+  const td=todayDOY(selDate);
   const openIds=new Set([...document.querySelectorAll(".card.open")].map(c=>c.id));
   CARD_PLANT={};
-  const withStage=PLANTS.map(p=>({p, st:stageOf(p.curve,mf)}));
+  const withStage=PLANTS.map(p=>({p, st:stageOf(p, td)}));
   const blooming=withStage.filter(x=>IN_BLOOM.has(x.st)).map(x=>x.p);
   const coming  =withStage.filter(x=>x.st==="coming").map(x=>x.p);
   // sort each by how far along / soon (peak first, then opening, then fading)
   const order={peak:0,opening:1,fading:2};
-  blooming.sort((a,b)=>(order[stageOf(a.curve,mf)]-order[stageOf(b.curve,mf)]) || (interp(b.curve,mf)-interp(a.curve,mf)));
+  blooming.sort((a,b)=>(order[stageOf(a,td)]-order[stageOf(b,td)]) || (interp(curveFor(b),mf)-interp(curveFor(a),mf)));
 
   let idx=0, html="";
   // ---- Section 1: In bloom now ----
@@ -793,7 +828,8 @@ function statusOf(t){
 }
 const TREE_WORDS=/maple|oak|pear|cherry|locust|pine|birch|ash|elm|willow|catalpa|dogwood|magnolia|redbud|ailanthus|mimosa|linden|poplar|sycamore|hickory|walnut|sweetgum|spruce|cedar|hawthorn|crabapple|tree/i;
 const SHRUB_WORDS=/rose|viburnum|lilac|forsythia|honeysuckle|sumac|hydrangea|azalea|rhododendron|blackberry|raspberry|bramble|privet|barberry|knotweed|wisteria|shrub|bush|holly|dogbane/i;
-function classifyType(name){ if(TREE_WORDS.test(name))return "tree"; if(SHRUB_WORDS.test(name))return "shrub"; return "ground"; }
+const LAWN_WORDS=/clover|dandelion|plantain|violet|speedwell|chickweed|ground ivy|creeping|buttercup|henbit|dead-?nettle|medic|sorrel/i;
+function classifyType(name){ if(TREE_WORDS.test(name))return "tree"; if(SHRUB_WORDS.test(name))return "shrub"; if(LAWN_WORDS.test(name))return "lawn"; return "wild"; }
 
 const editBtn=document.getElementById("editBtn"), routeEdit=document.getElementById("routeEdit"),
       reStatus=document.getElementById("reStatus"), fromInput=document.getElementById("fromInput"),
@@ -842,18 +878,37 @@ async function updateRoute(){
 function setStatus(m,e){reStatus.textContent=m;reStatus.classList.toggle("err",!!e);}
 function shortName(s){return s.split(",")[0].trim();}
 
-/* ---- click-to-enlarge lightbox ---- */
+/* ---- click-to-enlarge lightbox with pinch / double-tap zoom ---- */
 const lightbox=document.getElementById("lightbox"), lbImg=document.getElementById("lbImg"), lbCap=document.getElementById("lbCap");
+let lbScale=1, lbX=0, lbY=0; const lbPts=new Map(); let lbStartDist=0, lbStartScale=1, lbMoved=false;
+function lbApply(){ lbImg.style.transform=`translate(${lbX}px,${lbY}px) scale(${lbScale})`; }
+function lbReset(){ lbScale=1; lbX=0; lbY=0; lbApply(); }
+function lbDist(a,b){ return Math.hypot(a.clientX-b.clientX, a.clientY-b.clientY); }
 function openLightbox(src,caption,credit){
   if(!src) return;
+  lbReset();
   lbImg.src=src; lbImg.alt=caption||"";
   lbCap.innerHTML=esc(caption||"")+(credit?`<span class="cr">${esc(credit)}</span>`:"");
   lightbox.classList.add("show");
 }
-function closeLightbox(){ lightbox.classList.remove("show"); lbImg.removeAttribute("src"); }
-lightbox.addEventListener("click",closeLightbox);
+function closeLightbox(){ lightbox.classList.remove("show"); lbReset(); lbImg.removeAttribute("src"); }
+lightbox.addEventListener("click",e=>{ if(e.target===lbImg) return; closeLightbox(); });
 document.getElementById("lbClose").addEventListener("click",e=>{e.stopPropagation();closeLightbox();});
 document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&lightbox.classList.contains("show")) closeLightbox(); });
+lbImg.addEventListener("pointerdown",e=>{ e.preventDefault(); lbImg.setPointerCapture(e.pointerId);
+  lbPts.set(e.pointerId,e); lbMoved=false;
+  if(lbPts.size===2){ const a=[...lbPts.values()]; lbStartDist=lbDist(a[0],a[1])||1; lbStartScale=lbScale; } });
+lbImg.addEventListener("pointermove",e=>{ if(!lbPts.has(e.pointerId)) return; const prev=lbPts.get(e.pointerId); lbPts.set(e.pointerId,e);
+  if(lbPts.size===2){ const a=[...lbPts.values()]; const d=lbDist(a[0],a[1]); lbScale=Math.max(1,Math.min(5,lbStartScale*d/lbStartDist)); lbMoved=true; lbApply(); }
+  else if(lbPts.size===1 && lbScale>1){ lbX+=e.clientX-prev.clientX; lbY+=e.clientY-prev.clientY; lbMoved=true; lbApply(); } });
+function lbUp(e){ lbPts.delete(e.pointerId);
+  if(lbPts.size===0){
+    if(!lbMoved && lbScale<=1.02) closeLightbox();
+    else if(lbScale<=1.02) lbReset();
+  } }
+lbImg.addEventListener("pointerup",lbUp);
+lbImg.addEventListener("pointercancel",e=>lbPts.delete(e.pointerId));
+lbImg.addEventListener("dblclick",e=>{ e.preventDefault(); e.stopPropagation(); if(lbScale>1) lbReset(); else { lbScale=2.5; lbApply(); } });
 window.openLightbox=openLightbox;
 
 /* ---- boot --------------------------------------------------------- */
@@ -863,7 +918,7 @@ refreshRibbon(); refreshWhen(); renderList();
   <button class="lb-close" id="lbClose" aria-label="Close">&times;</button>
   <img id="lbImg" alt="">
   <div class="lb-cap" id="lbCap"></div>
-  <div class="lb-hint">tap anywhere to close</div>
+  <div class="lb-hint">pinch or double-tap to zoom · tap outside to close</div>
 </div>
 </body>
 </html>
