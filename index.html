@@ -197,6 +197,10 @@
     letter-spacing:.03em;text-transform:none}
   #lightbox .lb-close{position:absolute;top:14px;right:18px;color:#f3f5ea;font-size:30px;
     background:none;border:0;cursor:pointer;line-height:1;opacity:.85}
+  @keyframes lbpop{0%{transform:scale(.55);opacity:0}60%{opacity:1}100%{transform:scale(1);opacity:1}}
+  #lightbox.show img{animation:lbpop .3s cubic-bezier(.2,.85,.25,1)}
+  .photo.clickable{transition:transform .12s ease}
+  .photo.clickable:active{transform:scale(.96)}
   #lightbox .lb-hint{color:#f3f5ea;opacity:.5;font-size:10px;font-family:"Spline Sans Mono",monospace;
     letter-spacing:.1em;text-transform:uppercase}
 </style>
@@ -227,7 +231,7 @@
 
   <section class="season">
     <div class="when">
-      <span id="whenLabel">Your route &middot; Jun 16</span>
+      <span id="whenLabel">Your route</span>
       <button class="today-btn" id="todayBtn" type="button">&#8634; Today</button>
     </div>
     <div class="ribbon" id="ribbon">
@@ -324,7 +328,7 @@ const DEMO_PLANTS = [
   uses:"Few good ones: it is the favored host of the spotted lanternfly, and crushed leaves smell rank.",
   kin:["Sumac (look-alike)"], kinNote:"Mistaken for sumac or walnut, but a crushed leaf’s foul smell gives it away."},
  {common:"Mimosa (Silktree)", sci:"Albizia julibrissin", type:"tree", fam:"Fabaceae", status:"invasive",
-  bloom:{s:[6,20],p:[7,12],e:[8,18]},
+  bloom:{s:[6,5],p:[6,28],e:[8,12]},
   why:"An ornamental escaped from yards, favoring warm, sunny road edges and disturbed ground.",
   uses:"Planted for pink powderpuff flowers and fern-like leaves; little use once it goes wild.",
   kin:["Crown Vetch","Redbud"], kinNote:"A legume — which is why it turns up so readily on poor roadside soils."},
@@ -724,23 +728,26 @@ async function loadPhotos(cardEl,plant){
 /* Part-specific photos: iNaturalist supplies the flower (always present), and
    Wikimedia Commons is the curated source for leaf and seed/fruit, searched by
    species + part. Each has a large version for the click-to-enlarge lightbox. */
+async function fetchT(url, ms){
+  const c=new AbortController(); const t=setTimeout(()=>c.abort(), ms||6000);
+  try{ return await fetch(url,{signal:c.signal}); } catch(e){ return null; } finally{ clearTimeout(t); }
+}
+
+/* Photos per plant. iNaturalist (real, community-graded field photos) fills all
+   three tiles so they are always practical; Wikimedia Commons then upgrades the
+   leaf and seed/fruit tiles when a clean, part-specific photo exists. */
 async function fetchPartPhotos(sci, common){
-  const seen=new Set();
   const inat=await inatPhotos(sci);
-  async function pick(queries, fromIdx){
-    for(const q of queries){
-      const w=await wikiPhoto(q);
-      if(w && !seen.has(w.url)){ seen.add(w.url); return w; }
-    }
-    for(let k=fromIdx;k<inat.length;k++){ if(!seen.has(inat[k].url)){ seen.add(inat[k].url); return inat[k]; } }
-    return null;
-  }
-  let flower=null;
-  if(inat[0] && !seen.has(inat[0].url)){ seen.add(inat[0].url); flower=inat[0]; }
-  else flower=await pick([sci+" flower", sci+" inflorescence"], 0);
-  const leaf=await pick([sci+" leaf", sci+" leaves", sci+" foliage"], 1);
-  const seed=await pick([sci+" fruit", sci+" seed", sci+" seeds", sci+" pod"], 2);
-  return [flower, leaf, seed];
+  const used=new Set();
+  const take=i=>{ for(let k=i;k<inat.length;k++){ if(!used.has(inat[k].url)){ used.add(inat[k].url); return inat[k]; } }
+                  for(let k=0;k<inat.length;k++){ if(!used.has(inat[k].url)){ used.add(inat[k].url); return inat[k]; } }
+                  return inat[0]||null; };
+  const out=[ take(0), take(1), take(2) ];          // 3 distinct iNaturalist photos = guaranteed practical
+  const leaf=await wikiPhoto([sci+" leaf", sci+" leaves", sci+" foliage"]);
+  if(leaf && !used.has(leaf.url)){ used.add(leaf.url); out[1]=leaf; }
+  const seed=await wikiPhoto([sci+" fruit", sci+" seed pod", sci+" seeds", sci+" seedhead"]);
+  if(seed && !used.has(seed.url)){ used.add(seed.url); out[2]=seed; }
+  return out;
 }
 
 /* iNaturalist photos (display + large) for a scientific name */
@@ -749,15 +756,15 @@ async function inatPhotos(sci){
   const add=ph=>{ if(!ph) return; const m=ph.medium_url||ph.url; if(!m) return;
     out.push({url:m, large:(ph.large_url||m.replace("medium","large")), credit:"iNaturalist (CC)"}); };
   try{
-    const r=await fetch(`${INAT}/taxa?q=${encodeURIComponent(sci)}&per_page=1&order_by=observations_count`);
-    if(r.ok){
+    const r=await fetchT(`${INAT}/taxa?q=${encodeURIComponent(sci)}&per_page=1&order_by=observations_count`, 7000);
+    if(r && r.ok){
       const t=((await r.json()).results||[])[0];
       if(t){
         (t.taxon_photos||[]).forEach(tp=>add(tp.photo));
         add(t.default_photo);
         if(out.length<3 && t.id){
-          const ro=await fetch(`${INAT}/observations?taxon_id=${t.id}&photos=true&quality_grade=research&order_by=votes&per_page=12`);
-          if(ro.ok) ((await ro.json()).results||[]).forEach(o=>(o.photos||[]).forEach(ph=>{
+          const ro=await fetchT(`${INAT}/observations?taxon_id=${t.id}&photos=true&quality_grade=research&order_by=votes&per_page=12`, 7000);
+          if(ro && ro.ok) ((await ro.json()).results||[]).forEach(o=>(o.photos||[]).forEach(ph=>{
             const sq=ph.url||""; const m=sq.replace("square","medium");
             if(m) out.push({url:m, large:sq.replace("square","large")||m, credit:"iNaturalist (CC)"}); }));
         }
@@ -767,23 +774,28 @@ async function inatPhotos(sci){
   const seen=new Set(); return out.filter(p=>!seen.has(p.url)&&seen.add(p.url));
 }
 
-/* one curated image from Wikimedia Commons matching "species part" */
-async function wikiPhoto(query){
-  try{
-    const u="https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*"
-      +"&generator=search&gsrnamespace=6&gsrlimit=4&gsrsearch="+encodeURIComponent(query)
-      +"&prop=imageinfo&iiprop=url|extmetadata&iiurlwidth=900";
-    const r=await fetch(u); if(!r.ok) return null;
-    const pages=((await r.json()).query||{}).pages||{};
-    const arr=Object.values(pages).sort((a,b)=>(a.index||0)-(b.index||0));
-    for(const p of arr){
-      const ii=(p.imageinfo||[])[0]; if(!ii) continue;
-      if(/\.(svg|tif|tiff|pdf|webm|ogv)$/i.test(ii.url||"")) continue;
-      const url=ii.thumburl||ii.url; if(!url) continue;
-      const artist=(((ii.extmetadata||{}).Artist||{}).value||"").replace(/<[^>]+>/g,"").trim();
-      return {url, large:ii.url||url, credit:(artist?artist+" \u00b7 ":"")+"Wikimedia Commons"};
-    }
-  }catch(e){}
+/* one clean, practical photo from Wikimedia Commons for any of the queries —
+   skips herbarium sheets, illustrations, maps, diagrams and non-photo files. */
+const WIKI_BAD=/herbari|specimen|illustrat|drawing|sketch|\bmap\b|distribution|range map|diagram|\bplate\b|engraving|lithograph|\bchart\b|label|microscop|\bSEM\b|chromosome|seedling|köhler|kohler|icones|tafel|stamp|coin|museum/i;
+async function wikiPhoto(queries){
+  for(const query of queries){
+    try{
+      const u="https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*"
+        +"&generator=search&gsrnamespace=6&gsrlimit=6&gsrsearch="+encodeURIComponent(query)
+        +"&prop=imageinfo&iiprop=url|extmetadata&iiurlwidth=900";
+      const r=await fetchT(u, 6000); if(!r || !r.ok) continue;
+      const pages=((await r.json()).query||{}).pages||{};
+      const arr=Object.values(pages).sort((a,b)=>(a.index||0)-(b.index||0));
+      for(const p of arr){
+        const ii=(p.imageinfo||[])[0]; if(!ii) continue;
+        if(!/\.(jpe?g|png)$/i.test(ii.url||"")) continue;
+        if(WIKI_BAD.test((p.title||"")+" "+(ii.url||""))) continue;
+        const url=ii.thumburl||ii.url; if(!url) continue;
+        const artist=(((ii.extmetadata||{}).Artist||{}).value||"").replace(/<[^>]+>/g,"").trim();
+        return {url, large:ii.url||url, credit:(artist?artist+" · ":"")+"Wikimedia Commons"};
+      }
+    }catch(e){}
+  }
   return null;
 }
 
@@ -882,7 +894,7 @@ function shortName(s){return s.split(",")[0].trim();}
 const lightbox=document.getElementById("lightbox"), lbImg=document.getElementById("lbImg"), lbCap=document.getElementById("lbCap");
 let lbScale=1, lbX=0, lbY=0; const lbPts=new Map(); let lbStartDist=0, lbStartScale=1, lbMoved=false;
 function lbApply(){ lbImg.style.transform=`translate(${lbX}px,${lbY}px) scale(${lbScale})`; }
-function lbReset(){ lbScale=1; lbX=0; lbY=0; lbApply(); }
+function lbReset(){ lbScale=1; lbX=0; lbY=0; lbImg.style.transform=""; }
 function lbDist(a,b){ return Math.hypot(a.clientX-b.clientX, a.clientY-b.clientY); }
 function openLightbox(src,caption,credit){
   if(!src) return;
