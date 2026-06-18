@@ -3,6 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>Bloomline</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -714,7 +717,9 @@ async function loadPhotos(cardEl,plant){
     tiles.forEach((tile,i)=>{
       const ph=photos[i];
       if(ph && ph.url){
-        const img=new Image(); img.alt=plant.common+" \u2014 "+tile.dataset.part;
+        if(i>0 && ph.partOK===false){ const lab=tile.querySelector(".plabel"); if(lab) lab.textContent="Plant"; }
+        const partTxt=((tile.querySelector(".plabel")||{}).textContent)||tile.dataset.part;
+        const img=new Image(); img.alt=plant.common+" \u2014 "+partTxt;
         img.onload=()=>{tile.classList.remove("shimmer");const p=tile.querySelector(".ph");if(p)p.remove();
           tile.insertBefore(img,tile.firstChild); requestAnimationFrame(()=>img.classList.add("loaded"));};
         img.onerror=()=>tile.classList.remove("shimmer");
@@ -722,7 +727,7 @@ async function loadPhotos(cardEl,plant){
         tile.classList.add("clickable");
         tile.dataset.large=ph.large||ph.url;
         tile.dataset.credit=ph.credit||"";
-        tile.dataset.caption=plant.common+" \u00b7 "+tile.dataset.part;
+        tile.dataset.caption=plant.common+" \u00b7 "+partTxt;
         tile.onclick=()=>openLightbox(tile.dataset.large, tile.dataset.caption, tile.dataset.credit);
       } else { tile.classList.remove("shimmer"); }
     });
@@ -741,18 +746,22 @@ async function fetchT(url, ms){
 /* Photos per plant. iNaturalist (real, community-graded field photos) fills all
    three tiles so they are always practical; Wikimedia Commons then upgrades the
    leaf and seed/fruit tiles when a clean, part-specific photo exists. */
+const LEAF_MUST=["leaf","leaves","foliage","frond"];
+const LEAF_AVOID=["flower","infloresc","fruit","seed","pod","bark","trunk","scar","bud","twig","branch","winter","gall","gland","root","sapling","seedling","habit","distribution","map","drawing","herbar","specimen"];
+const SEED_MUST=["fruit","seed","pod","berry","hip","cone","samara","drupe","capsule","achene","seedhead"];
+const SEED_AVOID=["leaf","leaves","foliage","flower","infloresc","bark","trunk","scar","bud","seedling","sapling","habit","distribution","map","drawing","herbar","specimen"];
 async function fetchPartPhotos(sci, common){
   const inat=await inatPhotos(sci);
   const used=new Set();
   const take=i=>{ for(let k=i;k<inat.length;k++){ if(!used.has(inat[k].url)){ used.add(inat[k].url); return inat[k]; } }
                   for(let k=0;k<inat.length;k++){ if(!used.has(inat[k].url)){ used.add(inat[k].url); return inat[k]; } }
                   return inat[0]||null; };
-  const out=[ take(0), take(1), take(2) ];          // 3 distinct iNaturalist photos = guaranteed practical
-  const leaf=await wikiPhoto([sci+" leaf", sci+" leaves", sci+" foliage"]);
-  if(leaf && !used.has(leaf.url)){ used.add(leaf.url); out[1]=leaf; }
-  const seed=await wikiPhoto([sci+" fruit", sci+" seed pod", sci+" seeds", sci+" seedhead"]);
-  if(seed && !used.has(seed.url)){ used.add(seed.url); out[2]=seed; }
-  return out;
+  const flower=take(0);
+  let leaf=await wikiPhoto([sci+" leaves", sci+" leaf", sci+" foliage"], LEAF_MUST, LEAF_AVOID);
+  if(leaf && !used.has(leaf.url)){ used.add(leaf.url); leaf.partOK=true; } else { leaf=take(1); if(leaf) leaf.partOK=false; }
+  let seed=await wikiPhoto([sci+" fruit", sci+" seeds", sci+" seed pods", sci+" seed"], SEED_MUST, SEED_AVOID);
+  if(seed && !used.has(seed.url)){ used.add(seed.url); seed.partOK=true; } else { seed=take(2); if(seed) seed.partOK=false; }
+  return [flower, leaf, seed];
 }
 
 /* iNaturalist photos (display + large) for a scientific name */
@@ -782,11 +791,11 @@ async function inatPhotos(sci){
 /* one clean, practical photo from Wikimedia Commons for any of the queries —
    skips herbarium sheets, illustrations, maps, diagrams and non-photo files. */
 const WIKI_BAD=/herbari|specimen|illustrat|drawing|sketch|\bmap\b|distribution|range map|diagram|\bplate\b|engraving|lithograph|\bchart\b|label|microscop|\bSEM\b|chromosome|seedling|köhler|kohler|icones|tafel|stamp|coin|museum/i;
-async function wikiPhoto(queries){
+async function wikiPhoto(queries, must, avoid){
   for(const query of queries){
     try{
       const u="https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*"
-        +"&generator=search&gsrnamespace=6&gsrlimit=6&gsrsearch="+encodeURIComponent(query)
+        +"&generator=search&gsrnamespace=6&gsrlimit=8&gsrsearch="+encodeURIComponent(query)
         +"&prop=imageinfo&iiprop=url|extmetadata&iiurlwidth=900";
       const r=await fetchT(u, 6000); if(!r || !r.ok) continue;
       const pages=((await r.json()).query||{}).pages||{};
@@ -794,7 +803,10 @@ async function wikiPhoto(queries){
       for(const p of arr){
         const ii=(p.imageinfo||[])[0]; if(!ii) continue;
         if(!/\.(jpe?g|png)$/i.test(ii.url||"")) continue;
-        if(WIKI_BAD.test((p.title||"")+" "+(ii.url||""))) continue;
+        const title=((p.title||"")+"").toLowerCase();
+        if(WIKI_BAD.test(title+" "+(ii.url||""))) continue;
+        if(must  && !must.some(w=>title.includes(w))) continue;
+        if(avoid &&  avoid.some(w=>title.includes(w))) continue;
         const url=ii.thumburl||ii.url; if(!url) continue;
         const artist=(((ii.extmetadata||{}).Artist||{}).value||"").replace(/<[^>]+>/g,"").trim();
         return {url, large:ii.url||url, credit:(artist?artist+" · ":"")+"Wikimedia Commons"};
@@ -910,7 +922,7 @@ function openLightbox(src,caption,credit){
 }
 function closeLightbox(){ lightbox.classList.remove("show"); lbReset(); lbImg.removeAttribute("src"); }
 lightbox.addEventListener("click",e=>{ if(e.target===lbImg) return; closeLightbox(); });
-document.getElementById("lbClose").addEventListener("click",e=>{e.stopPropagation();closeLightbox();});
+document.getElementById("lbClose")?.addEventListener("click",e=>{e.stopPropagation();closeLightbox();});
 document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&lightbox.classList.contains("show")) closeLightbox(); });
 lbImg.addEventListener("pointerdown",e=>{ e.preventDefault(); lbImg.setPointerCapture(e.pointerId);
   lbPts.set(e.pointerId,e); lbMoved=false;
@@ -929,7 +941,8 @@ lbImg.addEventListener("dblclick",e=>{ e.preventDefault(); e.stopPropagation(); 
 window.openLightbox=openLightbox;
 
 /* ---- boot --------------------------------------------------------- */
-refreshRibbon(); refreshWhen(); renderList();
+function boot(){ try{ refreshRibbon(); refreshWhen(); renderList(); }catch(e){ console.error("boot error", e); } }
+if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", boot); else boot();
 </script>
 
 </div>
