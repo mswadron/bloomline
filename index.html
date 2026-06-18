@@ -250,6 +250,11 @@
   </footer>
 </div>
 
+<div id="lightbox" role="dialog" aria-modal="true" aria-label="Enlarged photo">
+  <button class="lb-close" id="lbClose" aria-label="Close">&times;</button>
+  <img id="lbImg" alt="">
+  <div class="lb-cap" id="lbCap"></div>
+  <div class="lb-hint">pinch or double-tap to zoom · tap outside to close</div>
 <script>
 /* ===================================================================
    Bloomline — interactive prototype
@@ -926,11 +931,7 @@ window.openLightbox=openLightbox;
 /* ---- boot --------------------------------------------------------- */
 refreshRibbon(); refreshWhen(); renderList();
 </script>
-<div id="lightbox" role="dialog" aria-modal="true" aria-label="Enlarged photo">
-  <button class="lb-close" id="lbClose" aria-label="Close">&times;</button>
-  <img id="lbImg" alt="">
-  <div class="lb-cap" id="lbCap"></div>
-  <div class="lb-hint">pinch or double-tap to zoom · tap outside to close</div>
+
 </div>
 </body>
 </html>
