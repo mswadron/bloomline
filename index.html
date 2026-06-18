@@ -84,6 +84,30 @@
   .drag-hint{font-family:"Spline Sans Mono",monospace;font-size:9.5px;letter-spacing:.06em;
              color:var(--muted);text-align:center;margin-top:8px;opacity:.8}
 
+  /* header top row + plant search */
+  .htop{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .search-btn{flex:none;width:38px;height:38px;border-radius:11px;border:1px solid rgba(255,255,255,.22);
+    background:rgba(255,255,255,.1);color:#f3f5ea;cursor:pointer;display:flex;align-items:center;justify-content:center}
+  .search-btn:hover{background:rgba(255,255,255,.18)}
+  .search-btn svg{width:19px;height:19px}
+  .searchbar{display:none;margin-top:12px;background:rgba(255,255,255,.95);border-radius:12px;
+    align-items:center;gap:8px;padding:4px 6px 4px 12px}
+  .searchbar.show{display:flex}
+  .searchbar input{flex:1;border:0;outline:none;background:transparent;color:var(--ink);
+    font-family:"Inter",sans-serif;font-size:15px;padding:9px 0}
+  .searchbar .sc{flex:none;border:0;background:#e7efdc;color:var(--green);width:28px;height:28px;
+    border-radius:8px;cursor:pointer;font-size:15px;line-height:1}
+  /* tiny plant thumbnail on each bar */
+  .thumb{flex:none;width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;
+    overflow:hidden;position:relative;background:#e7efdc;border:1px solid var(--line);color:var(--green)}
+  .thumb.bloom{background:#f5f1e6}
+  .thumb svg{width:24px;height:24px;transition:opacity .3s}
+  .thumb .thumbimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .35s}
+  .thumb .thumbimg.on{opacity:1}
+  .thumb.hasimg svg{opacity:0}
+  /* out-of-season chip (only seen in search results) */
+  .chip.none{color:var(--muted);border-color:var(--line);background:#fff}
+  .chip.none .pip{background:#b9c0ab}
   /* ---- big section (In bloom / Coming up) ---- */
   .sec{padding:18px 20px 0}
   .sec > h2{font-family:"Fraunces",serif;font-weight:600;font-size:21px;margin:0 0 2px;
@@ -211,8 +235,17 @@
 <body>
 <div class="app">
   <header>
-    <div class="wordmark">Bloom<span>line</span></div>
+    <div class="htop">
+      <div class="wordmark">Bloom<span>line</span></div>
+      <button class="search-btn" id="searchBtn" type="button" aria-label="Search plants">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      </button>
+    </div>
     <div class="tag">what's blooming on your drive</div>
+    <div class="searchbar" id="searchbar">
+      <input id="searchInput" type="text" placeholder="Search any plant…" autocomplete="off">
+      <button class="sc" id="searchClear" type="button" aria-label="Clear">&times;</button>
+    </div>
     <div class="route">
       <span class="dot"></span> <span class="from" id="fromLabel">Sayreville</span>
       <span class="arrow">&rarr;</span>
@@ -476,7 +509,7 @@ const TYPE_ICON = {
   lawn:`<svg class="gi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21c1.8-1.2 2.8-3.2 2.8-7"/><path d="M8.5 21c0-5 .8-8 1-11"/><path d="M12.5 21c.8-4 2-6 3.8-8"/><path d="M16.5 21c0-4 1-6 3.5-8"/><path d="M3 21h18"/></svg>`,
 };
 
-const STAGE_LABEL = {opening:"Just opening", peak:"At peak", fading:"Fading", coming:"Coming up"};
+const STAGE_LABEL = {opening:"Just opening", peak:"At peak", fading:"Fading", coming:"Coming up", none:"Out of season"};
 const STAGECOLOR  = {opening:"#5d8a2f", peak:"#c08a1c", fading:"#a8542a", coming:"#5d8a2f", none:"#9aa789"};
 const MONTHS=["J","F","M","A","M","J","J","A","S","O","N","D"];
 const MONTH_FULL=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
@@ -485,6 +518,7 @@ const MONTH_FULL=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","N
 let PLANTS = DEMO_PLANTS.map(p=>({...p}));
 let LIVE = false;                 // true after a route update pulls iNat data
 let selDate = new Date();
+let searchQuery = "";
 const today = new Date();
 
 function yearFrac(d){const s=new Date(d.getFullYear(),0,1),n=new Date(d.getFullYear()+1,0,1);return (d-s)/(n-s);}
@@ -608,6 +642,36 @@ function photosHTML(){
 }
 
 let CARD_PLANT={};
+/* ---- tiny per-bar thumbnail: leaf-shape art for trees, flower photo otherwise ---- */
+const LEAF_PATHS={
+  ovate:'<path fill="currentColor" d="M12 2C16 7 18 13 12 22 6 13 8 7 12 2Z"/>',
+  heart:'<path fill="currentColor" d="M12 21C7 16 3 12 5 7 6.5 4 10 5 12 8 14 5 17.5 4 19 7 21 12 17 16 12 21Z"/>',
+  maple:'<path fill="currentColor" d="M12 2 13.4 7.2 18.5 6 15.2 10.4 20 12.5 14.6 13.2 16.5 18 12.6 15.4 12 22 11.4 15.4 7.5 18 9.4 13.2 4 12.5 8.8 10.4 5.5 6 10.6 7.2Z"/>',
+  pinnate:'<g fill="currentColor"><rect x="11.4" y="3" width="1.2" height="18" rx="0.6"/><ellipse cx="8" cy="7" rx="3" ry="1.5" transform="rotate(-32 8 7)"/><ellipse cx="16" cy="7" rx="3" ry="1.5" transform="rotate(32 16 7)"/><ellipse cx="7.6" cy="12" rx="3.2" ry="1.6" transform="rotate(-32 7.6 12)"/><ellipse cx="16.4" cy="12" rx="3.2" ry="1.6" transform="rotate(32 16.4 12)"/><ellipse cx="8.2" cy="17" rx="2.7" ry="1.4" transform="rotate(-32 8.2 17)"/><ellipse cx="15.8" cy="17" rx="2.7" ry="1.4" transform="rotate(32 15.8 17)"/></g>'
+};
+const LEAF_BY_NAME=[[/maple/i,"maple"],[/redbud|catalpa/i,"heart"],[/locust|mimosa|heaven/i,"pinnate"]];
+function leafKind(common){ for(const [re,k] of LEAF_BY_NAME) if(re.test(common)) return k; return "ovate"; }
+function leafArt(p){ return `<svg viewBox="0 0 24 24" aria-hidden="true">${LEAF_PATHS[leafKind(p.common)]}</svg>`; }
+function flowerGlyph(){ return `<svg viewBox="0 0 24 24" aria-hidden="true"><g fill="currentColor"><circle cx="12" cy="12" r="2.4"/><ellipse cx="12" cy="6.4" rx="2.1" ry="3"/><ellipse cx="12" cy="17.6" rx="2.1" ry="3"/><ellipse cx="6.4" cy="12" rx="3" ry="2.1"/><ellipse cx="17.6" cy="12" rx="3" ry="2.1"/></g></svg>`; }
+function thumbHTML(p,c){
+  if(p.type==="tree") return `<div class="thumb leaf">${leafArt(p)}</div>`;
+  return `<div class="thumb bloom" style="color:${c}">${flowerGlyph()}</div>`;
+}
+const thumbCache={};
+async function loadThumb(plant, el){
+  if(plant.type==="tree") return;                 // trees keep the leaf-shape art
+  const set=u=>{ const img=new Image(); img.className="thumbimg"; img.alt="";
+    img.onload=()=>{ el.classList.add("hasimg"); el.appendChild(img); requestAnimationFrame(()=>img.classList.add("on")); };
+    img.src=u; };
+  if(thumbCache[plant.sci]){ set(thumbCache[plant.sci]); return; }
+  try{
+    const r=await fetchT(`${INAT}/taxa?q=${encodeURIComponent(plant.sci)}&per_page=1&order_by=observations_count`,7000);
+    if(r && r.ok){ const t=((await r.json()).results||[])[0];
+      const u=t && t.default_photo && (t.default_photo.square_url||t.default_photo.medium_url||t.default_photo.url);
+      if(u){ thumbCache[plant.sci]=u; set(u); } }
+  }catch(e){}
+}
+
 function card(p,idx,mf){
   const td=todayDOY(selDate);
   const stage=stageOf(p, td);
@@ -621,6 +685,7 @@ function card(p,idx,mf){
         <div class="sci">${esc(p.sci)}</div>
         <div class="badges">${badges(p,stage)}</div>
       </div>
+      ${thumbHTML(p,c)}
       <div class="chev">&rsaquo;</div>
     </div>
     <div class="body"><div class="body-inner">
@@ -658,11 +723,34 @@ function typeGroup(items, mf, startIdx){
 }
 
 const host=document.getElementById("stages");
+function afterRender(openIds){
+  document.querySelectorAll(".card").forEach(c=>{
+    const p=CARD_PLANT[+c.id.replace("card","")];
+    const th=c.querySelector(".thumb");
+    if(p && th) loadThumb(p, th);
+  });
+  openIds.forEach(id=>{const el=document.getElementById(id);
+    if(el){el.classList.add("open"); const h=el.querySelector(".head"); if(h)h.setAttribute("aria-expanded","true");
+      loadPhotos(el,CARD_PLANT[+id.replace("card","")]);}});
+}
+function renderSearch(mf,td,openIds){
+  const q=searchQuery.toLowerCase();
+  const matches=PLANTS.filter(p=>((p.common||"")+" "+(p.sci||"")).toLowerCase().includes(q));
+  let idx=0, html=`<section class="sec"><h2>Search<span class="cnt">${matches.length} match${matches.length===1?"":"es"}</span></h2>`
+    +`<p class="sec-sub">Across the whole season — tap a plant for its details and timeline</p>`;
+  if(matches.length){ const g=typeGroup(matches,mf,idx); html+=g.html; idx=g.next; }
+  else html+=`<div class="grp"><div class="empty-grp">No plant matches \u201C${esc(searchQuery)}\u201D.</div></div>`;
+  html+=`</section>`;
+  host.innerHTML=html;
+  afterRender(openIds);
+  document.getElementById("footCount").textContent=matches.length+(matches.length===1?" plant":" plants");
+}
 function renderList(){
   const mf=monthFloat(selDate);
   const td=todayDOY(selDate);
   const openIds=new Set([...document.querySelectorAll(".card.open")].map(c=>c.id));
   CARD_PLANT={};
+  if(searchQuery){ renderSearch(mf,td,openIds); return; }
   const withStage=PLANTS.map(p=>({p, st:stageOf(p, td)}));
   const blooming=withStage.filter(x=>IN_BLOOM.has(x.st)).map(x=>x.p);
   const coming  =withStage.filter(x=>x.st==="coming").map(x=>x.p);
@@ -685,9 +773,7 @@ function renderList(){
   html+=`</section>`;
 
   host.innerHTML=html;
-  openIds.forEach(id=>{const el=document.getElementById(id);
-    if(el){el.classList.add("open"); const h=el.querySelector(".head"); if(h)h.setAttribute("aria-expanded","true");
-      loadPhotos(el,CARD_PLANT[+id.replace("card","")]);}});
+  afterRender(openIds);
   document.getElementById("footCount").textContent=
     blooming.length+(blooming.length===1?" plant":" plants");
 }
@@ -941,6 +1027,11 @@ lbImg.addEventListener("dblclick",e=>{ e.preventDefault(); e.stopPropagation(); 
 window.openLightbox=openLightbox;
 
 /* ---- boot --------------------------------------------------------- */
+const searchBtn=document.getElementById("searchBtn"), searchbar=document.getElementById("searchbar"), searchInput=document.getElementById("searchInput");
+searchBtn?.addEventListener("click",()=>{ const on=searchbar.classList.toggle("show");
+  if(on){ searchInput.focus(); } else { searchInput.value=""; searchQuery=""; renderList(); } });
+searchInput?.addEventListener("input",()=>{ searchQuery=searchInput.value.trim(); renderList(); });
+document.getElementById("searchClear")?.addEventListener("click",()=>{ searchInput.value=""; searchQuery=""; searchInput.focus(); renderList(); });
 function boot(){ try{ refreshRibbon(); refreshWhen(); renderList(); }catch(e){ console.error("boot error", e); } }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", boot); else boot();
 </script>
