@@ -432,7 +432,7 @@ const DEMO_PLANTS = [
   why:"The ultimate disturbance tree — sidewalk cracks, rail lines, road shoulders. It grows almost anywhere, fast.",
   uses:"Few good ones: it is the favored host of the spotted lanternfly, and crushed leaves smell rank.",
   kin:["Sumac (look-alike)"], kinNote:"Mistaken for sumac or walnut, but a crushed leaf’s foul smell gives it away."},
- {common:"Mimosa (Silktree)", sci:"Albizia julibrissin", type:"tree", fam:"Fabaceae", status:"invasive",
+ {common:"Mimosa (Silktree)", sci:"Albizia julibrissin", alias:"Persian Silk Tree, Silk Tree", type:"tree", fam:"Fabaceae", status:"invasive",
   bloom:{s:[6,5],p:[6,28],e:[8,12]},
   why:"An ornamental escaped from yards, favoring warm, sunny road edges and disturbed ground.",
   uses:"Planted for pink powderpuff flowers and fern-like leaves; little use once it goes wild.",
@@ -799,7 +799,7 @@ function afterRender(openIds){
 }
 function renderSearch(mf,td,openIds){
   const q=searchQuery.toLowerCase();
-  const matches=PLANTS.filter(p=>((p.common||"")+" "+(p.sci||"")).toLowerCase().includes(q));
+  const matches=PLANTS.filter(p=>((p.common||"")+" "+(p.sci||"")+" "+(p.alias||"")).toLowerCase().includes(q));
   let idx=0, html=`<section class="sec"><h2>Search<span class="cnt">${matches.length} match${matches.length===1?"":"es"}</span></h2>`
     +`<p class="sec-sub">Across the whole season — tap a plant for its details and timeline</p>`;
   if(matches.length){ const g=typeGroup(matches,mf,idx); html+=g.html; idx=g.next; }
