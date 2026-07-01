@@ -10,6 +10,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <style>
   :root{
     --ink:#1c2a1d; --green:#2f5233; --paper:#eef0e6; --card:#f7f8f1;
@@ -84,6 +86,45 @@
   .drag-hint{font-family:"Spline Sans Mono",monospace;font-size:9.5px;letter-spacing:.06em;
              color:var(--muted);text-align:center;margin-top:8px;opacity:.8}
 
+  /* ---- sophisticated route chooser ---- */
+  .rmodal{position:fixed;inset:0;background:rgba(20,28,18,.55);display:none;z-index:300;align-items:flex-end;justify-content:center}
+  .rmodal.show{display:flex}
+  .rm-card{background:var(--paper);width:100%;max-width:480px;border-radius:20px 20px 0 0;
+    padding:16px 16px 20px;max-height:94vh;overflow:auto;box-shadow:0 -8px 40px rgba(0,0,0,.35)}
+  .rm-head{display:flex;align-items:center;justify-content:space-between;font-family:"Fraunces",serif;
+    font-weight:600;font-size:20px;color:var(--green);margin-bottom:12px}
+  .rm-head button{border:0;background:none;font-size:25px;color:var(--muted);cursor:pointer;line-height:1}
+  .rm-field{position:relative;display:flex;align-items:center;gap:9px;background:var(--card);
+    border:1px solid var(--line);border-radius:12px;padding:4px 6px 4px 10px;margin-bottom:9px}
+  .rm-field.active{border-color:var(--green);box-shadow:0 0 0 2px rgba(47,82,51,.12)}
+  .rm-field .rm-dot{flex:none;width:22px;height:22px;border-radius:7px;color:#fff;
+    font-family:"Spline Sans Mono",monospace;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center}
+  .rm-field .rm-dot.a{background:var(--green)} .rm-field .rm-dot.b{background:var(--ending)}
+  .rm-field input{flex:1;border:0;outline:none;background:transparent;font-family:"Inter",sans-serif;
+    font-size:15px;color:var(--ink);padding:9px 0;min-width:0}
+  .rm-field .rm-loc{flex:none;border:0;background:#e7efdc;color:var(--green);width:32px;height:32px;
+    border-radius:9px;cursor:pointer;font-size:15px}
+  .rm-suggest{position:absolute;top:calc(100% + 4px);left:0;right:0;background:#fff;border:1px solid var(--line);
+    border-radius:10px;z-index:5;overflow:hidden;box-shadow:0 8px 22px rgba(0,0,0,.14)}
+  .rm-suggest:empty{display:none}
+  .rm-sug{padding:10px 12px;font-size:14px;cursor:pointer;border-bottom:1px solid var(--line)}
+  .rm-sug:last-child{border-bottom:0}
+  .rm-sug:hover{background:#eef2e4}
+  .rm-map{height:240px;border-radius:12px;overflow:hidden;border:1px solid var(--line);margin:4px 0 8px;background:#dfe4d4;z-index:0}
+  .rm-hint{font-size:11px;color:var(--muted);text-align:center;margin-bottom:12px;
+    font-family:"Spline Sans Mono",monospace;letter-spacing:.03em}
+  .rm-actions{display:flex;gap:9px}
+  .rm-actions button{font-family:"Spline Sans Mono",monospace;font-size:12px;letter-spacing:.07em;
+    text-transform:uppercase;border-radius:11px;padding:12px;cursor:pointer;border:1px solid}
+  #rmGo{background:var(--green);color:#f3f5ea;border-color:var(--green);flex:2}
+  #rmCancel{background:#fff;color:var(--muted);border-color:var(--line);flex:1}
+  .rm-status{font-family:"Spline Sans Mono",monospace;font-size:11px;color:var(--green);margin-top:9px;min-height:14px;text-align:center}
+  .leaflet-div-icon{background:transparent;border:0}
+  .rm-pin{width:24px;height:24px;background:var(--green);color:#fff;border:2px solid #fff;
+    border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;
+    box-shadow:0 2px 5px rgba(0,0,0,.35)}
+  .rm-pin span{transform:rotate(45deg);font-family:"Spline Sans Mono",monospace;font-size:11px;font-weight:600}
+  .rm-pin.b{background:var(--ending)}
   /* header top row + plant search */
   .htop{display:flex;align-items:center;justify-content:space-between;gap:10px}
   .search-btn{flex:none;width:38px;height:38px;border-radius:11px;border:1px solid rgba(255,255,255,.22);
@@ -286,6 +327,29 @@
   </footer>
 </div>
 
+<div id="routemodal" class="rmodal" role="dialog" aria-modal="true" aria-label="Choose your route">
+  <div class="rm-card">
+    <div class="rm-head">Choose your route <button id="rmCloseX" type="button" aria-label="Close">&times;</button></div>
+    <div class="rm-field" id="rmFieldA">
+      <span class="rm-dot a">A</span>
+      <input id="rmFrom" type="text" placeholder="Start — city, town or place" autocomplete="off">
+      <button class="rm-loc" id="rmGeo" type="button" title="Use my location" aria-label="Use my location">&#9678;</button>
+      <div class="rm-suggest" id="rmFromSug"></div>
+    </div>
+    <div class="rm-field" id="rmFieldB">
+      <span class="rm-dot b">B</span>
+      <input id="rmTo" type="text" placeholder="Destination — city, town or place" autocomplete="off">
+      <div class="rm-suggest" id="rmToSug"></div>
+    </div>
+    <div class="rm-map" id="rmMap"></div>
+    <div class="rm-hint">Tap the map to drop the active pin, or drag a pin to fine-tune</div>
+    <div class="rm-actions">
+      <button id="rmGo" type="button">Show what's blooming</button>
+      <button id="rmCancel" type="button">Cancel</button>
+    </div>
+    <div class="rm-status" id="rmStatus"></div>
+  </div>
+</div>
 <div id="lightbox" role="dialog" aria-modal="true" aria-label="Enlarged photo">
   <button class="lb-close" id="lbClose" aria-label="Close">&times;</button>
   <img id="lbImg" alt="">
@@ -946,52 +1010,133 @@ const SHRUB_WORDS=/rose|viburnum|lilac|forsythia|honeysuckle|sumac|hydrangea|aza
 const LAWN_WORDS=/clover|dandelion|plantain|violet|speedwell|chickweed|ground ivy|creeping|buttercup|henbit|dead-?nettle|medic|sorrel/i;
 function classifyType(name){ if(TREE_WORDS.test(name))return "tree"; if(SHRUB_WORDS.test(name))return "shrub"; if(LAWN_WORDS.test(name))return "lawn"; return "wild"; }
 
-const editBtn=document.getElementById("editBtn"), routeEdit=document.getElementById("routeEdit"),
-      reStatus=document.getElementById("reStatus"), fromInput=document.getElementById("fromInput"),
-      toInput=document.getElementById("toInput");
-function openEditor(){routeEdit.classList.add("show");
-  fromInput.value=document.getElementById("fromLabel").textContent.trim();
-  toInput.value=document.getElementById("toLabel").textContent.trim();
-  reStatus.textContent="";reStatus.classList.remove("err");fromInput.focus();}
-function closeEditor(){routeEdit.classList.remove("show");}
-editBtn.addEventListener("click",()=>routeEdit.classList.contains("show")?closeEditor():openEditor());
-document.getElementById("reCancel").addEventListener("click",closeEditor);
-document.getElementById("reGo").addEventListener("click",updateRoute);
-toInput.addEventListener("keydown",e=>{if(e.key==="Enter")updateRoute();});
-fromInput.addEventListener("keydown",e=>{if(e.key==="Enter")toInput.focus();});
+const routeModal=document.getElementById("routemodal");
+const rmFrom=document.getElementById("rmFrom"), rmTo=document.getElementById("rmTo");
+const rmFromSug=document.getElementById("rmFromSug"), rmToSug=document.getElementById("rmToSug");
+const rmStatus=document.getElementById("rmStatus");
+const REV="https://api.bigdatacloud.net/data/reverse-geocode-client";
+const ROUTE={a:null,b:null};
+let activeField="a", rmap=null, mkA=null, mkB=null, rline=null, mapReady=false;
 
-async function updateRoute(){
-  const from=fromInput.value.trim(), to=toInput.value.trim();
-  if(!from||!to){ setStatus("Enter both a start and a destination.",true); return; }
-  setStatus("Looking up “"+from+"” and “"+to+"”…");
+function markActive(){ document.getElementById("rmFieldA").classList.toggle("active",activeField==="a");
+  document.getElementById("rmFieldB").classList.toggle("active",activeField==="b"); }
+function shortName(s){ return (s||"").split(",")[0].trim(); }
+function rmSet(m){ rmStatus.textContent=m||""; }
+
+function openChooser(){
+  routeModal.classList.add("show"); rmSet("");
+  rmFrom.value=document.getElementById("fromLabel").textContent.trim();
+  rmTo.value=document.getElementById("toLabel").textContent.trim();
+  activeField="a"; markActive();
+  setTimeout(initMap,60);
+  if(!ROUTE.a) geocode(rmFrom.value).then(p=>{ROUTE.a=p;placeMarker("a",p);fitRoute();}).catch(()=>{});
+  if(!ROUTE.b) geocode(rmTo.value).then(p=>{ROUTE.b=p;placeMarker("b",p);fitRoute();}).catch(()=>{});
+}
+function closeChooser(){ routeModal.classList.remove("show"); }
+
+function initMap(){
+  if(mapReady||typeof L==="undefined"||!document.getElementById("rmMap")) return;
+  rmap=L.map("rmMap",{zoomControl:true}).setView([40.5,-74.42],9);
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:"© OpenStreetMap"}).addTo(rmap);
+  rmap.on("click",e=>setPoint(activeField,{name:"",lat:e.latlng.lat,lng:e.latlng.lng}));
+  mapReady=true;
+  if(ROUTE.a) placeMarker("a",ROUTE.a);
+  if(ROUTE.b) placeMarker("b",ROUTE.b);
+  fitRoute(); setTimeout(()=>rmap.invalidateSize(),90);
+}
+function pinIcon(field){ return L.divIcon({className:"leaflet-div-icon",html:`<div class="rm-pin ${field}"><span>${field.toUpperCase()}</span></div>`,iconSize:[24,24],iconAnchor:[12,24]}); }
+function placeMarker(field,p){
+  if(!mapReady||!p) return; const ll=[p.lat,p.lng];
+  if(field==="a"){ if(!mkA){ mkA=L.marker(ll,{draggable:true,icon:pinIcon("a")}).addTo(rmap); mkA.on("dragend",()=>onDrag("a")); } else mkA.setLatLng(ll); }
+  else { if(!mkB){ mkB=L.marker(ll,{draggable:true,icon:pinIcon("b")}).addTo(rmap); mkB.on("dragend",()=>onDrag("b")); } else mkB.setLatLng(ll); }
+  drawLine();
+}
+function onDrag(field){ const m=field==="a"?mkA:mkB, ll=m.getLatLng(); setPoint(field,{name:"",lat:ll.lat,lng:ll.lng},true); }
+function drawLine(){ if(!mapReady) return; if(rline){ rmap.removeLayer(rline); rline=null; }
+  if(ROUTE.a&&ROUTE.b) rline=L.polyline([[ROUTE.a.lat,ROUTE.a.lng],[ROUTE.b.lat,ROUTE.b.lng]],{color:"#2f5233",weight:3,opacity:.7,dashArray:"6 5"}).addTo(rmap); }
+function fitRoute(){ if(!mapReady) return;
+  if(ROUTE.a&&ROUTE.b) rmap.fitBounds([[ROUTE.a.lat,ROUTE.a.lng],[ROUTE.b.lat,ROUTE.b.lng]],{padding:[45,45]});
+  else if(ROUTE.a) rmap.setView([ROUTE.a.lat,ROUTE.a.lng],11);
+  else if(ROUTE.b) rmap.setView([ROUTE.b.lat,ROUTE.b.lng],11); }
+
+async function setPoint(field,p,noPan){
+  ROUTE[field]=p; placeMarker(field,p);
+  const input=field==="a"?rmFrom:rmTo;
+  if(!p.name){ input.value="Locating…"; p.name=await reverseGeocode(p.lat,p.lng); }
+  input.value=p.name;
+  if(!noPan) fitRoute();
+}
+async function reverseGeocode(lat,lng){
+  try{ const r=await fetchT(`${REV}?latitude=${lat}&longitude=${lng}&localityLanguage=en`,7000);
+    if(r&&r.ok){ const j=await r.json();
+      const city=j.city||j.locality||j.principalSubdivision||"";
+      const code=j.principalSubdivisionCode?String(j.principalSubdivisionCode).replace(/^[A-Z]+-/,""):"";
+      const lbl=[city,code||j.principalSubdivision].filter(Boolean).join(", ");
+      if(lbl) return lbl; } }catch(e){}
+  return lat.toFixed(3)+", "+lng.toFixed(3);
+}
+
+function bindAuto(input,sugEl,field){
+  let t=null;
+  input.addEventListener("focus",()=>{activeField=field;markActive();});
+  input.addEventListener("input",()=>{ activeField=field; markActive();
+    const q=input.value.trim(); clearTimeout(t);
+    if(q.length<2){ sugEl.innerHTML=""; return; }
+    t=setTimeout(async()=>{ const list=await geoSuggest(q);
+      sugEl.innerHTML=list.map((p,i)=>`<div class="rm-sug" data-i="${i}">${esc(p.label)}</div>`).join("");
+      [...sugEl.children].forEach((el,i)=>el.addEventListener("mousedown",ev=>{ ev.preventDefault();
+        setPoint(field,{name:list[i].label,lat:list[i].lat,lng:list[i].lng}); sugEl.innerHTML=""; })); },250);
+  });
+  input.addEventListener("blur",()=>setTimeout(()=>{sugEl.innerHTML="";},150));
+}
+async function geoSuggest(q){
+  try{ const r=await fetchT(`${GEO}?name=${encodeURIComponent(q)}&count=6&language=en&format=json`,6000);
+    if(r&&r.ok) return ((await r.json()).results||[]).map(p=>({label:p.name+(p.admin1?", "+(STATE_ABBR[p.admin1]||p.admin1):"")+(p.country_code&&p.country_code!=="US"?", "+p.country_code:""), lat:p.latitude, lng:p.longitude}));
+  }catch(e){} return [];
+}
+
+document.getElementById("rmGeo").addEventListener("click",()=>{
+  if(!navigator.geolocation){ rmSet("Geolocation isn’t available on this device."); return; }
+  rmSet("Getting your location…");
+  navigator.geolocation.getCurrentPosition(async pos=>{ activeField="a"; markActive();
+    await setPoint("a",{name:"",lat:pos.coords.latitude,lng:pos.coords.longitude}); rmSet(""); },
+    err=>rmSet("Couldn’t get location: "+err.message), {enableHighAccuracy:true,timeout:10000});
+});
+bindAuto(rmFrom,rmFromSug,"a"); bindAuto(rmTo,rmToSug,"b");
+document.getElementById("editBtn").addEventListener("click",openChooser);
+document.getElementById("rmCancel").addEventListener("click",closeChooser);
+document.getElementById("rmCloseX").addEventListener("click",closeChooser);
+routeModal.addEventListener("click",e=>{ if(e.target===routeModal) closeChooser(); });
+document.getElementById("rmGo").addEventListener("click",applyRoute);
+
+async function applyRoute(){
+  try{ if(!ROUTE.a && rmFrom.value.trim()) ROUTE.a=await geocode(rmFrom.value);
+       if(!ROUTE.b && rmTo.value.trim()) ROUTE.b=await geocode(rmTo.value); }catch(e){}
+  const A=ROUTE.a, B=ROUTE.b;
+  if(!A||!B){ rmSet("Pick both a start (A) and a destination (B)."); return; }
+  rmSet("Finding what’s flowering along the route…");
   try{
-    const [A,B]=await Promise.all([geocode(from),geocode(to)]);
-    setStatus("Found "+A.name+" → "+B.name+". Asking iNaturalist what’s flowering…");
     const mid={lat:(A.lat+B.lat)/2,lng:(A.lng+B.lng)/2};
     const lists=await Promise.all([floweringNear(A.lat,A.lng),floweringNear(mid.lat,mid.lng),floweringNear(B.lat,B.lng)]);
     const agg={};
-    lists.forEach(list=>list.forEach(row=>{const t=row.taxon;if(!t)return;
-      const a=agg[t.id]||(agg[t.id]={taxon:t,count:0,pts:0}); a.count+=row.count; a.pts+=1;}));
+    lists.forEach(list=>list.forEach(row=>{const t=row.taxon;if(!t)return; const a=agg[t.id]||(agg[t.id]={taxon:t,count:0,pts:0}); a.count+=row.count; a.pts+=1;}));
     let ranked=Object.values(agg).sort((x,y)=>(y.pts-x.pts)||(y.count-x.count)).slice(0,18);
-    if(!ranked.length){ setStatus("No flowering observations found along that route right now.",true); return; }
-    setStatus("Building bloom curves for "+ranked.length+" species…");
+    if(!ranked.length){ rmSet("No flowering observations found along that route right now."); return; }
+    rmSet("Building bloom curves for "+ranked.length+" species…");
     const built=await Promise.all(ranked.map(async a=>{
       const t=a.taxon, curve=(await monthlyCurve(t.id))||[0,0,2,10,40,75,85,70,40,12,2,0];
       const name=(t.preferred_common_name||t.name||"Unknown").replace(/\b\w/g,m=>m.toUpperCase());
-      return {common:name, sci:t.name||"", type:classifyType(name+" "+(t.name||"")), fam:"",
-        status:statusOf(t), curve, why:"", uses:"", kin:[], kinNote:"",
-        links:t.id?[{src:"inat",label:"iNat",t:"View on iNaturalist",url:"https://www.inaturalist.org/taxa/"+t.id}]:[]};
+      return {common:name, sci:t.name||"", type:classifyType(name+" "+(t.name||"")), fam:"", status:statusOf(t), curve, why:"", uses:"", kin:[], kinNote:"", links:t.id?[{src:"inat",label:"iNat",t:"View on iNaturalist",url:"https://www.inaturalist.org/taxa/"+t.id}]:[]};
     }));
     PLANTS=built; LIVE=true;
-    document.getElementById("fromLabel").textContent=shortName(A.name);
-    document.getElementById("toLabel").textContent=shortName(B.name);
+    document.getElementById("fromLabel").textContent=shortName(A.name||rmFrom.value);
+    document.getElementById("toLabel").textContent=shortName(B.name||rmTo.value);
+    searchQuery=""; const sb=document.getElementById("searchbar"); if(sb) sb.classList.remove("show");
     renderList();
-    setStatus("✓ Updated — "+built.length+" species along "+shortName(A.name)+" → "+shortName(B.name));
-    setTimeout(closeEditor,1400);
-  }catch(err){ setStatus("Couldn’t update: "+err.message+". Showing the previous route.",true); }
+    rmSet("✓ "+built.length+" species along "+shortName(A.name||rmFrom.value)+" → "+shortName(B.name||rmTo.value));
+    setTimeout(closeChooser,1100);
+  }catch(err){ rmSet("Couldn’t update: "+err.message+"."); }
 }
-function setStatus(m,e){reStatus.textContent=m;reStatus.classList.toggle("err",!!e);}
-function shortName(s){return s.split(",")[0].trim();}
 
 /* ---- click-to-enlarge lightbox with pinch / double-tap zoom ---- */
 const lightbox=document.getElementById("lightbox"), lbImg=document.getElementById("lbImg"), lbCap=document.getElementById("lbCap");
