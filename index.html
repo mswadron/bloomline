@@ -754,7 +754,8 @@ function card(p,idx,mf){
     </div>
     <div class="body"><div class="body-inner">
       ${photosHTML()}
-      <div class="layer"><div class="lh">Why it grows here</div><p>${esc(p.why)||'<span style="color:var(--muted)">No notes yet for this species.</span>'}</p></div>
+      ${p.why?`<div class="layer"><div class="lh">Why it grows here</div><p>${esc(p.why)}</p></div>`:""}
+      ${p.about?`<div class="layer"><div class="lh">About</div><p>${esc(p.about)}</p></div>`:""}
       ${p.uses?`<div class="layer"><div class="lh">Uses</div><p>${esc(p.uses)}</p></div>`:""}
       ${p.kinNote?`<div class="layer"><div class="lh">Related plants</div><p>${esc(p.kinNote)}</p>
         <div class="kin">${(p.kin||[]).map(k=>`<span>${esc(k)}</span>`).join("")}</div></div>`:""}
@@ -1008,7 +1009,36 @@ function statusOf(t){
 const TREE_WORDS=/maple|oak|pear|cherry|locust|pine|birch|ash|elm|willow|catalpa|dogwood|magnolia|redbud|ailanthus|mimosa|linden|poplar|sycamore|hickory|walnut|sweetgum|spruce|cedar|hawthorn|crabapple|tree/i;
 const SHRUB_WORDS=/rose|viburnum|lilac|forsythia|honeysuckle|sumac|hydrangea|azalea|rhododendron|blackberry|raspberry|bramble|privet|barberry|knotweed|wisteria|shrub|bush|holly|dogbane/i;
 const LAWN_WORDS=/clover|dandelion|plantain|violet|speedwell|chickweed|ground ivy|creeping|buttercup|henbit|dead-?nettle|medic|sorrel/i;
-function classifyType(name){ if(TREE_WORDS.test(name))return "tree"; if(SHRUB_WORDS.test(name))return "shrub"; if(LAWN_WORDS.test(name))return "lawn"; return "wild"; }
+const TREE_FAMILIES=/^(Pinaceae|Cupressaceae|Fagaceae|Betulaceae|Juglandaceae|Sapindaceae|Salicaceae|Ulmaceae|Platanaceae|Magnoliaceae|Simaroubaceae|Bignoniaceae|Altingiaceae|Hamamelidaceae|Moraceae|Anacardiaceae|Lauraceae|Tiliaceae)$/;
+const SHRUB_FAMILIES=/^(Ericaceae|Adoxaceae|Caprifoliaceae|Rhamnaceae|Berberidaceae|Elaeagnaceae|Grossulariaceae|Hydrangeaceae)$/;
+function classifyType(name, fam){
+  if(TREE_WORDS.test(name)) return "tree";
+  if(SHRUB_WORDS.test(name)) return "shrub";
+  if(LAWN_WORDS.test(name)) return "lawn";
+  if(fam && TREE_FAMILIES.test(fam)) return "tree";
+  if(fam && SHRUB_FAMILIES.test(fam)) return "shrub";
+  return "wild";
+}
+/* pull family, native/introduced status and a Wikipedia blurb for a batch of taxon ids */
+async function fetchTaxaDetails(ids){
+  const out={};
+  try{
+    const r=await fetchT(`${INAT}/taxa/${ids.slice(0,30).join(",")}`,9000);
+    if(r&&r.ok) ((await r.json()).results||[]).forEach(t=>{
+      const fam=(t.ancestors||[]).filter(x=>x.rank==="family").map(x=>x.name)[0]||"";
+      out[t.id]={ common:t.preferred_common_name||"", family:fam, status:statusOf(t), about:cleanWiki(t.wikipedia_summary) };
+    });
+  }catch(e){}
+  return out;
+}
+function cleanWiki(html){
+  if(!html) return "";
+  let x=html.replace(/<[^>]+>/g," ").replace(/\s+/g," ").trim();
+  const m=x.match(/^.*?[.!?](\s|$)(.*?[.!?](\s|$))?/);
+  if(m) x=m[0].trim();
+  if(x.length>320) x=x.slice(0,317).trim()+"…";
+  return x;
+}
 
 const routeModal=document.getElementById("routemodal");
 const rmFrom=document.getElementById("rmFrom"), rmTo=document.getElementById("rmTo");
@@ -1137,11 +1167,15 @@ async function applyRoute(){
     lists.forEach(list=>list.forEach(row=>{const t=row.taxon;if(!t)return; const a=agg[t.id]||(agg[t.id]={taxon:t,count:0,pts:0}); a.count+=row.count; a.pts+=1;}));
     let ranked=Object.values(agg).sort((x,y)=>(y.pts-x.pts)||(y.count-x.count)).slice(0,18);
     if(!ranked.length){ rmSet("No flowering observations found along that route right now."); return; }
-    rmSet("Building bloom curves for "+ranked.length+" species…");
+    rmSet("Enriching "+ranked.length+" species with local data…");
+    const detIds=ranked.map(a=>a.taxon&&a.taxon.id).filter(Boolean);
+    const details=await fetchTaxaDetails(detIds);
     const built=await Promise.all(ranked.map(async a=>{
-      const t=a.taxon, curve=(await monthlyCurve(t.id))||[0,0,2,10,40,75,85,70,40,12,2,0];
-      const name=(t.preferred_common_name||t.name||"Unknown").replace(/\b\w/g,m=>m.toUpperCase());
-      return {common:name, sci:t.name||"", type:classifyType(name+" "+(t.name||"")), fam:"", status:statusOf(t), curve, why:"", uses:"", kin:[], kinNote:"", links:t.id?[{src:"inat",label:"iNat",t:"View on iNaturalist",url:"https://www.inaturalist.org/taxa/"+t.id}]:[]};
+      const t=a.taxon, d=details[t.id]||{};
+      const curve=(await monthlyCurve(t.id))||[0,0,2,10,40,75,85,70,40,12,2,0];
+      const name=(d.common||t.preferred_common_name||t.name||"Unknown").replace(/\b\w/g,m=>m.toUpperCase());
+      const fam=d.family||"";
+      return {common:name, sci:t.name||"", type:classifyType(name+" "+(t.name||""), fam), fam, status:d.status||statusOf(t), curve, why:"", about:d.about||"", uses:"", kin:[], kinNote:"", links:t.id?[{src:"inat",label:"iNat",t:"View on iNaturalist",url:"https://www.inaturalist.org/taxa/"+t.id}]:[]};
     }));
     PLANTS=built; LIVE=true;
     document.getElementById("fromLabel").textContent=shortName(A.name||rmFrom.value);
