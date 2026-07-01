@@ -1109,11 +1109,26 @@ document.getElementById("rmCloseX").addEventListener("click",closeChooser);
 routeModal.addEventListener("click",e=>{ if(e.target===routeModal) closeChooser(); });
 document.getElementById("rmGo").addEventListener("click",applyRoute);
 
+/* The curated dataset IS the roadside flora of NJ + neighbours, so a local
+   route must never drop known plants (e.g. mimosa). Keep the rich list for any
+   route inside this region; only pull sparse live iNaturalist data for far routes. */
+function inNortheast(p){ return !!p && p.lat>=38.3 && p.lat<=43.8 && p.lng>=-80.8 && p.lng<=-71.2; }
 async function applyRoute(){
   try{ if(!ROUTE.a && rmFrom.value.trim()) ROUTE.a=await geocode(rmFrom.value);
        if(!ROUTE.b && rmTo.value.trim()) ROUTE.b=await geocode(rmTo.value); }catch(e){}
   const A=ROUTE.a, B=ROUTE.b;
   if(!A||!B){ rmSet("Pick both a start (A) and a destination (B)."); return; }
+  if(inNortheast(A) && inNortheast(B)){
+    PLANTS=DEMO_PLANTS.map(p=>{const c={...p}; delete c._w; delete c.curve; return c;});
+    LIVE=false;
+    document.getElementById("fromLabel").textContent=shortName(A.name||rmFrom.value);
+    document.getElementById("toLabel").textContent=shortName(B.name||rmTo.value);
+    searchQuery=""; const sb=document.getElementById("searchbar"); if(sb) sb.classList.remove("show");
+    renderList();
+    rmSet("✓ "+shortName(A.name||rmFrom.value)+" → "+shortName(B.name||rmTo.value)+" — full regional plant list");
+    setTimeout(closeChooser,1000);
+    return;
+  }
   rmSet("Finding what’s flowering along the route…");
   try{
     const mid={lat:(A.lat+B.lat)/2,lng:(A.lng+B.lng)/2};
