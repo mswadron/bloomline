@@ -86,6 +86,14 @@
   .drag-hint{font-family:"Spline Sans Mono",monospace;font-size:9.5px;letter-spacing:.06em;
              color:var(--muted);text-align:center;margin-top:8px;opacity:.8}
 
+  .route .loc-edit{cursor:pointer;border-bottom:1px dashed rgba(255,255,255,.45)}
+  .route .loc-edit:hover{border-bottom-color:#fff}
+  .route-hint{font-family:"Spline Sans Mono",monospace;font-size:9.5px;letter-spacing:.08em;
+    text-transform:uppercase;color:#f3f5ea;opacity:.6;margin-top:8px}
+  .inline-edit{display:none;position:relative;margin-top:10px}
+  .inline-edit.show{display:block}
+  .inline-edit>input{width:100%;font-family:"Inter",sans-serif;font-size:15px;border:1px solid rgba(255,255,255,.3);
+    border-radius:11px;padding:11px 13px;background:rgba(255,255,255,.96);color:var(--ink);outline:none}
   /* ---- sophisticated route chooser ---- */
   .rmodal{position:fixed;inset:0;background:rgba(20,28,18,.55);display:none;z-index:300;align-items:flex-end;justify-content:center}
   .rmodal.show{display:flex}
@@ -288,10 +296,15 @@
       <button class="sc" id="searchClear" type="button" aria-label="Clear">&times;</button>
     </div>
     <div class="route">
-      <span class="dot"></span> <span class="from" id="fromLabel">Sayreville</span>
+      <span class="dot"></span> <span class="from loc-edit" id="fromLabel" role="button" tabindex="0">Sayreville</span>
       <span class="arrow">&rarr;</span>
-      <span class="dot"></span> <span class="to" id="toLabel">New Brunswick, NJ</span>
-      <button class="edit" id="editBtn" type="button">EDIT</button>
+      <span class="dot"></span> <span class="to loc-edit" id="toLabel" role="button" tabindex="0">New Brunswick, NJ</span>
+      <button class="edit" id="editBtn" type="button" title="Open map & options" aria-label="Open map">&#128506;</button>
+    </div>
+    <div class="route-hint">Tap a place to change &middot; &#128506; for map</div>
+    <div class="inline-edit" id="inlineEdit">
+      <input id="inlineInput" type="text" placeholder="Type a place…" autocomplete="off">
+      <div class="rm-suggest" id="inlineSug"></div>
     </div>
     <div class="route-edit" id="routeEdit">
       <label for="fromInput">Start</label>
@@ -1143,31 +1156,31 @@ document.getElementById("rmGo").addEventListener("click",applyRoute);
    route must never drop known plants (e.g. mimosa). Keep the rich list for any
    route inside this region; only pull sparse live iNaturalist data for far routes. */
 function inNortheast(p){ return !!p && p.lat>=38.3 && p.lat<=43.8 && p.lng>=-80.8 && p.lng<=-71.2; }
-async function applyRoute(){
-  try{ if(!ROUTE.a && rmFrom.value.trim()) ROUTE.a=await geocode(rmFrom.value);
-       if(!ROUTE.b && rmTo.value.trim()) ROUTE.b=await geocode(rmTo.value); }catch(e){}
+async function runRoute(status){
+  status=status||function(){};
+  try{
+    if(!ROUTE.a) ROUTE.a=await geocode(document.getElementById("fromLabel").textContent.trim());
+    if(!ROUTE.b) ROUTE.b=await geocode(document.getElementById("toLabel").textContent.trim());
+  }catch(e){}
   const A=ROUTE.a, B=ROUTE.b;
-  if(!A||!B){ rmSet("Pick both a start (A) and a destination (B)."); return; }
+  if(!A||!B){ status("Pick a start and a destination."); return false; }
+  document.getElementById("fromLabel").textContent=shortName(A.name||"");
+  document.getElementById("toLabel").textContent=shortName(B.name||"");
+  searchQuery=""; const sb=document.getElementById("searchbar"); if(sb) sb.classList.remove("show");
   if(inNortheast(A) && inNortheast(B)){
-    PLANTS=DEMO_PLANTS.map(p=>{const c={...p}; delete c._w; delete c.curve; return c;});
-    LIVE=false;
-    document.getElementById("fromLabel").textContent=shortName(A.name||rmFrom.value);
-    document.getElementById("toLabel").textContent=shortName(B.name||rmTo.value);
-    searchQuery=""; const sb=document.getElementById("searchbar"); if(sb) sb.classList.remove("show");
-    renderList();
-    rmSet("✓ "+shortName(A.name||rmFrom.value)+" → "+shortName(B.name||rmTo.value)+" — full regional plant list");
-    setTimeout(closeChooser,1000);
-    return;
+    PLANTS=DEMO_PLANTS.map(p=>{const c={...p}; delete c._w; delete c.curve; return c;}); LIVE=false;
+    renderList(); status("✓ "+shortName(A.name)+" → "+shortName(B.name)+" — full regional list");
+    return true;
   }
-  rmSet("Finding what’s flowering along the route…");
+  status("Finding what’s flowering along the route…");
   try{
     const mid={lat:(A.lat+B.lat)/2,lng:(A.lng+B.lng)/2};
     const lists=await Promise.all([floweringNear(A.lat,A.lng),floweringNear(mid.lat,mid.lng),floweringNear(B.lat,B.lng)]);
     const agg={};
     lists.forEach(list=>list.forEach(row=>{const t=row.taxon;if(!t)return; const a=agg[t.id]||(agg[t.id]={taxon:t,count:0,pts:0}); a.count+=row.count; a.pts+=1;}));
     let ranked=Object.values(agg).sort((x,y)=>(y.pts-x.pts)||(y.count-x.count)).slice(0,18);
-    if(!ranked.length){ rmSet("No flowering observations found along that route right now."); return; }
-    rmSet("Enriching "+ranked.length+" species with local data…");
+    if(!ranked.length){ status("No flowering observations found there right now."); return false; }
+    status("Enriching "+ranked.length+" species…");
     const detIds=ranked.map(a=>a.taxon&&a.taxon.id).filter(Boolean);
     const details=await fetchTaxaDetails(detIds);
     const built=await Promise.all(ranked.map(async a=>{
@@ -1177,15 +1190,42 @@ async function applyRoute(){
       const fam=d.family||"";
       return {common:name, sci:t.name||"", type:classifyType(name+" "+(t.name||""), fam), fam, status:d.status||statusOf(t), curve, why:"", about:d.about||"", uses:"", kin:[], kinNote:"", links:t.id?[{src:"inat",label:"iNat",t:"View on iNaturalist",url:"https://www.inaturalist.org/taxa/"+t.id}]:[]};
     }));
-    PLANTS=built; LIVE=true;
-    document.getElementById("fromLabel").textContent=shortName(A.name||rmFrom.value);
-    document.getElementById("toLabel").textContent=shortName(B.name||rmTo.value);
-    searchQuery=""; const sb=document.getElementById("searchbar"); if(sb) sb.classList.remove("show");
-    renderList();
-    rmSet("✓ "+built.length+" species along "+shortName(A.name||rmFrom.value)+" → "+shortName(B.name||rmTo.value));
-    setTimeout(closeChooser,1100);
-  }catch(err){ rmSet("Couldn’t update: "+err.message+"."); }
+    PLANTS=built; LIVE=true; renderList();
+    status("✓ "+built.length+" species along "+shortName(A.name)+" → "+shortName(B.name));
+    return true;
+  }catch(err){ status("Couldn’t update: "+err.message); return false; }
 }
+async function applyRoute(){
+  try{ if(!ROUTE.a && rmFrom.value.trim()) ROUTE.a=await geocode(rmFrom.value);
+       if(!ROUTE.b && rmTo.value.trim()) ROUTE.b=await geocode(rmTo.value); }catch(e){}
+  const ok=await runRoute(rmSet);
+  if(ok) setTimeout(closeChooser,1000);
+}
+
+/* ---- inline one-tap location choose (no dialog, no save button) ---- */
+const inlineEdit=document.getElementById("inlineEdit"), inlineInput=document.getElementById("inlineInput"), inlineSug=document.getElementById("inlineSug");
+let inlineField="a", inlineT=null;
+function inlineStatus(txt){ const h=document.querySelector(".route-hint"); if(!h) return;
+  h.textContent=txt; clearTimeout(h._t); h._t=setTimeout(()=>{ h.innerHTML="Tap a place to change &middot; &#128506; for map"; },2800); }
+function openInline(field){ inlineField=field; inlineEdit.classList.add("show");
+  inlineInput.value=""; inlineInput.placeholder="Change "+(field==="a"?"start":"destination")+"…";
+  inlineSug.innerHTML=""; inlineInput.focus(); }
+function closeInline(){ inlineEdit.classList.remove("show"); inlineSug.innerHTML=""; }
+document.getElementById("fromLabel").addEventListener("click",()=>openInline("a"));
+document.getElementById("toLabel").addEventListener("click",()=>openInline("b"));
+inlineInput.addEventListener("input",()=>{ const q=inlineInput.value.trim(); clearTimeout(inlineT);
+  if(q.length<2){ inlineSug.innerHTML=""; return; }
+  inlineT=setTimeout(async()=>{ const list=await geoSuggest(q);
+    inlineSug.innerHTML=list.map((p,i)=>`<div class="rm-sug" data-i="${i}">${esc(p.label)}</div>`).join("");
+    [...inlineSug.children].forEach((el,i)=>el.addEventListener("mousedown",async ev=>{ ev.preventDefault();
+      const p=list[i]; ROUTE[inlineField]={name:p.label,lat:p.lat,lng:p.lng};
+      document.getElementById(inlineField==="a"?"fromLabel":"toLabel").textContent=shortName(p.label);
+      closeInline(); inlineStatus("Updating…"); await runRoute(inlineStatus);
+    }));
+  },250);
+});
+inlineInput.addEventListener("keydown",e=>{ if(e.key==="Escape") closeInline(); });
+inlineInput.addEventListener("blur",()=>setTimeout(closeInline,160));
 
 /* ---- click-to-enlarge lightbox with pinch / double-tap zoom ---- */
 const lightbox=document.getElementById("lightbox"), lbImg=document.getElementById("lbImg"), lbCap=document.getElementById("lbCap");
