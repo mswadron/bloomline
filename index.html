@@ -1059,6 +1059,7 @@ const rmFromSug=document.getElementById("rmFromSug"), rmToSug=document.getElemen
 const rmStatus=document.getElementById("rmStatus");
 const REV="https://api.bigdatacloud.net/data/reverse-geocode-client";
 const ROUTE={a:null,b:null};
+const routeCache={};
 let activeField="a", rmap=null, mkA=null, mkB=null, rline=null, mapReady=false;
 
 function markActive(){ document.getElementById("rmFieldA").classList.toggle("active",activeField==="a");
@@ -1172,6 +1173,8 @@ async function runRoute(status){
     renderList(); status("✓ "+shortName(A.name)+" → "+shortName(B.name)+" — full regional list");
     return true;
   }
+  const rkey="live:"+A.lat.toFixed(2)+","+A.lng.toFixed(2)+"|"+B.lat.toFixed(2)+","+B.lng.toFixed(2);
+  if(routeCache[rkey]){ PLANTS=routeCache[rkey].map(p=>({...p})); LIVE=true; renderList(); status("✓ "+PLANTS.length+" species (cached)"); return true; }
   status("Finding what’s flowering along the route…");
   try{
     const mid={lat:(A.lat+B.lat)/2,lng:(A.lng+B.lng)/2};
@@ -1190,7 +1193,7 @@ async function runRoute(status){
       const fam=d.family||"";
       return {common:name, sci:t.name||"", type:classifyType(name+" "+(t.name||""), fam), fam, status:d.status||statusOf(t), curve, why:"", about:d.about||"", uses:"", kin:[], kinNote:"", links:t.id?[{src:"inat",label:"iNat",t:"View on iNaturalist",url:"https://www.inaturalist.org/taxa/"+t.id}]:[]};
     }));
-    PLANTS=built; LIVE=true; renderList();
+    PLANTS=built; LIVE=true; routeCache[rkey]=built.map(p=>({...p})); renderList();
     status("✓ "+built.length+" species along "+shortName(A.name)+" → "+shortName(B.name));
     return true;
   }catch(err){ status("Couldn’t update: "+err.message); return false; }
@@ -1266,7 +1269,26 @@ searchBtn?.addEventListener("click",()=>{ const on=searchbar.classList.toggle("s
   if(on){ searchInput.focus(); } else { searchInput.value=""; searchQuery=""; renderList(); } });
 searchInput?.addEventListener("input",()=>{ searchQuery=searchInput.value.trim(); renderList(); });
 document.getElementById("searchClear")?.addEventListener("click",()=>{ searchInput.value=""; searchQuery=""; searchInput.focus(); renderList(); });
-function boot(){ try{ refreshRibbon(); refreshWhen(); renderList(); }catch(e){ console.error("boot error", e); } }
+async function ipLocate(){
+  for(const u of ["https://ipwho.is/","https://get.geojs.io/v1/ip/geo.json"]){
+    try{ const r=await fetchT(u,6000); if(!r||!r.ok) continue; const j=await r.json();
+      const lat=parseFloat(j.latitude), lng=parseFloat(j.longitude), city=j.city||j.region||"";
+      if(isFinite(lat)&&isFinite(lng)) return {name:city||(lat.toFixed(2)+", "+lng.toFixed(2)), lat, lng};
+    }catch(e){} }
+  return null;
+}
+async function autoLocate(){
+  try{
+    const loc=await ipLocate();
+    if(!loc || inNortheast(loc)) return;          // NJ/Northeast keeps the curated list
+    ROUTE.a={...loc}; ROUTE.b={...loc};
+    document.getElementById("fromLabel").textContent=shortName(loc.name);
+    document.getElementById("toLabel").textContent=shortName(loc.name);
+    inlineStatus("Finding plants near "+shortName(loc.name)+"…");
+    await runRoute(inlineStatus);
+  }catch(e){}
+}
+function boot(){ try{ refreshRibbon(); refreshWhen(); renderList(); autoLocate(); }catch(e){ console.error("boot error", e); } }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", boot); else boot();
 </script>
 
