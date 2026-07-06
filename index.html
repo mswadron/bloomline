@@ -922,16 +922,48 @@ async function fetchPartPhotos(sci, common){
   const take=i=>{ for(let k=i;k<inat.length;k++){ if(!used.has(inat[k].url)){ used.add(inat[k].url); return inat[k]; } }
                   for(let k=0;k<inat.length;k++){ if(!used.has(inat[k].url)){ used.add(inat[k].url); return inat[k]; } }
                   return inat[0]||null; };
-  // each tile hunts for its OWN part on Wikimedia (in parallel); fall back to a
-  // distinct iNaturalist photo (relabelled "Plant") only if no part photo exists.
+  // Each tile pulls from Wikimedia's HUMAN-CURATED organ sub-categories first
+  // (e.g. "Acer rubrum (flowers)"), then keyword search, then a distinct
+  // iNaturalist photo relabelled "Plant". Categories = people filing by organ.
   const [wf,wl,ws]=await Promise.all([
-    wikiPhoto([sci+" flowers", sci+" flower", sci+" in bloom", sci+" inflorescence"], FLOWER_MUST, FLOWER_AVOID),
-    wikiPhoto([sci+" leaves", sci+" leaf", sci+" foliage"], LEAF_MUST, LEAF_AVOID),
-    wikiPhoto([sci+" fruit", sci+" seeds", sci+" seed pods", sci+" seed"], SEED_MUST, SEED_AVOID)
+    partPhoto([sci+" (flowers)", sci+" (flower)", "Flowers of "+sci],
+              [sci+" flowers", sci+" flower", sci+" in bloom", sci+" inflorescence"], FLOWER_MUST, FLOWER_AVOID),
+    partPhoto([sci+" (leaves)", sci+" (leaf)", "Leaves of "+sci],
+              [sci+" leaves", sci+" leaf", sci+" foliage"], LEAF_MUST, LEAF_AVOID),
+    partPhoto([sci+" (fruits)", sci+" (fruit)", sci+" (seeds)", sci+" (seed)", "Fruit of "+sci],
+              [sci+" fruit", sci+" seeds", sci+" seed pods", sci+" seed"], SEED_MUST, SEED_AVOID)
   ]);
   const pick=(w,idx)=>{ if(w && !used.has(w.url)){ used.add(w.url); w.partOK=true; return w; }
                         const t=take(idx); if(t) t.partOK=false; return t; };
   return [ pick(wf,0), pick(wl,1), pick(ws,2) ];
+}
+
+/* organ category first (reliable), then keyword search */
+async function partPhoto(cats, queries, must, avoid){
+  const byCat=await wikiCategoryPhoto(cats);
+  if(byCat) return byCat;
+  return await wikiPhoto(queries, must, avoid);
+}
+/* first clean photo filed under a Wikimedia Commons organ category */
+async function wikiCategoryPhoto(cats){
+  for(const cat of cats){
+    try{
+      const u="https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*"
+        +"&generator=categorymembers&gcmtype=file&gcmlimit=10&gcmtitle=Category:"+encodeURIComponent(cat)
+        +"&prop=imageinfo&iiprop=url|extmetadata&iiurlwidth=900";
+      const r=await fetchT(u,6000); if(!r||!r.ok) continue;
+      const pages=((await r.json()).query||{}).pages||{};
+      for(const p of Object.values(pages)){
+        const ii=(p.imageinfo||[])[0]; if(!ii) continue;
+        if(!/\.(jpe?g|png)$/i.test(ii.url||"")) continue;
+        if(WIKI_BAD.test(((p.title||"")+" "+(ii.url||"")).toLowerCase())) continue;
+        const url=ii.thumburl||ii.url; if(!url) continue;
+        const artist=(((ii.extmetadata||{}).Artist||{}).value||"").replace(/<[^>]+>/g,"").trim();
+        return {url, large:ii.url||url, credit:(artist?artist+" · ":"")+"Wikimedia Commons"};
+      }
+    }catch(e){}
+  }
+  return null;
 }
 
 /* iNaturalist photos (display + large) for a scientific name */
