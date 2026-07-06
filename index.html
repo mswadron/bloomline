@@ -917,14 +917,13 @@ const SEED_AVOID=["leaf","leaves","foliage","flower","infloresc","bark","trunk",
 const FLOWER_MUST=["flower","flowers","floral","infloresc","bloom","blossom","raceme","umbel","catkin","capitul","petal"];
 const FLOWER_AVOID=["leaf","leaves","foliage","frond","fruit","seed","pod","bark","trunk","scar","bud","seedling","sapling","habit","distribution","map","drawing","herbar","specimen"];
 async function fetchPartPhotos(sci, common){
-  const inat=await inatPhotos(sci);
+  // gather a general fallback image pool from iNaturalist AND Encyclopedia of Life
+  const [inat, eol]=await Promise.all([inatPhotos(sci), eolPhotos(sci)]);
+  const pool=[...inat, ...eol];
   const used=new Set();
-  const take=i=>{ for(let k=i;k<inat.length;k++){ if(!used.has(inat[k].url)){ used.add(inat[k].url); return inat[k]; } }
-                  for(let k=0;k<inat.length;k++){ if(!used.has(inat[k].url)){ used.add(inat[k].url); return inat[k]; } }
-                  return inat[0]||null; };
-  // Each tile pulls from Wikimedia's HUMAN-CURATED organ sub-categories first
-  // (e.g. "Acer rubrum (flowers)"), then keyword search, then a distinct
-  // iNaturalist photo relabelled "Plant". Categories = people filing by organ.
+  const nextFree=()=>{ for(const p of pool){ if(!used.has(p.url)){ used.add(p.url); return p; } } return pool[0]||null; };
+  // each tile: Wikimedia organ CATEGORY first, then keyword; else a distinct
+  // pool photo relabelled "Plant".
   const [wf,wl,ws]=await Promise.all([
     partPhoto([sci+" (flowers)", sci+" (flower)", "Flowers of "+sci],
               [sci+" flowers", sci+" flower", sci+" in bloom", sci+" inflorescence"], FLOWER_MUST, FLOWER_AVOID),
@@ -933,9 +932,23 @@ async function fetchPartPhotos(sci, common){
     partPhoto([sci+" (fruits)", sci+" (fruit)", sci+" (seeds)", sci+" (seed)", "Fruit of "+sci],
               [sci+" fruit", sci+" seeds", sci+" seed pods", sci+" seed"], SEED_MUST, SEED_AVOID)
   ]);
-  const pick=(w,idx)=>{ if(w && !used.has(w.url)){ used.add(w.url); w.partOK=true; return w; }
-                        const t=take(idx); if(t) t.partOK=false; return t; };
-  return [ pick(wf,0), pick(wl,1), pick(ws,2) ];
+  const pick=(w)=>{ if(w && !used.has(w.url)){ used.add(w.url); w.partOK=true; return w; }
+                    const p=nextFree(); if(p) p.partOK=false; return p; };
+  return [ pick(wf), pick(wl), pick(ws) ];
+}
+/* Encyclopedia of Life: extra curated images (from iNat/Flickr/Smithsonian) */
+async function eolPhotos(sci){
+  const out=[];
+  try{
+    const r=await fetchT(`https://eol.org/api/search/1.0.json?q=${encodeURIComponent(sci)}&exact=true`,6000);
+    if(!r||!r.ok) return out;
+    const id=(((await r.json()).results||[])[0]||{}).id; if(!id) return out;
+    const r2=await fetchT(`https://eol.org/api/pages/1.0/${id}.json?images_per_page=6&details=true&taxonomy=false&vetted=0`,7000);
+    if(!r2||!r2.ok) return out;
+    const dos=(((await r2.json()).taxonConcept||{}).dataObjects)||[];
+    dos.forEach(o=>{ const u=o.eolMediaURL||o.mediaURL; if(u && /\.(jpe?g|png)/i.test(u)) out.push({url:u, large:u, credit:"Encyclopedia of Life (CC)"}); });
+  }catch(e){}
+  const seen=new Set(); return out.filter(p=>!seen.has(p.url)&&seen.add(p.url));
 }
 
 /* organ category first (reliable), then keyword search */
