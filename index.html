@@ -881,7 +881,7 @@ async function loadPhotos(cardEl,plant){
     tiles.forEach((tile,i)=>{
       const ph=photos[i];
       if(ph && ph.url){
-        if(i>0 && ph.partOK===false){ const lab=tile.querySelector(".plabel"); if(lab) lab.textContent="Plant"; }
+        if(ph.partOK===false){ const lab=tile.querySelector(".plabel"); if(lab) lab.textContent="Plant"; }
         const partTxt=((tile.querySelector(".plabel")||{}).textContent)||tile.dataset.part;
         const img=new Image(); img.alt=plant.common+" \u2014 "+partTxt;
         img.onload=()=>{tile.classList.remove("shimmer");const p=tile.querySelector(".ph");if(p)p.remove();
@@ -914,18 +914,24 @@ const LEAF_MUST=["leaf","leaves","foliage","frond"];
 const LEAF_AVOID=["flower","infloresc","fruit","seed","pod","bark","trunk","scar","bud","twig","branch","winter","gall","gland","root","sapling","seedling","habit","distribution","map","drawing","herbar","specimen"];
 const SEED_MUST=["fruit","seed","pod","berry","hip","cone","samara","drupe","capsule","achene","seedhead"];
 const SEED_AVOID=["leaf","leaves","foliage","flower","infloresc","bark","trunk","scar","bud","seedling","sapling","habit","distribution","map","drawing","herbar","specimen"];
+const FLOWER_MUST=["flower","flowers","floral","infloresc","bloom","blossom","raceme","umbel","catkin","capitul","petal"];
+const FLOWER_AVOID=["leaf","leaves","foliage","frond","fruit","seed","pod","bark","trunk","scar","bud","seedling","sapling","habit","distribution","map","drawing","herbar","specimen"];
 async function fetchPartPhotos(sci, common){
   const inat=await inatPhotos(sci);
   const used=new Set();
   const take=i=>{ for(let k=i;k<inat.length;k++){ if(!used.has(inat[k].url)){ used.add(inat[k].url); return inat[k]; } }
                   for(let k=0;k<inat.length;k++){ if(!used.has(inat[k].url)){ used.add(inat[k].url); return inat[k]; } }
                   return inat[0]||null; };
-  const flower=take(0);
-  let leaf=await wikiPhoto([sci+" leaves", sci+" leaf", sci+" foliage"], LEAF_MUST, LEAF_AVOID);
-  if(leaf && !used.has(leaf.url)){ used.add(leaf.url); leaf.partOK=true; } else { leaf=take(1); if(leaf) leaf.partOK=false; }
-  let seed=await wikiPhoto([sci+" fruit", sci+" seeds", sci+" seed pods", sci+" seed"], SEED_MUST, SEED_AVOID);
-  if(seed && !used.has(seed.url)){ used.add(seed.url); seed.partOK=true; } else { seed=take(2); if(seed) seed.partOK=false; }
-  return [flower, leaf, seed];
+  // each tile hunts for its OWN part on Wikimedia (in parallel); fall back to a
+  // distinct iNaturalist photo (relabelled "Plant") only if no part photo exists.
+  const [wf,wl,ws]=await Promise.all([
+    wikiPhoto([sci+" flowers", sci+" flower", sci+" in bloom", sci+" inflorescence"], FLOWER_MUST, FLOWER_AVOID),
+    wikiPhoto([sci+" leaves", sci+" leaf", sci+" foliage"], LEAF_MUST, LEAF_AVOID),
+    wikiPhoto([sci+" fruit", sci+" seeds", sci+" seed pods", sci+" seed"], SEED_MUST, SEED_AVOID)
+  ]);
+  const pick=(w,idx)=>{ if(w && !used.has(w.url)){ used.add(w.url); w.partOK=true; return w; }
+                        const t=take(idx); if(t) t.partOK=false; return t; };
+  return [ pick(wf,0), pick(wl,1), pick(ws,2) ];
 }
 
 /* iNaturalist photos (display + large) for a scientific name */
