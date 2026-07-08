@@ -279,6 +279,48 @@
   .photo.clickable:active{transform:scale(.96)}
   #lightbox .lb-hint{color:#f3f5ea;opacity:.5;font-size:10px;font-family:"Spline Sans Mono",monospace;
     letter-spacing:.1em;text-transform:uppercase}
+  /* ---- community: account chip, field notes, sighting pins ---- */
+  .htools{display:flex;align-items:center;gap:8px;flex:none}
+  .acct-chip{font-family:"Spline Sans Mono",monospace;font-size:11px;letter-spacing:.06em;color:#f3f5ea;
+    background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);border-radius:11px;
+    padding:0 11px;height:38px;display:flex;align-items:center;gap:7px;cursor:pointer;max-width:160px}
+  .acct-chip:hover{background:rgba(255,255,255,.18)}
+  .acct-chip.in{padding-left:5px}
+  .acct-chip img{width:26px;height:26px;border-radius:8px;object-fit:cover;flex:none}
+  .acct-chip .ava{width:26px;height:26px;border-radius:8px;background:#cfe0a8;color:var(--green);
+    display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px;flex:none}
+  .acct-chip .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:96px}
+  .sight-count{display:none;margin-top:10px;font-family:"Spline Sans Mono",monospace;font-size:11px;
+    letter-spacing:.03em;color:var(--green);background:#e7efdc;border:1px solid #c2d0a6;border-radius:10px;
+    padding:8px 11px;cursor:pointer;text-align:center}
+  .sight-count.show{display:block}
+  .ulinks{display:flex;flex-direction:column;gap:4px;margin-top:6px}
+  .ulinks .link{font-size:13px;color:var(--green);text-decoration:none}
+  .ulinks .link:hover{text-decoration:underline}
+  .notes-list{display:flex;flex-direction:column;gap:9px;margin-bottom:10px}
+  .notes-empty{font-size:13px;color:var(--muted);font-style:italic}
+  .note-item{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:9px 11px}
+  .note-body{font-size:14px;color:#36422f;line-height:1.45}
+  .note-meta{font-family:"Spline Sans Mono",monospace;font-size:10px;letter-spacing:.04em;color:var(--muted);
+    margin-top:5px;display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+  .note-who{color:var(--green);font-weight:500}
+  .note-here,.note-del{font-family:inherit;font-size:10px;letter-spacing:.04em;border:0;background:none;cursor:pointer;padding:0}
+  .note-here{color:var(--green)} .note-del{color:var(--ending)}
+  .note-form{display:flex;flex-direction:column;gap:8px}
+  .note-text{font-family:"Inter",sans-serif;font-size:13.5px;border:1px solid var(--line);border-radius:9px;
+    padding:9px 11px;resize:vertical;background:#fff;color:var(--ink);width:100%}
+  .note-text:focus{outline:2px solid var(--coming);outline-offset:1px}
+  .note-pin{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--muted);cursor:pointer}
+  .note-row{display:flex;align-items:center;gap:10px}
+  .note-post{font-family:"Spline Sans Mono",monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+    background:var(--green);color:#f3f5ea;border:0;border-radius:9px;padding:9px 14px;cursor:pointer;flex:none}
+  .note-post:hover{background:#264428}
+  .note-msg{font-family:"Spline Sans Mono",monospace;font-size:10.5px;color:var(--muted)}
+  .sight-pin{font-size:18px;line-height:22px;text-align:center;filter:drop-shadow(0 1px 2px rgba(0,0,0,.35))}
+  .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);z-index:400;
+    background:var(--ink);color:#f3f5ea;font-size:13px;padding:11px 16px;border-radius:12px;
+    box-shadow:0 8px 30px rgba(0,0,0,.3);opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;max-width:88%}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
 </head>
 <body>
@@ -286,9 +328,12 @@
   <header>
     <div class="htop">
       <div class="wordmark">Bloom<span>line</span></div>
-      <button class="search-btn" id="searchBtn" type="button" aria-label="Search plants">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-      </button>
+      <div class="htools">
+        <button class="acct-chip" id="acctChip" type="button" aria-label="Account">Sign in</button>
+        <button class="search-btn" id="searchBtn" type="button" aria-label="Search plants">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        </button>
+      </div>
     </div>
     <div class="tag">what's blooming on your drive</div>
     <div class="searchbar" id="searchbar">
@@ -330,6 +375,7 @@
            aria-label="Selected date" aria-valuemin="1" aria-valuemax="365"></div>
     </div>
     <div class="drag-hint">Drag the marker &mdash; or tap the ribbon &mdash; to time-travel the season</div>
+    <div class="sight-count" id="sightCount"></div>
   </section>
 
   <main id="stages"></main>
@@ -368,6 +414,10 @@
   <img id="lbImg" alt="">
   <div class="lb-cap" id="lbCap"></div>
   <div class="lb-hint">pinch or double-tap to zoom · tap outside to close</div>
+<!-- Firebase (compat build — works with the classic script below; global `firebase`) -->
+<script src="https://www.gstatic.com/firebasejs/12.15.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.15.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore-compat.js"></script>
 <script>
 /* ===================================================================
    Bloomline — interactive prototype
@@ -664,15 +714,22 @@ function dateFromX(clientX){
   return new Date(start.getTime()+ms);
 }
 let rafPending=false;
+/* on a live (far-route) list, the species set is anchored to a month; when the
+   user scrubs into a different month, re-query so the list matches the date */
+function maybeRefreshLive(){
+  if(!LIVE || liveMonth===null || selDate.getMonth()===liveMonth) return;
+  if(!ROUTE.a || !ROUTE.b) return;
+  runRoute(typeof inlineStatus==="function"?inlineStatus:function(){});
+}
 function setDate(d,full){
   selDate=d; refreshRibbon(); refreshWhen();
-  if(full) renderList();
+  if(full){ renderList(); maybeRefreshLive(); }
   else if(!rafPending){rafPending=true;requestAnimationFrame(()=>{rafPending=false;renderList();});}
 }
 let dragging=false;
 function startDrag(e){dragging=true; if(e.pointerId!=null&&nowmark.setPointerCapture)nowmark.setPointerCapture(e.pointerId); moveDrag(e); e.preventDefault();}
 function moveDrag(e){if(!dragging)return; const x=e.touches?e.touches[0].clientX:e.clientX; setDate(dateFromX(x),false);}
-function endDrag(){if(dragging){dragging=false;renderList();}}
+function endDrag(){if(dragging){dragging=false;renderList();maybeRefreshLive();}}
 nowmark.addEventListener("pointerdown",startDrag);
 window.addEventListener("pointermove",moveDrag);
 window.addEventListener("pointerup",endDrag);
@@ -774,6 +831,7 @@ function card(p,idx,mf){
         <div class="kin">${(p.kin||[]).map(k=>`<span>${esc(k)}</span>`).join("")}</div></div>`:""}
       <div class="layer"><div class="lh">Learn more</div>
         ${linksHTML(p.links)}
+        <div class="ulinks" data-sci="${esc(p.sci)}"></div>
         <div class="add">
           <button class="add-btn" onclick="showAdd(${idx})">+ Add a link</button>
           <div class="add-form" id="form${idx}">
@@ -781,6 +839,14 @@ function card(p,idx,mf){
             <div class="add-row"><button class="submit" onclick="submitAdd(${idx})">Submit</button>
               <button class="cancel" onclick="showAdd(${idx})">Cancel</button></div>
           </div><div id="pend${idx}"></div>
+        </div>
+      </div>
+      <div class="layer notes-layer"><div class="lh">Field notes <span class="nl-count"></span></div>
+        <div class="notes-list" data-sci="${esc(p.sci)}"><div class="notes-empty">No field notes yet — be the first to log a sighting.</div></div>
+        <div class="note-form">
+          <textarea class="note-text" rows="2" maxlength="500" placeholder="Saw this blooming nearby? Add a field note…"></textarea>
+          <label class="note-pin"><input type="checkbox" class="note-loc"> &#128205; pin where I saw it</label>
+          <div class="note-row"><button class="note-post" type="button">Post note</button><span class="note-msg"></span></div>
         </div>
       </div>
     </div></div>
@@ -806,7 +872,9 @@ function afterRender(openIds){
     const p=CARD_PLANT[+c.id.replace("card","")];
     const th=c.querySelector(".thumb");
     if(p && th) loadThumb(p, th);
+    if(p) wireCommunity(c,p);
   });
+  updateSightCount();
   openIds.forEach(id=>{const el=document.getElementById(id);
     if(el){el.classList.add("open"); const h=el.querySelector(".head"); if(h)h.setAttribute("aria-expanded","true");
       loadPhotos(el,CARD_PLANT[+id.replace("card","")]);}});
@@ -859,9 +927,18 @@ function renderList(){
 function toggle(i){const el=document.getElementById("card"+i);const open=el.classList.toggle("open");
   el.querySelector(".head").setAttribute("aria-expanded",open); if(open)loadPhotos(el,CARD_PLANT[i]);}
 function showAdd(i){document.getElementById("form"+i).classList.toggle("show");}
-function submitAdd(i){const f=document.getElementById("form"+i);f.classList.remove("show");
-  f.querySelectorAll("input").forEach(x=>x.value="");
-  document.getElementById("pend"+i).innerHTML=`<span class="pending">&#10003; Submitted &middot; pending review</span>`;}
+function submitAdd(i){
+  const f=document.getElementById("form"+i), p=CARD_PLANT[i], pend=document.getElementById("pend"+i);
+  const ins=f.querySelectorAll("input"), url=(ins[0].value||"").trim(), title=(ins[1].value||"").trim();
+  if(!url){ pend.innerHTML=`<span class="pending">Paste a link first.</span>`; return; }
+  if(!FB_ON){ pend.innerHTML=`<span class="pending">Connect Firebase to submit links.</span>`; return; }
+  const write=()=>fbDB.collection("links").add({plantSci:p.sci, url, title:title||url, uid:fbUser.uid,
+      name:displayName(fbUser), createdAt:firebase.firestore.FieldValue.serverTimestamp()})
+    .then(()=>{ f.classList.remove("show"); ins.forEach(x=>x.value=""); pend.innerHTML=`<span class="pending">&#10003; Added — thanks!</span>`; })
+    .catch(e=>{ pend.innerHTML=`<span class="pending">Couldn't add: ${esc(e.message)}</span>`; });
+  if(!fbUser){ pend.innerHTML=`<span class="pending">Signing you in…</span>`; signIn().then(write).catch(()=>{ pend.innerHTML=`<span class="pending">Sign-in needed.</span>`; }); }
+  else write();
+}
 window.toggle=toggle;window.showAdd=showAdd;window.submitAdd=submitAdd;
 
 /* ===================================================================
@@ -1048,22 +1125,24 @@ async function geocode(q){
 }
 const STATE_ABBR={"New Jersey":"NJ","New York":"NY","Pennsylvania":"PA","Connecticut":"CT","Massachusetts":"MA","Maryland":"MD","Delaware":"DE","Virginia":"VA","California":"CA"};
 
-async function floweringNear(lat,lng){
-  const d2=new Date(),d1=new Date();d1.setDate(d1.getDate()-30);
-  const iso=d=>d.toISOString().slice(0,10);
-  const u=`${INAT}/observations/species_counts?lat=${lat}&lng=${lng}&radius=15`
+async function floweringNear(lat,lng,months){
+  const mparam=(months&&months.length?months:[new Date().getMonth()+1]).join(",");
+  const u=`${INAT}/observations/species_counts?lat=${lat}&lng=${lng}&radius=20`
         +`&iconic_taxa=Plantae&term_id=12&term_value_id=13&quality_grade=research`
-        +`&d1=${iso(d1)}&d2=${iso(d2)}&per_page=40`;
+        +`&month=${mparam}&per_page=50`;
   const r=await fetch(u); if(!r.ok) throw new Error("species "+r.status);
   return (await r.json()).results||[];
 }
-async function monthlyCurve(taxonId){
+async function monthlyCurve(taxonId,bbox){
   try{
-    const u=`${INAT}/observations/histogram?taxon_id=${taxonId}&date_field=observed&interval=month_of_year&term_id=12&term_value_id=13`;
+    let u=`${INAT}/observations/histogram?taxon_id=${taxonId}&date_field=observed&interval=month_of_year&term_id=12&term_value_id=13`;
+    if(bbox) u+=`&nelat=${bbox.nelat}&nelng=${bbox.nelng}&swlat=${bbox.swlat}&swlng=${bbox.swlng}`;
     const r=await fetch(u); if(!r.ok) return null;
-    const h=(await r.json()).results.month_of_year, curve=[];
+    const res=(await r.json()).results, h=(res&&res.month_of_year)||{}, curve=[];
     for(let m=1;m<=12;m++) curve.push(h[m]||h[String(m)]||0);
-    const max=Math.max(...curve,1); return curve.map(v=>Math.round(v/max*100));
+    const max=Math.max(...curve,0);
+    if(max<=0) return bbox ? await monthlyCurve(taxonId) : curve.map(()=>0);   // local empty → global fallback
+    return curve.map(v=>Math.round(v/max*100));
   }catch(e){ return null; }
 }
 function statusOf(t){
@@ -1124,6 +1203,7 @@ function openChooser(){
   rmTo.value=document.getElementById("toLabel").textContent.trim();
   activeField="a"; markActive();
   setTimeout(initMap,60);
+  setTimeout(renderSightings,150);
   if(!ROUTE.a) geocode(rmFrom.value).then(p=>{ROUTE.a=p;placeMarker("a",p);fitRoute();}).catch(()=>{});
   if(!ROUTE.b) geocode(rmTo.value).then(p=>{ROUTE.b=p;placeMarker("b",p);fitRoute();}).catch(()=>{});
 }
@@ -1134,10 +1214,12 @@ function initMap(){
   rmap=L.map("rmMap",{zoomControl:true}).setView([40.5,-74.42],9);
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:"© OpenStreetMap"}).addTo(rmap);
   rmap.on("click",e=>setPoint(activeField,{name:"",lat:e.latlng.lat,lng:e.latlng.lng}));
+  sightLayer=L.layerGroup().addTo(rmap);
   mapReady=true;
   if(ROUTE.a) placeMarker("a",ROUTE.a);
   if(ROUTE.b) placeMarker("b",ROUTE.b);
   fitRoute(); setTimeout(()=>rmap.invalidateSize(),90);
+  renderSightings();
 }
 function pinIcon(field){ return L.divIcon({className:"leaflet-div-icon",html:`<div class="rm-pin ${field}"><span>${field.toUpperCase()}</span></div>`,iconSize:[24,24],iconAnchor:[12,24]}); }
 function placeMarker(field,p){
@@ -1208,6 +1290,19 @@ document.getElementById("rmGo").addEventListener("click",applyRoute);
    route must never drop known plants (e.g. mimosa). Keep the rich list for any
    route inside this region; only pull sparse live iNaturalist data for far routes. */
 function inNortheast(p){ return !!p && p.lat>=38.3 && p.lat<=43.8 && p.lng>=-80.8 && p.lng<=-71.2; }
+let liveMonth=null;   // month index (0-11) the current live list was built for
+function haversine(a,b){ const R=6371,dLat=(b.lat-a.lat)*Math.PI/180,dLng=(b.lng-a.lng)*Math.PI/180,
+  s=Math.sin(dLat/2)**2+Math.cos(a.lat*Math.PI/180)*Math.cos(b.lat*Math.PI/180)*Math.sin(dLng/2)**2;
+  return 2*R*Math.asin(Math.min(1,Math.sqrt(s))); }
+/* evenly spaced sample points A→B; more for longer drives (3..7) so the middle
+   of a route is actually sampled, not just the endpoints */
+function routeSamples(A,B){ const km=haversine(A,B), n=Math.max(3,Math.min(7,Math.round(km/60)+1)), pts=[];
+  for(let i=0;i<n;i++){ const f=n>1?i/(n-1):0; pts.push({lat:A.lat+(B.lat-A.lat)*f,lng:A.lng+(B.lng-A.lng)*f}); } return pts; }
+/* padded bounding box around the corridor, for local bloom timing */
+function routeBBox(pts){ const la=pts.map(p=>p.lat),lo=pts.map(p=>p.lng),pad=0.6;
+  return {swlat:Math.min(...la)-pad,swlng:Math.min(...lo)-pad,nelat:Math.max(...la)+pad,nelng:Math.max(...lo)+pad}; }
+/* the scrubbed month and its neighbours (1-12), for the flowering query */
+function monthsAround(d){ const m=d.getMonth()+1, w=x=>((x-1+12)%12)+1; return [w(m-1),m,w(m+1)]; }
 async function runRoute(status){
   status=status||function(){};
   try{
@@ -1224,12 +1319,13 @@ async function runRoute(status){
     renderList(); status("✓ "+shortName(A.name)+" → "+shortName(B.name)+" — full regional list");
     return true;
   }
-  const rkey="live:"+A.lat.toFixed(2)+","+A.lng.toFixed(2)+"|"+B.lat.toFixed(2)+","+B.lng.toFixed(2);
+  const pts=routeSamples(A,B), bbox=routeBBox(pts), months=monthsAround(selDate);
+  liveMonth=selDate.getMonth();
+  const rkey="live:"+A.lat.toFixed(2)+","+A.lng.toFixed(2)+"|"+B.lat.toFixed(2)+","+B.lng.toFixed(2)+"|m"+selDate.getMonth();
   if(routeCache[rkey]){ PLANTS=routeCache[rkey].map(p=>({...p})); LIVE=true; renderList(); status("✓ "+PLANTS.length+" species (cached)"); return true; }
   status("Finding what’s flowering along the route…");
   try{
-    const mid={lat:(A.lat+B.lat)/2,lng:(A.lng+B.lng)/2};
-    const lists=await Promise.all([floweringNear(A.lat,A.lng),floweringNear(mid.lat,mid.lng),floweringNear(B.lat,B.lng)]);
+    const lists=await Promise.all(pts.map(p=>floweringNear(p.lat,p.lng,months)));
     const agg={};
     lists.forEach(list=>list.forEach(row=>{const t=row.taxon;if(!t)return; const a=agg[t.id]||(agg[t.id]={taxon:t,count:0,pts:0}); a.count+=row.count; a.pts+=1;}));
     let ranked=Object.values(agg).sort((x,y)=>(y.pts-x.pts)||(y.count-x.count)).slice(0,18);
@@ -1239,7 +1335,7 @@ async function runRoute(status){
     const details=await fetchTaxaDetails(detIds);
     const built=await Promise.all(ranked.map(async a=>{
       const t=a.taxon, d=details[t.id]||{};
-      const curve=(await monthlyCurve(t.id))||[0,0,2,10,40,75,85,70,40,12,2,0];
+      const curve=(await monthlyCurve(t.id,bbox))||[0,0,2,10,40,75,85,70,40,12,2,0];
       const name=(d.common||t.preferred_common_name||t.name||"Unknown").replace(/\b\w/g,m=>m.toUpperCase());
       const fam=d.family||"";
       return {common:name, sci:t.name||"", type:classifyType(name+" "+(t.name||""), fam), fam, status:d.status||statusOf(t), curve, why:"", about:d.about||"", uses:"", kin:[], kinNote:"", links:t.id?[{src:"inat",label:"iNat",t:"View on iNaturalist",url:"https://www.inaturalist.org/taxa/"+t.id}]:[]};
@@ -1314,6 +1410,182 @@ lbImg.addEventListener("pointercancel",e=>lbPts.delete(e.pointerId));
 lbImg.addEventListener("dblclick",e=>{ e.preventDefault(); e.stopPropagation(); if(lbScale>1) lbReset(); else { lbScale=2.5; lbApply(); } });
 window.openLightbox=openLightbox;
 
+/* ===================================================================
+   Community layer — Firebase Auth (logins) + Firestore field notes
+   (comments) + location-anchored sighting pins.
+   Paste your firebaseConfig below (Firebase console → Project settings →
+   Your apps → Web). Until you do, these features quietly disable
+   themselves and the rest of the app runs exactly as before.
+   =================================================================== */
+var firebaseConfig = {
+  apiKey: "AIzaSyAqNjIGBDIFBKY4CJzzEeV7-9JKoHFqyvY",
+  authDomain: "torah-interactive.firebaseapp.com",
+  projectId: "torah-interactive",
+  storageBucket: "torah-interactive.firebasestorage.app",
+  messagingSenderId: "54134767110",
+  appId: "1:54134767110:web:101d78923e9cc1cd760d87",
+  measurementId: "G-DVCQDJEEF2"
+};
+var FB_ON=false, fbAuth=null, fbDB=null, fbUser=null;
+var NOTES_BY_SCI={}, LINKS_BY_SCI={}, SIGHTINGS=[], sightLayer=null;
+function fbEnabled(){ return firebaseConfig.apiKey && firebaseConfig.apiKey.indexOf("PASTE")===-1; }
+
+function initCommunity(){
+  wireAcctChip();
+  var sc=document.getElementById("sightCount");
+  if(sc && !sc._wired){ sc._wired=1; sc.addEventListener("click",function(){ if(FB_ON) openChooser(); }); }
+  if(!fbEnabled() || typeof firebase==="undefined"){ return; }
+  try{
+    firebase.initializeApp(firebaseConfig);
+    fbAuth=firebase.auth(); fbDB=firebase.firestore(); FB_ON=true;
+    fbAuth.onAuthStateChanged(function(u){ fbUser=u; renderAcctChip(); refreshNoteMsgs();
+      document.querySelectorAll(".card").forEach(function(c){ var p=CARD_PLANT[+c.id.replace("card","")]; if(p) fillCardNotes(c,p); }); });
+    watchNotes(); watchLinks();
+  }catch(e){ console.warn("Firebase init failed", e); FB_ON=false; }
+}
+
+/* ---- auth + account chip ---- */
+var acctChip=document.getElementById("acctChip");
+function wireAcctChip(){ if(acctChip && !acctChip._wired){ acctChip._wired=1; acctChip.addEventListener("click",onAcctClick); } renderAcctChip(); }
+function onAcctClick(){
+  if(!FB_ON){ toast("Add your Firebase config in bloomline.html to enable accounts."); return; }
+  if(fbUser){ if(confirm("Sign out of Bloomline?")) fbAuth.signOut(); }
+  else signIn();
+}
+function signIn(){
+  if(!FB_ON){ toast("Connect Firebase to sign in."); return Promise.reject(new Error("no-fb")); }
+  var prov=new firebase.auth.GoogleAuthProvider();
+  return fbAuth.signInWithPopup(prov).catch(function(){ return fbAuth.signInAnonymously().then(function(){ toast("Signed in anonymously."); }); });
+}
+function displayName(u){ return u ? (u.displayName || (u.isAnonymous ? "Anonymous" : (u.email||"You").split("@")[0])) : ""; }
+function renderAcctChip(){
+  if(!acctChip) return;
+  if(!FB_ON){ acctChip.textContent="Sign in"; acctChip.classList.remove("in"); return; }
+  if(fbUser){
+    var n=displayName(fbUser); acctChip.classList.add("in");
+    acctChip.innerHTML=(fbUser.photoURL?'<img src="'+esc(fbUser.photoURL)+'" alt="">':'<span class="ava">'+esc((n[0]||"?").toUpperCase())+'</span>')+'<span class="nm">'+esc(n)+'</span>';
+    acctChip.title="Signed in as "+n+" — tap to sign out";
+  } else { acctChip.classList.remove("in"); acctChip.textContent="Sign in"; acctChip.title="Sign in to post field notes"; }
+}
+
+/* ---- toast ---- */
+var _toastEl=null, _toastT=null;
+function toast(msg){
+  if(!_toastEl){ _toastEl=document.createElement("div"); _toastEl.className="toast"; document.body.appendChild(_toastEl); }
+  _toastEl.textContent=msg; _toastEl.classList.add("show");
+  clearTimeout(_toastT); _toastT=setTimeout(function(){ _toastEl.classList.remove("show"); },2600);
+}
+
+/* ---- Firestore live listeners ---- */
+function watchNotes(){
+  fbDB.collection("notes").orderBy("createdAt","desc").limit(500).onSnapshot(function(snap){
+    NOTES_BY_SCI={}; SIGHTINGS=[];
+    snap.forEach(function(doc){ var d=doc.data(); d._id=doc.id;
+      (NOTES_BY_SCI[d.plantSci]=NOTES_BY_SCI[d.plantSci]||[]).push(d);
+      if(typeof d.lat==="number" && typeof d.lng==="number") SIGHTINGS.push(d); });
+    document.querySelectorAll(".card").forEach(function(c){ var p=CARD_PLANT[+c.id.replace("card","")]; if(p) fillCardNotes(c,p); });
+    renderSightings(); updateSightCount();
+  }, function(err){ console.warn("notes listener", err); });
+}
+function watchLinks(){
+  fbDB.collection("links").orderBy("createdAt","desc").limit(500).onSnapshot(function(snap){
+    LINKS_BY_SCI={};
+    snap.forEach(function(doc){ var d=doc.data(); (LINKS_BY_SCI[d.plantSci]=LINKS_BY_SCI[d.plantSci]||[]).push(d); });
+    document.querySelectorAll(".card").forEach(function(c){ var p=CARD_PLANT[+c.id.replace("card","")]; if(p) fillCardLinks(c,p); });
+  }, function(err){ console.warn("links listener", err); });
+}
+
+/* ---- render community content into cards ---- */
+function timeAgo(ts){
+  if(!ts||!ts.toDate) return "just now";
+  var s=(Date.now()-ts.toDate().getTime())/1000;
+  if(s<60) return "just now"; if(s<3600) return Math.floor(s/60)+"m ago";
+  if(s<86400) return Math.floor(s/3600)+"h ago"; if(s<2592000) return Math.floor(s/86400)+"d ago";
+  return ts.toDate().toLocaleDateString();
+}
+function fillCardNotes(cardEl,p){
+  var list=cardEl.querySelector(".notes-list"); if(!list) return;
+  var arr=NOTES_BY_SCI[p.sci]||[];
+  var cnt=cardEl.querySelector(".nl-count"); if(cnt) cnt.textContent=arr.length?("· "+arr.length):"";
+  if(!arr.length){ list.innerHTML='<div class="notes-empty">'+(FB_ON?"No field notes yet — be the first to log a sighting.":"Connect Firebase to enable field notes.")+'</div>'; return; }
+  list.innerHTML=arr.map(function(d){
+    var loc=(typeof d.lat==="number")?'<button class="note-here" data-lat="'+d.lat+'" data-lng="'+d.lng+'">&#128205; '+(d.lat.toFixed(2)+", "+d.lng.toFixed(2))+'</button>':'';
+    var mine=fbUser && d.uid===fbUser.uid;
+    return '<div class="note-item"><div class="note-body">'+esc(d.text)+'</div><div class="note-meta">'+
+      '<span class="note-who">'+esc(d.name||"Someone")+'</span> · '+esc(timeAgo(d.createdAt))+' '+loc+
+      (mine?' · <button class="note-del" data-id="'+esc(d._id)+'">delete</button>':'')+'</div></div>';
+  }).join("");
+  list.querySelectorAll(".note-here").forEach(function(b){ b.addEventListener("click",function(){ jumpToSighting(+b.dataset.lat,+b.dataset.lng); }); });
+  list.querySelectorAll(".note-del").forEach(function(b){ b.addEventListener("click",function(){ deleteNote(b.dataset.id); }); });
+}
+function fillCardLinks(cardEl,p){
+  var box=cardEl.querySelector(".ulinks"); if(!box) return;
+  var arr=LINKS_BY_SCI[p.sci]||[];
+  box.innerHTML=arr.map(function(d){ return '<a class="link" href="'+esc(d.url)+'" target="_blank" rel="noopener">&#128279; '+esc(d.title||d.url)+'</a>'; }).join("");
+}
+
+/* ---- posting field notes ---- */
+function wireCommunity(cardEl,p){
+  var btn=cardEl.querySelector(".note-post");
+  if(btn && !btn._wired){ btn._wired=1; btn.addEventListener("click",function(){ submitNote(cardEl,p); }); }
+  fillCardNotes(cardEl,p); fillCardLinks(cardEl,p);
+}
+function refreshNoteMsgs(){ document.querySelectorAll(".note-msg").forEach(function(m){ m.textContent=""; }); }
+function submitNote(cardEl,p){
+  var ta=cardEl.querySelector(".note-text"), msg=cardEl.querySelector(".note-msg");
+  var withLoc=cardEl.querySelector(".note-loc") && cardEl.querySelector(".note-loc").checked;
+  var text=((ta&&ta.value)||"").trim();
+  if(!text){ if(msg) msg.textContent="Write a note first."; return; }
+  if(!FB_ON){ toast("Connect Firebase to post field notes."); return; }
+  function doWrite(loc){
+    var data={ plantSci:p.sci, plantCommon:p.common, text:text, uid:fbUser.uid, name:displayName(fbUser),
+      createdAt:firebase.firestore.FieldValue.serverTimestamp() };
+    if(loc){ data.lat=Math.round(loc.lat*1000)/1000; data.lng=Math.round(loc.lng*1000)/1000; }
+    fbDB.collection("notes").add(data).then(function(){ if(ta) ta.value=""; if(msg) msg.textContent="Posted ✓"; })
+      .catch(function(e){ if(msg) msg.textContent="Couldn't post: "+e.message; });
+  }
+  function afterAuth(){
+    if(withLoc){
+      if(msg) msg.textContent="Getting your location…";
+      navigator.geolocation.getCurrentPosition(
+        function(pos){ doWrite({lat:pos.coords.latitude,lng:pos.coords.longitude}); },
+        function(){ if(msg) msg.textContent="Location unavailable — posting without a pin."; doWrite(null); },
+        {enableHighAccuracy:false,timeout:8000,maximumAge:60000});
+    } else doWrite(null);
+  }
+  if(!fbUser){ if(msg) msg.textContent="Signing you in…"; signIn().then(afterAuth).catch(function(){ if(msg) msg.textContent="Sign-in needed to post."; }); }
+  else afterAuth();
+}
+function deleteNote(id){ if(!FB_ON||!id) return; if(!confirm("Delete your note?")) return;
+  fbDB.collection("notes").doc(id).delete().catch(function(e){ toast("Couldn't delete: "+e.message); }); }
+
+/* ---- location-anchored pins on the route map ---- */
+function sightIcon(){ return L.divIcon({className:"leaflet-div-icon",html:'<div class="sight-pin">&#127804;</div>',iconSize:[22,22],iconAnchor:[11,11]}); }
+function currentBBox(){
+  if(ROUTE.a && ROUTE.b) return routeBBox(routeSamples(ROUTE.a,ROUTE.b));
+  if(ROUTE.a) return {swlat:ROUTE.a.lat-0.6,swlng:ROUTE.a.lng-0.6,nelat:ROUTE.a.lat+0.6,nelng:ROUTE.a.lng+0.6};
+  return null;
+}
+function sightingsInCorridor(){
+  var bb=currentBBox(); if(!bb) return SIGHTINGS.slice(0,200);
+  return SIGHTINGS.filter(function(d){ return d.lat>=bb.swlat&&d.lat<=bb.nelat&&d.lng>=bb.swlng&&d.lng<=bb.nelng; });
+}
+function renderSightings(){
+  if(!mapReady||!sightLayer) return;
+  sightLayer.clearLayers();
+  sightingsInCorridor().forEach(function(d){
+    L.marker([d.lat,d.lng],{icon:sightIcon()}).addTo(sightLayer)
+      .bindPopup('<b>'+esc(d.plantCommon||d.plantSci)+'</b><br>'+esc(d.text)+'<br><i>'+esc(d.name||"Someone")+' · '+esc(timeAgo(d.createdAt))+'</i>');
+  });
+}
+function jumpToSighting(lat,lng){ openChooser(); setTimeout(function(){ if(mapReady){ rmap.setView([lat,lng],12); renderSightings(); } },220); }
+function updateSightCount(){
+  var el=document.getElementById("sightCount"); if(!el) return;
+  var n=FB_ON?sightingsInCorridor().length:0;
+  if(!n){ el.classList.remove("show"); el.textContent=""; return; }
+  el.classList.add("show"); el.textContent="🌸 "+n+" field note"+(n===1?"":"s")+" along your route — view on map";
+}
+
 /* ---- boot --------------------------------------------------------- */
 const searchBtn=document.getElementById("searchBtn"), searchbar=document.getElementById("searchbar"), searchInput=document.getElementById("searchInput");
 searchBtn?.addEventListener("click",()=>{ const on=searchbar.classList.toggle("show");
@@ -1339,7 +1611,7 @@ async function autoLocate(){
     await runRoute(inlineStatus);
   }catch(e){}
 }
-function boot(){ try{ refreshRibbon(); refreshWhen(); renderList(); autoLocate(); }catch(e){ console.error("boot error", e); } }
+function boot(){ try{ refreshRibbon(); refreshWhen(); renderList(); initCommunity(); autoLocate(); }catch(e){ console.error("boot error", e); } }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", boot); else boot();
 </script>
 
