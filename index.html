@@ -1450,12 +1450,12 @@ function wireAcctChip(){ if(acctChip && !acctChip._wired){ acctChip._wired=1; ac
 function onAcctClick(){
   if(!FB_ON){ toast("Add your Firebase config in bloomline.html to enable accounts."); return; }
   if(fbUser){ if(confirm("Sign out of Bloomline?")) fbAuth.signOut(); }
-  else signIn();
+  else signIn().catch(function(){});
 }
 function signIn(){
   if(!FB_ON){ toast("Connect Firebase to sign in."); return Promise.reject(new Error("no-fb")); }
   var prov=new firebase.auth.GoogleAuthProvider();
-  return fbAuth.signInWithPopup(prov).catch(function(){ return fbAuth.signInAnonymously().then(function(){ toast("Signed in anonymously."); }); });
+  return fbAuth.signInWithPopup(prov).catch(function(e){ toast("Sign in with Google to post."); throw e; });
 }
 function displayName(u){ return u ? (u.displayName || (u.isAnonymous ? "Anonymous" : (u.email||"You").split("@")[0])) : ""; }
 function renderAcctChip(){
