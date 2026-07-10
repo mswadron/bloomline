@@ -321,6 +321,21 @@
     background:var(--ink);color:#f3f5ea;font-size:13px;padding:11px 16px;border-radius:12px;
     box-shadow:0 8px 30px rgba(0,0,0,.3);opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;max-width:88%}
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  /* ---- privacy & moderation ---- */
+  .note-priv{font-size:11px;color:var(--muted);margin:-2px 0 2px 24px;line-height:1.3}
+  .post-terms{font-size:11px;color:var(--muted)}
+  .post-terms a{color:var(--green)}
+  .note-report,.link-report{font-family:inherit;font-size:10px;letter-spacing:.04em;border:0;background:none;color:var(--muted);cursor:pointer;padding:0}
+  .note-report:hover,.link-report:hover{color:var(--ending);text-decoration:underline}
+  .acct-wrap{position:relative;flex:none}
+  .acct-menu{position:absolute;right:0;top:calc(100% + 6px);background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.18);padding:6px;display:none;z-index:300;min-width:190px}
+  .acct-menu.show{display:block}
+  .acct-menu .who{font-family:"Spline Sans Mono",monospace;font-size:10px;letter-spacing:.04em;color:var(--muted);padding:6px 10px 8px}
+  .acct-menu button{display:block;width:100%;text-align:left;background:none;border:0;font-family:"Inter",sans-serif;font-size:13.5px;color:var(--ink);padding:9px 10px;border-radius:7px;cursor:pointer}
+  .acct-menu button:hover{background:#eef1e6}
+  .acct-menu .danger{color:var(--ending)}
+  footer .legal{margin-top:6px;font-size:11.5px}
+  footer .legal a{color:var(--muted)}
 </style>
 </head>
 <body>
@@ -329,7 +344,14 @@
     <div class="htop">
       <div class="wordmark">Bloom<span>line</span></div>
       <div class="htools">
-        <button class="acct-chip" id="acctChip" type="button" aria-label="Account">Sign in</button>
+        <div class="acct-wrap">
+          <button class="acct-chip" id="acctChip" type="button" aria-label="Account">Sign in</button>
+          <div class="acct-menu" id="acctMenu">
+            <div class="who" id="amWho"></div>
+            <button id="amSignout" type="button">Sign out</button>
+            <button id="amDelete" type="button" class="danger">Delete account &amp; data</button>
+          </div>
+        </div>
         <button class="search-btn" id="searchBtn" type="button" aria-label="Search plants">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
         </button>
@@ -383,6 +405,7 @@
   <footer>
     <span id="footCount">plants</span> flowering along this route &middot; data from
     <b>iNaturalist</b> &amp; contributors
+    <div class="legal"><a href="/privacy.html">Privacy</a> &middot; <a href="/terms.html">Community Guidelines</a></div>
   </footer>
 </div>
 
@@ -846,7 +869,9 @@ function card(p,idx,mf){
         <div class="note-form">
           <textarea class="note-text" rows="2" maxlength="500" placeholder="Saw this blooming nearby? Add a field note…"></textarea>
           <label class="note-pin"><input type="checkbox" class="note-loc"> &#128205; pin where I saw it</label>
+          <div class="note-priv">Public &middot; location rounded to ~100m &middot; please don't pin rare or protected plants</div>
           <div class="note-row"><button class="note-post" type="button">Post note</button><span class="note-msg"></span></div>
+          <div class="post-terms">By posting you agree to the <a href="/terms.html" target="_blank" rel="noopener">Community Guidelines</a>. Your note is public.</div>
         </div>
       </div>
     </div></div>
@@ -932,9 +957,11 @@ function submitAdd(i){
   const ins=f.querySelectorAll("input"), url=(ins[0].value||"").trim(), title=(ins[1].value||"").trim();
   if(!url){ pend.innerHTML=`<span class="pending">Paste a link first.</span>`; return; }
   if(!FB_ON){ pend.innerHTML=`<span class="pending">Connect Firebase to submit links.</span>`; return; }
+  if(!/^https?:\/\/.+\..+/i.test(url)){ pend.innerHTML=`<span class="pending">Enter a valid http(s) link.</span>`; return; }
+  const sp=spamCheck(); if(sp){ pend.innerHTML=`<span class="pending">${esc(sp)}</span>`; return; }
   const write=()=>fbDB.collection("links").add({plantSci:p.sci, url, title:title||url, uid:fbUser.uid,
       name:displayName(fbUser), createdAt:firebase.firestore.FieldValue.serverTimestamp()})
-    .then(()=>{ f.classList.remove("show"); ins.forEach(x=>x.value=""); pend.innerHTML=`<span class="pending">&#10003; Added — thanks!</span>`; })
+    .then(()=>{ notePosted(); f.classList.remove("show"); ins.forEach(x=>x.value=""); pend.innerHTML=`<span class="pending">&#10003; Added — thanks!</span>`; })
     .catch(e=>{ pend.innerHTML=`<span class="pending">Couldn't add: ${esc(e.message)}</span>`; });
   if(!fbUser){ pend.innerHTML=`<span class="pending">Signing you in…</span>`; signIn().then(write).catch(()=>{ pend.innerHTML=`<span class="pending">Sign-in needed.</span>`; }); }
   else write();
@@ -1434,6 +1461,10 @@ function initCommunity(){
   wireAcctChip();
   var sc=document.getElementById("sightCount");
   if(sc && !sc._wired){ sc._wired=1; sc.addEventListener("click",function(){ if(FB_ON) openChooser(); }); }
+  var amS=document.getElementById("amSignout"), amD=document.getElementById("amDelete");
+  if(amS && !amS._wired){ amS._wired=1; amS.addEventListener("click",function(){ var m=document.getElementById("acctMenu"); if(m)m.classList.remove("show"); if(fbAuth) fbAuth.signOut(); }); }
+  if(amD && !amD._wired){ amD._wired=1; amD.addEventListener("click",function(){ var m=document.getElementById("acctMenu"); if(m)m.classList.remove("show"); deleteAccount(); }); }
+  if(!document._acctOutside){ document._acctOutside=1; document.addEventListener("click",function(e){ var w=document.querySelector(".acct-wrap"), m=document.getElementById("acctMenu"); if(m && m.classList.contains("show") && w && !w.contains(e.target)) m.classList.remove("show"); }); }
   if(!fbEnabled() || typeof firebase==="undefined"){ return; }
   try{
     firebase.initializeApp(firebaseConfig);
@@ -1449,7 +1480,7 @@ var acctChip=document.getElementById("acctChip");
 function wireAcctChip(){ if(acctChip && !acctChip._wired){ acctChip._wired=1; acctChip.addEventListener("click",onAcctClick); } renderAcctChip(); }
 function onAcctClick(){
   if(!FB_ON){ toast("Add your Firebase config in bloomline.html to enable accounts."); return; }
-  if(fbUser){ if(confirm("Sign out of Bloomline?")) fbAuth.signOut(); }
+  if(fbUser){ var mo=document.getElementById("acctMenu"); if(mo) mo.classList.toggle("show"); }
   else signIn().catch(function(){});
 }
 function signIn(){
@@ -1460,12 +1491,14 @@ function signIn(){
 function displayName(u){ return u ? (u.displayName || (u.isAnonymous ? "Anonymous" : (u.email||"You").split("@")[0])) : ""; }
 function renderAcctChip(){
   if(!acctChip) return;
+  var menu=document.getElementById("acctMenu"), who=document.getElementById("amWho");
   if(!FB_ON){ acctChip.textContent="Sign in"; acctChip.classList.remove("in"); return; }
   if(fbUser){
     var n=displayName(fbUser); acctChip.classList.add("in");
     acctChip.innerHTML=(fbUser.photoURL?'<img src="'+esc(fbUser.photoURL)+'" alt="">':'<span class="ava">'+esc((n[0]||"?").toUpperCase())+'</span>')+'<span class="nm">'+esc(n)+'</span>';
-    acctChip.title="Signed in as "+n+" — tap to sign out";
-  } else { acctChip.classList.remove("in"); acctChip.textContent="Sign in"; acctChip.title="Sign in to post field notes"; }
+    acctChip.title="Account options";
+    if(who) who.textContent="Signed in as "+n;
+  } else { acctChip.classList.remove("in"); acctChip.textContent="Sign in"; acctChip.title="Sign in to post field notes"; if(menu) menu.classList.remove("show"); }
 }
 
 /* ---- toast ---- */
@@ -1490,7 +1523,7 @@ function watchNotes(){
 function watchLinks(){
   fbDB.collection("links").orderBy("createdAt","desc").limit(500).onSnapshot(function(snap){
     LINKS_BY_SCI={};
-    snap.forEach(function(doc){ var d=doc.data(); (LINKS_BY_SCI[d.plantSci]=LINKS_BY_SCI[d.plantSci]||[]).push(d); });
+    snap.forEach(function(doc){ var d=doc.data(); d._id=doc.id; (LINKS_BY_SCI[d.plantSci]=LINKS_BY_SCI[d.plantSci]||[]).push(d); });
     document.querySelectorAll(".card").forEach(function(c){ var p=CARD_PLANT[+c.id.replace("card","")]; if(p) fillCardLinks(c,p); });
   }, function(err){ console.warn("links listener", err); });
 }
@@ -1513,15 +1546,17 @@ function fillCardNotes(cardEl,p){
     var mine=fbUser && d.uid===fbUser.uid;
     return '<div class="note-item"><div class="note-body">'+esc(d.text)+'</div><div class="note-meta">'+
       '<span class="note-who">'+esc(d.name||"Someone")+'</span> · '+esc(timeAgo(d.createdAt))+' '+loc+
-      (mine?' · <button class="note-del" data-id="'+esc(d._id)+'">delete</button>':'')+'</div></div>';
+      (mine?' · <button class="note-del" data-id="'+esc(d._id)+'">delete</button>':' · <button class="note-report" data-id="'+esc(d._id)+'">report</button>')+'</div></div>';
   }).join("");
   list.querySelectorAll(".note-here").forEach(function(b){ b.addEventListener("click",function(){ jumpToSighting(+b.dataset.lat,+b.dataset.lng); }); });
   list.querySelectorAll(".note-del").forEach(function(b){ b.addEventListener("click",function(){ deleteNote(b.dataset.id); }); });
+  list.querySelectorAll(".note-report").forEach(function(b){ b.addEventListener("click",function(){ reportContent("note", b.dataset.id, p.sci); }); });
 }
 function fillCardLinks(cardEl,p){
   var box=cardEl.querySelector(".ulinks"); if(!box) return;
   var arr=LINKS_BY_SCI[p.sci]||[];
-  box.innerHTML=arr.map(function(d){ return '<a class="link" href="'+esc(d.url)+'" target="_blank" rel="noopener">&#128279; '+esc(d.title||d.url)+'</a>'; }).join("");
+  box.innerHTML=arr.map(function(d){ return '<div class="ulink-row"><a class="link" href="'+esc(d.url)+'" target="_blank" rel="noopener">&#128279; '+esc(d.title||d.url)+'</a> <button class="link-report" data-id="'+esc(d._id)+'">report</button></div>'; }).join("");
+  box.querySelectorAll(".link-report").forEach(function(b){ b.addEventListener("click",function(){ reportContent("link", b.dataset.id, p.sci); }); });
 }
 
 /* ---- posting field notes ---- */
@@ -1537,11 +1572,12 @@ function submitNote(cardEl,p){
   var text=((ta&&ta.value)||"").trim();
   if(!text){ if(msg) msg.textContent="Write a note first."; return; }
   if(!FB_ON){ toast("Connect Firebase to post field notes."); return; }
+  var sp=spamCheck(); if(sp){ if(msg) msg.textContent=sp; return; }
   function doWrite(loc){
     var data={ plantSci:p.sci, plantCommon:p.common, text:text, uid:fbUser.uid, name:displayName(fbUser),
       createdAt:firebase.firestore.FieldValue.serverTimestamp() };
     if(loc){ data.lat=Math.round(loc.lat*1000)/1000; data.lng=Math.round(loc.lng*1000)/1000; }
-    fbDB.collection("notes").add(data).then(function(){ if(ta) ta.value=""; if(msg) msg.textContent="Posted ✓"; })
+    fbDB.collection("notes").add(data).then(function(){ notePosted(); if(ta) ta.value=""; if(msg) msg.textContent="Posted ✓"; })
       .catch(function(e){ if(msg) msg.textContent="Couldn't post: "+e.message; });
   }
   function afterAuth(){
@@ -1558,6 +1594,36 @@ function submitNote(cardEl,p){
 }
 function deleteNote(id){ if(!FB_ON||!id) return; if(!confirm("Delete your note?")) return;
   fbDB.collection("notes").doc(id).delete().catch(function(e){ toast("Couldn't delete: "+e.message); }); }
+function reportContent(type, id, plantSci){
+  if(!FB_ON){ toast("Sign in to report."); return; }
+  function doReport(){
+    fbDB.collection("reports").add({ targetType:type, targetId:id, plantSci:plantSci||"", reporterUid:fbUser.uid, reporterName:displayName(fbUser), createdAt:firebase.firestore.FieldValue.serverTimestamp() })
+      .then(function(){ toast("Reported — thanks, we'll take a look."); })
+      .catch(function(e){ toast("Couldn't report: "+e.message); });
+  }
+  if(!fbUser){ signIn().then(doReport).catch(function(){}); } else doReport();
+}
+function deleteAccount(){
+  if(!FB_ON || !fbUser){ toast("Sign in first."); return; }
+  if(!confirm("Permanently delete your account and ALL your field notes and links? This cannot be undone.")) return;
+  var uid=fbUser.uid; toast("Deleting your data…");
+  function delColl(name){ return fbDB.collection(name).where("uid","==",uid).get().then(function(snap){ return Promise.all(snap.docs.map(function(d){ return d.ref.delete(); })); }); }
+  function finish(){ toast("Account and all your data deleted."); }
+  Promise.all([delColl("notes"), delColl("links")]).then(function(){ return fbUser.delete(); }).then(finish).catch(function(e){
+    if(e && e.code==="auth/requires-recent-login"){
+      var prov=new firebase.auth.GoogleAuthProvider();
+      fbUser.reauthenticateWithPopup(prov).then(function(){ return fbUser.delete(); }).then(finish).catch(function(err){ toast("Couldn't finish deletion: "+err.message); });
+    } else { toast("Couldn't delete: "+((e&&e.message)||e)); }
+  });
+}
+var _postLog=[];
+function spamCheck(){
+  var now=Date.now(); _postLog=_postLog.filter(function(t){ return now-t < 3600000; });
+  if(_postLog.length && now-_postLog[_postLog.length-1] < 8000) return "Please wait a few seconds between posts.";
+  if(_postLog.length >= 30) return "You've hit the posting limit for now — try again later.";
+  return null;
+}
+function notePosted(){ _postLog.push(Date.now()); }
 
 /* ---- location-anchored pins on the route map ---- */
 function sightIcon(){ return L.divIcon({className:"leaflet-div-icon",html:'<div class="sight-pin">&#127804;</div>',iconSize:[22,22],iconAnchor:[11,11]}); }
