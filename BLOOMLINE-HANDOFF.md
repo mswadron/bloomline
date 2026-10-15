@@ -132,3 +132,4 @@ Bloomline is no longer read-only. Added to the working `bloomline.html`, on the 
 - Stage from the selected date: coming, turning, at peak (peak -4 to +5 days), dropping, bare. Each card has a color line drawn on a Sep to Nov axis from its `colors` sequence, plus where it turns first, how to identify it, and its color window.
 - The season color line is draggable; region choice is remembered in `localStorage` (`bl_fo_zone`).
 - Open: timing is a typical-year model, not live data. Next step could pull iNaturalist observations or state foliage reports to correct for early or late years.
+- When foliage-data.js, foliage.js or foliage.css change, bump the `?v=` on their three tags in index.html, or phones keep showing the old cached copy.
