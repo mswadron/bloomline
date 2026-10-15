@@ -53,7 +53,7 @@ window.FOLIAGE_DATA = {
     { h: "Wet ground first",
       t: "Swamp edges, stream banks and low wet spots color first. Red maple and black gum in a wet hollow can be scarlet while the hillside above is still green." },
     { h: "Stressed trees first",
-      t: "A tree on a road shoulder, in a parking lot island, or with damaged roots often turns weeks early. One red branch on a green maple usually means a girdled root or a wound on that limb." },
+      t: "A tree on a road shoulder, in a parking lot island, or with damaged roots often turns weeks early. A single red branch on a green maple usually means a girdled root or a wound on that limb." },
     { h: "Top and outside of the crown first",
       t: "The sunny, exposed outer shell of a tree turns before the shaded interior. On a sugar maple the sun side goes red or orange while the inside stays yellow longer." },
     { h: "North and high first",
@@ -71,7 +71,7 @@ window.FOLIAGE_DATA = {
       colors: ["#4d6b2f", "#c0391b", "#9a1f2a", "#6b2a4a"],
       colorWords: "Brilliant scarlet to maroon, among the first",
       where: "Ridges and dry mountain slopes, especially the Blue Ridge. It goes scarlet early while the forest around it is still green, and the pale seed strands hang on among the red leaves.",
-      id: "Long, finely toothed, glossy leaves that taste sour if you chew one. Drooping one-sided strands of tiny pale seed capsules at the branch tips. Often a leaning small tree.",
+      id: "Long, finely toothed, glossy leaves that taste sour if you chew a leaf. Drooping one-sided strands of tiny pale seed capsules at the branch tips. Often a leaning small tree.",
       also: "Its summer flowers make the prized sourwood honey of the southern Appalachians. Rare in New Jersey and north."
     },
     {
@@ -98,16 +98,16 @@ window.FOLIAGE_DATA = {
       colors: ["#4d6b2f", "#c0391b", "#9a1f2a", "#6b2a4a"],
       colorWords: "Crimson to burgundy",
       where: "Look at tree trunks and fences, not canopies. It goes red while the host tree is still fully green, often from the bottom of the vine up.",
-      id: "Five leaflets radiating from one point, toothed. Dark blue berries on red stalks. Climbs with sticky disc-tipped tendrils.",
+      id: "Five leaflets radiating from a single point, toothed. Dark blue berries on red stalks. Climbs with sticky disc-tipped tendrils.",
       also: "Easily confused with poison ivy. Count the leaflets: five is creeper, three is ivy."
     },
     {
       common: "Poison Ivy", sci: "Toxicodendron radicans", fam: "Anacardiaceae", type: "vine", status: "native",
       win: { s: [9, 18], p: [10, 8], e: [10, 28] },
       colors: ["#4d6b2f", "#c9a227", "#d9781e", "#b3261e"],
-      colorWords: "Yellow, orange and red, often all on one vine",
+      colorWords: "Yellow, orange and red, often all on the same vine",
       where: "Hairy vines on trunks and sprawling patches along trail and road edges. Turns early, a few leaves at a time.",
-      id: "Three leaflets, the middle one on a longer stalk. Edges smooth or with a few irregular teeth. Waxy white berries. Old vines are thick and hairy.",
+      id: "Three leaflets, the middle leaflet on a longer stalk. Edges smooth or with a few irregular teeth. Waxy white berries. Old vines are thick and hairy.",
       also: "The oil (urushiol) stays active on dead leaves and vines all winter. Never burn it."
     },
     {
@@ -124,9 +124,9 @@ window.FOLIAGE_DATA = {
       win: { s: [9, 25], p: [10, 15], e: [11, 1] },
       colors: ["#4d6b2f", "#d9781e", "#c0391b", "#8a1e1e"],
       colorWords: "Scarlet, sometimes orange or yellow",
-      where: "Wet ground turns first, so swamps and highway medians light up before uplands. Single early-red branches on a green tree are a stress signal. Individual trees vary: one is always scarlet, the one next to it always yellow.",
+      where: "Wet ground turns first, so swamps and highway medians light up before uplands. Single early-red branches on a green tree are a stress signal. Individual trees vary: the first tree may turn scarlet every year while the next tree over turns yellow.",
       id: "Three main lobes with V-shaped notches and sharp teeth. Leaf stalks are red. Smooth gray bark on younger trees.",
-      also: "The most common tree in the eastern U.S. Red flowers in March, red seeds in spring, red leaves in fall."
+      also: "The most common tree in the eastern U.S. Red flowers in March and red seeds in spring, then green leaves all summer like any other tree; the red comes back only when the green breaks down in fall."
     },
     {
       common: "Flowering Dogwood", sci: "Cornus florida", fam: "Cornaceae", type: "tree", status: "native",
@@ -142,7 +142,7 @@ window.FOLIAGE_DATA = {
       win: { s: [9, 25], p: [10, 12], e: [10, 28] },
       colors: ["#4d6b2f", "#c9a227", "#7a3a5a", "#5a2a4a"],
       colorWords: "Purple, maroon or bronze; some trees yellow",
-      where: "Turns early and drops fast. The whole crown colors at once, then sheds in a few days. Purple ash among yellow trees is one of the best ID tells of the season.",
+      where: "Turns early and drops fast. The whole crown colors at once, then sheds in a few days. Purple ash among yellow trees is among the best ID tells of the season.",
       id: "Opposite compound leaves, usually 7 leaflets. Diamond-patterned furrowed bark. Paddle-shaped seeds in clusters.",
       also: "Emerald ash borer has killed most ash in the region. A dead or thin-crowned ash with D-shaped exit holes is a common roadside sight."
     },
@@ -150,7 +150,7 @@ window.FOLIAGE_DATA = {
       common: "Sassafras", sci: "Sassafras albidum", fam: "Lauraceae", type: "tree", status: "native",
       win: { s: [10, 1], p: [10, 18], e: [11, 2] },
       colors: ["#4d6b2f", "#c9a227", "#d9781e", "#c0391b"],
-      colorWords: "Orange, red, yellow and salmon, mixed on one tree",
+      colorWords: "Orange, red, yellow and salmon, mixed on the same tree",
       where: "Field edges and young woods. Colors from the outer crown in, and a single small tree often carries every color at once.",
       id: "Three leaf shapes on the same tree: oval, mitten (two lobes) and three-lobed. Twigs are green. A crushed leaf or twig smells like root beer.",
       also: "The root bark was the original root beer flavor."
@@ -168,7 +168,7 @@ window.FOLIAGE_DATA = {
       common: "Sweetgum", only: ["south", "mid", "mdva"], sci: "Liquidambar styraciflua", fam: "Altingiaceae", type: "tree", status: "native",
       win: { s: [10, 10], p: [10, 28], e: [11, 15] },
       colors: ["#4d6b2f", "#c9a227", "#c0391b", "#5a2a4a"],
-      colorWords: "Every color on one tree: yellow, orange, red and deep purple",
+      colorWords: "Every color on the same tree: yellow, orange, red and deep purple",
       where: "Colors late and slowly, crown top and south side first. A tree can hold green, yellow and purple at once for weeks.",
       id: "Five-pointed star leaves. Spiky ball seed pods (gumballs) hang on the tree and litter sidewalks. Some twigs have corky ridges.",
       also: "Native to South Jersey; widely planted farther north as a street tree."
@@ -198,7 +198,7 @@ window.FOLIAGE_DATA = {
       colorWords: "Bright yellow",
       where: "Gray birch on road cuts and old fields, black and yellow birch in woods. Small leaves turn and fall quickly.",
       id: "Toothed oval to triangular leaves. Bark: chalky white with black triangles (gray birch), peeling white (paper), shiny dark with a wintergreen smell when scratched (black).",
-      also: "Gray birch is one of the first trees to colonize abandoned fields and roadsides."
+      also: "Gray birch is among the first trees to colonize abandoned fields and roadsides."
     },
     {
       common: "Witch Hazel", sci: "Hamamelis virginiana", fam: "Hamamelidaceae", type: "shrub", status: "native",
