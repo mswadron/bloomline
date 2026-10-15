@@ -12,6 +12,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<link rel="stylesheet" href="foliage.css">
 <style>
   :root{
     --ink:#1c2a1d; --green:#2f5233; --paper:#eef0e6; --card:#f7f8f1;
@@ -357,6 +358,10 @@
         </button>
       </div>
     </div>
+    <nav class="tabs" id="tabs" role="tablist" aria-label="Bloomline sections">
+      <button type="button" data-tab="bloom" class="on" role="tab" aria-selected="true">Blooms</button>
+      <button type="button" data-tab="foliage" role="tab" aria-selected="false">Northeast Foliage</button>
+    </nav>
     <div class="tag">what's blooming on your drive</div>
     <div class="searchbar" id="searchbar">
       <input id="searchInput" type="text" placeholder="Search any plant…" autocomplete="off">
@@ -401,6 +406,7 @@
   </section>
 
   <main id="stages"></main>
+  <div id="foPanel" aria-live="polite"></div>
 
   <footer>
     <span id="footCount">plants</span> flowering along this route &middot; data from
@@ -1682,5 +1688,7 @@ if(document.readyState==="loading") document.addEventListener("DOMContentLoaded"
 </script>
 
 </div>
+<script src="foliage-data.js"></script>
+<script src="foliage.js"></script>
 </body>
 </html>
