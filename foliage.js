@@ -51,7 +51,7 @@
     for(var i=0;i<bs.length;i++){ var on=bs[i].getAttribute("data-tab")===t; bs[i].classList.toggle("on",on); bs[i].setAttribute("aria-selected",on); }
     var tag=document.querySelector("header .tag");
     if(tag){ if(!tag.getAttribute("data-bloom")) tag.setAttribute("data-bloom",tag.textContent);
-      tag.textContent = fo ? "what's turning color in the Northeast" : tag.getAttribute("data-bloom"); }
+      tag.textContent = fo ? "what's turning color, Maine to Virginia" : tag.getAttribute("data-bloom"); }
     document.title = fo ? "Northeast Foliage · Bloomline" : "Bloomline";
     if(push){ try{ history.replaceState(null,"", fo ? "#foliage" : location.pathname+location.search); }catch(e){} }
     if(fo) render();

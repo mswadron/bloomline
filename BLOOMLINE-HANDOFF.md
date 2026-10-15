@@ -128,7 +128,7 @@ Bloomline is no longer read-only. Added to the working `bloomline.html`, on the 
 
 - Tab bar in the header: **Blooms | Northeast Foliage**. The foliage tab switches the whole page to an autumn theme (`body.fo-mode`) and hides the route, search, season ribbon and bloom list. Direct link: `bloomline.app/#foliage`.
 - Files: `foliage-data.js` (species, zones, pigments, "where to look first"), `foliage.js` (render + tab switch), `foliage.css` (tab bar + autumn theme). `index.html` only gained the stylesheet link, the tab `<nav>`, an empty `#foPanel`, and two script tags.
-- 20 Northeast species, each with a color window `{s,p,e}` for the NJ / NYC / LI lowlands; zones shift earlier (CT / MA / Hudson -9 days, VT / NH / ME -18). `only:` limits a species to some zones (sweetgum, tulip tree).
+- 22 species, each with a color window `{s,p,e}` for the NJ / NYC / LI lowlands. Five zones shift that window: VT / NH / ME -18 days, CT / MA / Hudson -9, PA / Upstate NY -6, NJ / NYC / LI 0, MD / DE / DC / VA +8 (added 2026-10-15). `only:` limits a species to some zones (sweetgum, tulip tree, sourwood, tamarack).
 - Stage from the selected date: coming, turning, at peak (peak -4 to +5 days), dropping, bare. Each card has a color line drawn on a Sep to Nov axis from its `colors` sequence, plus where it turns first, how to identify it, and its color window.
 - The season color line is draggable; region choice is remembered in `localStorage` (`bl_fo_zone`).
 - Open: timing is a typical-year model, not live data. Next step could pull iNaturalist observations or state foliage reports to correct for early or late years.

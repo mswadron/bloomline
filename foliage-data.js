@@ -14,12 +14,16 @@
 window.FOLIAGE_DATA = {
 
   zones: [
-    { id: "south", label: "NJ · NYC · LI", shift: 0,
-      note: "Lowland coastal plain and Piedmont. Peak usually the last week of October into early November." },
+    { id: "north", label: "VT · NH · ME", shift: -18,
+      note: "Northern New England, the Adirondacks and high Catskills. Peak usually early to mid October." },
     { id: "mid",   label: "CT · MA · Hudson", shift: -9,
       note: "Southern New England, the Hudson Valley and the Poconos. Peak usually mid to late October." },
-    { id: "north", label: "VT · NH · ME", shift: -18,
-      note: "Northern New England, the Adirondacks and high Catskills. Peak usually early to mid October." }
+    { id: "west",  label: "PA · Upstate NY", shift: -6,
+      note: "Central and western Pennsylvania, the Finger Lakes and western New York. The Allegheny ridges and plateau peak mid to late October; the river valleys about a week later." },
+    { id: "south", label: "NJ · NYC · LI", shift: 0,
+      note: "Lowland coastal plain and Piedmont. Peak usually the last week of October into early November." },
+    { id: "mdva",  label: "MD · DE · DC · VA", shift: 8,
+      note: "Maryland, Delaware, DC and northern Virginia. The Blue Ridge and Shenandoah turn around the third week of October, a week or two ahead of the lowlands; the Chesapeake shore peaks into early November." }
   ],
 
   /* the season's overall color line, Sep 1 to Nov 30 (south zone) */
@@ -61,6 +65,15 @@ window.FOLIAGE_DATA = {
   ],
 
   species: [
+    {
+      common: "Sourwood", only: ["west", "mdva"], sci: "Oxydendrum arboreum", fam: "Ericaceae", type: "tree", status: "native",
+      win: { s: [9, 10], p: [9, 30], e: [10, 20] },
+      colors: ["#4d6b2f", "#c0391b", "#9a1f2a", "#6b2a4a"],
+      colorWords: "Brilliant scarlet to maroon, among the first",
+      where: "Ridges and dry mountain slopes, especially the Blue Ridge. It goes scarlet early while the forest around it is still green, and the pale seed strands hang on among the red leaves.",
+      id: "Long, finely toothed, glossy leaves that taste sour if you chew one. Drooping one-sided strands of tiny pale seed capsules at the branch tips. Often a leaning small tree.",
+      also: "Its summer flowers make the prized sourwood honey of the southern Appalachians. Rare in New Jersey and north."
+    },
     {
       common: "Black Gum", sci: "Nyssa sylvatica", fam: "Nyssaceae", type: "tree", status: "native",
       win: { s: [9, 15], p: [10, 5], e: [10, 25] },
@@ -152,7 +165,7 @@ window.FOLIAGE_DATA = {
       also: "The tree behind maple syrup and the New England postcard. Commoner north of NJ; in the south zone mostly planted along roads and in towns."
     },
     {
-      common: "Sweetgum", only: ["south", "mid"], sci: "Liquidambar styraciflua", fam: "Altingiaceae", type: "tree", status: "native",
+      common: "Sweetgum", only: ["south", "mid", "mdva"], sci: "Liquidambar styraciflua", fam: "Altingiaceae", type: "tree", status: "native",
       win: { s: [10, 10], p: [10, 28], e: [11, 15] },
       colors: ["#4d6b2f", "#c9a227", "#c0391b", "#5a2a4a"],
       colorWords: "Every color on one tree: yellow, orange, red and deep purple",
@@ -161,7 +174,7 @@ window.FOLIAGE_DATA = {
       also: "Native to South Jersey; widely planted farther north as a street tree."
     },
     {
-      common: "Tulip Tree", only: ["south", "mid"], sci: "Liriodendron tulipifera", fam: "Magnoliaceae", type: "tree", status: "native",
+      common: "Tulip Tree", only: ["south", "mid", "west", "mdva"], sci: "Liriodendron tulipifera", fam: "Magnoliaceae", type: "tree", status: "native",
       win: { s: [10, 5], p: [10, 22], e: [11, 5] },
       colors: ["#4d6b2f", "#a8a82c", "#d9b521", "#c99a3a"],
       colorWords: "Clear butter yellow",
@@ -231,6 +244,15 @@ window.FOLIAGE_DATA = {
       where: "Among the last to turn, carrying the late-season color after the maples are bare. Color creeps in from the outer crown, and many hold dead leaves into winter.",
       id: "Pointed lobes tipped with bristles. Scarlet oak has deep C-shaped notches cut almost to the midrib. Acorns with shallow caps.",
       also: "White oaks (rounded lobes, no bristles) finish later still, in burgundy-brown."
+    },
+    {
+      common: "Tamarack", only: ["north", "mid", "west"], sci: "Larix laricina", fam: "Pinaceae", type: "tree", status: "native",
+      win: { s: [10, 20], p: [11, 5], e: [11, 20] },
+      colors: ["#4d6b2f", "#8a9a2c", "#d9b521", "#b8862a"],
+      colorWords: "Needles turn smoky gold, then drop",
+      where: "Bogs, swamps and cold wet hollows. The whole tree turns gold at once, standing out as the only yellow conifer among green spruce and pine.",
+      id: "Soft needles in tufts of 10 to 20 on short knobby spurs. Small upright cones. A conifer that goes bare in winter.",
+      also: "A deciduous conifer: it sheds every needle each fall and regrows them in spring. Also called eastern larch."
     },
     {
       common: "Norway Maple", sci: "Acer platanoides", fam: "Sapindaceae", type: "tree", status: "invasive",
