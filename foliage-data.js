@@ -214,6 +214,24 @@ window.FOLIAGE_DATA = {
       also: "The red berries make a lemony drink. Not the poison sumac of swamps, which has white berries and smooth-edged leaflets."
     },
     {
+      common: "Tree of Heaven", aka: ["ailanthus", "heaven tree", "stink tree", "chinese sumac"], sci: "Ailanthus altissima", fam: "Simaroubaceae", type: "tree", status: "invasive",
+      win: { s: [10, 1], p: [10, 16], e: [11, 1] },
+      colors: ["#4d6b2f", "#8a9a2c", "#c9b521", "#a8862a"],
+      colorWords: "Dull greenish yellow; the seed clusters are the real show",
+      where: "Highway shoulders, rail lines, vacant lots and sidewalk cracks. The leaflets yellow and fall first, then the long bare leaf stalks drop like sticks. Female trees keep big hanging clusters of tan to reddish twisted seeds all winter, the easiest way to spot it from the road.",
+      id: "Very long compound leaves, 1 to 3 feet, with 11 to 41 leaflets. Each leaflet has a small notch or tooth near its base with a gland underneath. Smooth tan-gray bark. A crushed leaf smells like rancid peanut butter. Often mistaken for sumac, which has teeth all along its leaflets.",
+      also: "Brought from China in the 1780s. It spreads by seed and root sprouts, poisons the soil around it to keep competitors out, and is the favorite host of the spotted lanternfly. Cutting it without treating the roots triggers dozens of new sprouts."
+    },
+    {
+      common: "Black Locust", aka: ["locust", "yellow locust", "false acacia", "robinia"], sci: "Robinia pseudoacacia", fam: "Fabaceae", type: "tree", status: "naturalized",
+      win: { s: [9, 25], p: [10, 12], e: [10, 28] },
+      colors: ["#4d6b2f", "#8a9a2c", "#d9c22a", "#8a6a2a"],
+      colorWords: "Pale yellow, often only briefly before the leaflets drop",
+      where: "Road cuts, old fields, fence rows and woods edges. Many trees turn brown in late summer, weeks before fall, because the locust leaf miner (a small beetle) eats the inside of the leaves. Healthy trees go pale yellow in early October and shed fast, leaving dark flat seed pods hanging into winter.",
+      id: "Compound leaves of 7 to 19 small, rounded, smooth-edged leaflets. A pair of short sharp thorns at the base of each leaf on young twigs. Deeply furrowed, rope-like dark bark. Flat brown pea-style pods 2 to 4 inches long.",
+      also: "Native to the Appalachians and Ozarks, planted and spread across the Northeast. A legume: it fixes its own nitrogen, so it thrives on poor road-cut soil. The wood resists rot for decades, the classic fence-post tree. White, sweet-scented flower clusters in late May."
+    },
+    {
       common: "Virginia Creeper", sci: "Parthenocissus quinquefolia", fam: "Vitaceae", type: "vine", status: "native",
       win: { s: [9, 12], p: [10, 3], e: [10, 25] },
       colors: ["#4d6b2f", "#c0391b", "#9a1f2a", "#6b2a4a"],

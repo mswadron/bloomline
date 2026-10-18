@@ -90,7 +90,7 @@
            '<div class="fo-axis"><span>Sep</span><span>Oct</span><span>Nov</span></div>';
   }
   function badges(sp,stg,lab){
-    var cls = sp.status==="invasive"?"invasive":sp.status==="planted"?"planted":"native";
+    var cls = sp.status==="invasive"?"invasive":sp.status==="planted"?"planted":sp.status==="naturalized"?"naturalized":"native";
     return '<div class="fo-badges"><span class="fo-b stage '+stg+'">'+esc(lab||STAGE_LABEL[stg])+'</span>'+
            '<span class="fo-b '+cls+'">'+esc(sp.status)+'</span>'+
            '<span class="fo-b">'+esc(sp.type)+'</span><span class="fo-b">'+esc(sp.fam)+'</span></div>';
