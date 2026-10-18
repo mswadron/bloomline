@@ -305,10 +305,10 @@ window.FOLIAGE_DATA = {
     },
     {
       common: "Hickories", aka: ["hickory", "shagbark", "pignut"], sci: "Carya ovata, C. glabra", fam: "Juglandaceae", type: "tree", status: "native",
-      win: { s: [10, 5], p: [10, 22], e: [11, 5] },
+      win: { s: [9, 28], p: [10, 14], e: [10, 31] },
       colors: ["#4d6b2f", "#c9a227", "#b8862a", "#8a6a2a"],
-      colorWords: "Golden yellow to bronze",
-      where: "Turns as a whole crown rather than branch by branch. Leaflets drop individually, then the bare stalks follow.",
+      colorWords: "Clear golden yellow, then bronze",
+      where: "Turns as a whole crown rather than branch by branch, and among the earlier yellows in the woods: a pignut can be solid gold while the oaks around it are still green. Leaflets drop individually, then the bare stalks follow.",
       id: "Compound leaves of 5 leaflets (shagbark) or 5 to 7 (pignut), the end ones largest. Shagbark has long peeling bark strips. Hard round nuts in husks.",
       also: "Shagbark hickory nuts were a major food for Native peoples; pecan is a hickory."
     },
