@@ -38,6 +38,54 @@ window.FOLIAGE_DATA = {
     { md: [11, 30], c: "#8c7d6a" }
   ],
 
+  /* "Why red comes last" explainer: the sugar trap, why red builds late,
+     next year's bud, and the pruning side note */
+  redStory: {
+    title: "Why red comes last",
+    sub: "Red is the only fall color the tree makes new. Here is how, and why it keeps building right up to leaf drop.",
+    parts: [
+      { h: "The sugar trap",
+        pts: [
+          "Every sunny day, the leaf still makes sugar. That is its job.",
+          "All summer, that sugar flows out through the leaf stalk to feed the tree.",
+          "In fall the tree starts sealing the stalk where it meets the twig. A layer of cork-like cells grows across it.",
+          "The exit closes. The sugar has nowhere to go. It piles up inside the leaf."
+        ] },
+      { h: "Sugar plus light makes red",
+        pts: [
+          "The leaf uses sunlight's energy to turn that trapped sugar into a brand-new red pigment (anthocyanin).",
+          "Sugar does not turn red by itself in the sun. The leaf has to build the red, and building takes light.",
+          "So the red is made fresh, in the last weeks. Yellow was there all year; red was not."
+        ] },
+      { h: "Why the red builds toward the end",
+        pts: [
+          "Each week the seal closes tighter, so more sugar stays trapped.",
+          "Each week the green is thinner, so more light reaches the red-making machinery.",
+          "Cool nights slow the sugar from leaking out and help the red form. That is why the last two weeks are the reddest.",
+          "The red also works as fresh sunscreen. It shades the leaf while the tree finishes pulling the last nutrients out.",
+          "What spoils it: cloudy, rainy weeks (less sugar) or a hard freeze (kills the leaf before the red forms)."
+        ] },
+      { h: "Next year's leaf is already there",
+        pts: [
+          "Look at where any leaf stalk meets the twig. Just above it sits a small bud.",
+          "Inside that bud, next spring's leaves are already formed, tiny and folded. On many trees the flowers are in there too.",
+          "The tree built that bud over the summer. The seal forms below it, so the old leaf falls and the bud stays on the twig for winter.",
+          "The mark left behind is a leaf scar. Each bud sits right above one."
+        ] }
+    ],
+    prune: {
+      h: "Side note: when to trim",
+      pts: [
+        "Because next year's buds are already on the twig, a fall cut removes leaves (and often flowers) that were ready for spring.",
+        "Fall cuts can also push out new shoots that do not harden before the freeze, so they die back.",
+        "Best time for most trees: after the leaves are down and the tree is dormant, through late winter.",
+        "Oaks: winter only. Cuts in the growing season draw the beetles that spread oak wilt.",
+        "Spring-flowering shrubs (lilac, forsythia, azalea): trim right after they bloom, before they set next year's buds.",
+        "Dead, broken or dangerous limbs: anytime."
+      ]
+    }
+  },
+
   pigments: [
     { name: "Chlorophyll", c: "#4d6b2f",
       text: "The green. Trees make it all summer and break it down in fall to salvage its nitrogen. Once it is gone, whatever else was in the leaf shows through." },

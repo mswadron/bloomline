@@ -133,3 +133,4 @@ Bloomline is no longer read-only. Added to the working `bloomline.html`, on the 
 - The season color line is draggable; region choice is remembered in `localStorage` (`bl_fo_zone`).
 - Open: timing is a typical-year model, not live data. Next step could pull iNaturalist observations or state foliage reports to correct for early or late years.
 - When foliage-data.js, foliage.js or foliage.css change, bump the `?v=` on their three tags in index.html, or phones keep showing the old cached copy.
+- 2026-10-18: added "Why red comes last" (data `redStory` in foliage-data.js, `redSection()`/`redSvg()` in foliage.js): sugar trap, sugar plus light makes red, why red builds late, next year's bud already formed, pruning side note (dormant season, oaks winter only, spring shrubs after bloom). Pigment cards renamed "The color key". Cache version now `?v=red1`.

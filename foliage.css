@@ -125,3 +125,15 @@ body.fo-mode #foPanel{display:block}
 .fo-foot a{color:var(--muted)}
 
 @media (prefers-reduced-motion:reduce){.fo-body,.fo-chev{transition:none}}
+
+/* why red comes last */
+.fo-diagwrap{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 8px 6px;margin:4px 0 12px}
+.fo-diag{display:block;width:100%;height:auto}
+.fo-step{display:flex;gap:11px;background:var(--card);border:1px solid var(--line);border-radius:13px;padding:12px 13px;margin-bottom:9px}
+.fo-step .n{flex:none;width:24px;height:24px;border-radius:7px;background:var(--fo-scarlet);color:#fbf1e6;
+  font-family:"Spline Sans Mono",monospace;font-size:11.5px;display:flex;align-items:center;justify-content:center}
+.fo-step b,.fo-prune b{font-family:"Fraunces",serif;font-size:16px;font-weight:600;display:block;margin-bottom:4px}
+.fo-step ul,.fo-prune ul{margin:0;padding-left:17px}
+.fo-step li,.fo-prune li{font-size:14px;color:#3d2a20;margin:3px 0;line-height:1.45}
+.fo-prune{background:#f3ebe0;border:1px dashed #cdb497;border-radius:13px;padding:12px 13px;margin:4px 0 2px}
+.fo-prune b{color:var(--fo-brown)}

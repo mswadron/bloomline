@@ -98,6 +98,41 @@
       '</div></div></div>';
   }
 
+  function redSvg(){
+    return '<svg class="fo-diag" viewBox="0 0 320 210" role="img" aria-label="A red leaf on a twig. The sun makes sugar in the leaf, a seal at the stalk blocks it from leaving, the trapped sugar becomes red pigment, and next year\'s bud sits on the twig just above the stalk.">'+
+      '<circle cx="292" cy="26" r="13" fill="#e8b23a"/>'+
+      '<g stroke="#e8b23a" stroke-width="2" stroke-linecap="round"><path d="M272 26h-6M312 26h6M292 46v6M292 6v-6M278 12l-4-4M306 12l4-4M278 40l-4 4"/></g>'+
+      '<path d="M268 40 L214 70" stroke="#e8b23a" stroke-width="2" stroke-dasharray="4 4" fill="none"/>'+
+      '<path d="M14 182 H306" stroke="#6b4a32" stroke-width="7" stroke-linecap="round"/>'+
+      '<path d="M120 178 C128 150 140 132 156 118" stroke="#8a5a2a" stroke-width="4" fill="none" stroke-linecap="round"/>'+
+      '<path d="M156 118 C150 70 196 34 246 40 C252 92 214 132 156 118 Z" fill="#c0391b"/>'+
+      '<path d="M156 118 C186 96 214 70 240 46" stroke="#8a1e1e" stroke-width="2" fill="none"/>'+
+      '<g fill="#f6e3a8"><circle cx="196" cy="80" r="3.2"/><circle cx="210" cy="96" r="3.2"/><circle cx="182" cy="100" r="3.2"/><circle cx="222" cy="70" r="3.2"/><circle cx="170" cy="86" r="3.2"/></g>'+
+      '<path d="M113 170 L133 162" stroke="#2a1a12" stroke-width="5" stroke-linecap="round"/>'+
+      '<path d="M104 178 C98 166 102 156 110 150 C114 160 112 170 104 178 Z" fill="#6b7a3a"/>'+
+      '<g font-family="Spline Sans Mono, monospace" font-size="9.5" fill="#2a1a12" letter-spacing=".04em">'+
+        '<text x="178" y="20">SUN MAKES SUGAR</text>'+
+        '<text x="236" y="122">SUGAR + LIGHT</text><text x="236" y="134">= NEW RED</text>'+
+        '<text x="150" y="160">SEAL BLOCKS</text><text x="150" y="172">THE EXIT</text>'+
+        '<text x="12" y="132">NEXT YEAR\'S</text><text x="12" y="144">BUD, ALREADY</text><text x="12" y="156">FORMED</text>'+
+        '<text x="12" y="202" fill="#7a6352">TWIG</text>'+
+      '</g>'+
+      '<path d="M76 150 L98 160" stroke="#7a6352" stroke-width="1.2"/>'+
+    '</svg>';
+  }
+  function redSection(){
+    var R=D.redStory; if(!R) return "";
+    var h='<section class="fo-sec fo-red"><h2>'+esc(R.title)+'</h2><p class="fo-sub">'+esc(R.sub)+'</p>'+
+          '<div class="fo-diagwrap">'+redSvg()+'</div>';
+    R.parts.forEach(function(p,i){
+      h+='<div class="fo-step"><div class="n">'+(i+1)+'</div><div><b>'+esc(p.h)+'</b><ul>'+
+         p.pts.map(function(t){return '<li>'+esc(t)+'</li>';}).join("")+'</ul></div></div>';
+    });
+    if(R.prune) h+='<div class="fo-prune"><b>'+esc(R.prune.h)+'</b><ul>'+
+         R.prune.pts.map(function(t){return '<li>'+esc(t)+'</li>';}).join("")+'</ul></div>';
+    return h+'</section>';
+  }
+
   function render(){
     var host=document.getElementById("foPanel"); if(!host) return;
     var z=zone(), d=st.day;
@@ -141,7 +176,8 @@
          '<p class="fo-bare">'+groups.bare.map(function(s){return esc(s.common);}).join(" · ")+'</p></section>';
     }
 
-    h+='<section class="fo-sec"><h2>Why the colors</h2><p class="fo-sub">Four pigments make every fall color you see</p><div class="fo-pig">'+
+    h+=redSection();
+    h+='<section class="fo-sec"><h2>The color key</h2><p class="fo-sub">Four pigments make every fall color you see. Only the red is new.</p><div class="fo-pig">'+
        D.pigments.map(function(p){ return '<div class="pc"><i style="background:'+p.c+'"></i><div><b>'+esc(p.name)+'</b><span>'+esc(p.text)+'</span></div></div>'; }).join("")+
        '</div></section>';
     h+='<section class="fo-sec"><h2>Where to look first</h2><p class="fo-sub">What turns before what, on the landscape and on a single tree</p><div class="fo-where">'+
