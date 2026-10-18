@@ -232,6 +232,114 @@ window.FOLIAGE_DATA = {
       also: "Native to the Appalachians and Ozarks, planted and spread across the Northeast. A legume: it fixes its own nitrogen, so it thrives on poor road-cut soil. The wood resists rot for decades, the classic fence-post tree. White, sweet-scented flower clusters in late May."
     },
     {
+      common: "Black Walnut", aka: ["walnut"], sci: "Juglans nigra", fam: "Juglandaceae", type: "tree", status: "native",
+      win: { s: [9, 15], p: [9, 30], e: [10, 15] },
+      colors: ["#4d6b2f", "#a8a82c", "#d9b521", "#8a7a3a"],
+      colorWords: "Yellow, briefly, then among the first trees bare",
+      where: "Fence rows, farm edges and yards. The leaflets yellow and fall in late September and early October, so a bare walnut stands out among green neighbors. Green tennis-ball nuts litter the ground below.",
+      id: "Long compound leaves with 15 to 23 narrow toothed leaflets, the end leaflet often missing. Dark, deeply ridged bark. Round green husked nuts that stain hands brown.",
+      also: "Its roots release juglone, a compound that stunts tomatoes and many other plants growing nearby. The wood is among the most valuable in North America."
+    },
+    {
+      common: "Black Cherry", aka: ["cherry", "wild cherry", "wild black cherry"], sci: "Prunus serotina", fam: "Rosaceae", type: "tree", status: "native",
+      win: { s: [9, 25], p: [10, 12], e: [10, 30] },
+      colors: ["#4d6b2f", "#c9a227", "#d9781e", "#b3261e"],
+      colorWords: "Yellow to orange, some trees red",
+      where: "Fence rows and roadsides, often in straight lines, because birds eat the cherries and drop the seeds where they perch. Colors from the outer crown in.",
+      id: "Narrow, glossy, finely toothed leaves with tiny incurved teeth and a line of rusty hairs along the midrib underneath. Young bark smooth with horizontal lines; old bark dark and flaky like burnt potato chips.",
+      also: "Wilted leaves and broken branches carry cyanide compounds that are toxic to livestock. The wood is prized for furniture."
+    },
+    {
+      common: "Honey Locust", aka: ["honeylocust", "locust", "thornless honey locust"], sci: "Gleditsia triacanthos", fam: "Fabaceae", type: "tree", status: "native",
+      win: { s: [10, 1], p: [10, 15], e: [10, 30] },
+      colors: ["#4d6b2f", "#a8a82c", "#e0c22a", "#c9a227"],
+      colorWords: "Clear small-leaf yellow",
+      where: "Planted everywhere as a street and parking-lot tree. The tiny leaflets turn yellow together and fall through the grass, so there is almost nothing to rake.",
+      id: "Feathery twice-compound leaves with dozens of tiny leaflets. Wild trees carry huge branched thorns on the trunk; planted ones are usually thornless. Long twisted brown pods.",
+      also: "Not closely related to black locust despite the name, though both are legumes. The pods have a sweet pulp, the source of the name."
+    },
+    {
+      common: "Quaking & Bigtooth Aspen", only: ["north", "mid", "west"], aka: ["aspen", "poplar", "popple", "trembling aspen"], sci: "Populus tremuloides, P. grandidentata", fam: "Salicaceae", type: "tree", status: "native",
+      win: { s: [10, 1], p: [10, 15], e: [10, 30] },
+      colors: ["#4d6b2f", "#a8a82c", "#e0c22a", "#d9a521"],
+      colorWords: "Bright gold that shimmers in the wind",
+      where: "Clear-cuts, burned ground, road edges and old fields up north. Whole groves turn at once because a grove is often a single plant, connected by its roots.",
+      id: "Round leaves on flattened stalks, so they flutter in the slightest breeze. Quaking aspen has fine teeth; bigtooth has large, coarse teeth. Smooth pale greenish-white bark.",
+      also: "One aspen clone in Utah is among the largest living things on Earth. In the Northeast they are the first trees back after logging or fire."
+    },
+    {
+      common: "Silver Maple", aka: ["maple", "silver-leaf maple"], sci: "Acer saccharinum", fam: "Sapindaceae", type: "tree", status: "native",
+      win: { s: [10, 10], p: [10, 28], e: [11, 12] },
+      colors: ["#4d6b2f", "#a8a82c", "#d9b521", "#a8862a"],
+      colorWords: "Pale yellow, often dull; silver undersides flash in the wind",
+      where: "River floodplains and older neighborhood streets. Colors late and modestly, often going straight from green to pale yellow-brown.",
+      id: "Deeply cut five-lobed leaves, the notches reaching almost to the center, bright silver-white underneath. Shaggy gray bark in strips on older trees. Large brittle limbs.",
+      also: "Planted heavily in the 1900s because it grows fast. The weak wood drops branches in storms, and the roots crack sidewalks and sewer lines."
+    },
+    {
+      common: "Sycamore & London Plane", only: ["mid", "west", "south", "mdva"], aka: ["sycamore", "plane tree", "london planetree", "buttonwood"], sci: "Platanus occidentalis, P. × acerifolia", fam: "Platanaceae", type: "tree", status: "native",
+      win: { s: [10, 5], p: [10, 25], e: [11, 15] },
+      colors: ["#4d6b2f", "#8a8a3a", "#b8862a", "#c9a87a"],
+      colorWords: "Yellow-brown to tan; color is not the point",
+      where: "Stream banks (sycamore) and city streets (London plane). The leaves go tan and crunchy rather than bright. In winter, the white upper limbs and hanging seed balls give it away from far off.",
+      id: "Big maple-like leaves, but set one at a time along the twig (maples are in pairs). Bark peels in patches of tan, olive and cream; upper limbs are bright white. Round bristly seed balls on long stalks.",
+      also: "The London plane is a cross between the American sycamore and an Asian plane, and it lines more city streets than any other tree in New York. Old sycamores can be hollow enough to stand in."
+    },
+    {
+      common: "Pin Oak", only: ["mid", "west", "south", "mdva"], aka: ["oak"], sci: "Quercus palustris", fam: "Fagaceae", type: "tree", status: "native",
+      win: { s: [10, 25], p: [11, 10], e: [11, 30] },
+      colors: ["#4d6b2f", "#8a5a2a", "#a0341e", "#7a4a2a"],
+      colorWords: "Bronze to russet red, very late",
+      where: "Street trees, parking lots and wet ground. Among the last trees to color. The lower branches droop, the middle ones stick straight out, and many hold dry brown leaves all winter.",
+      id: "Small leaves with deep C-shaped notches and bristle-tipped lobes. A straight central trunk with a pyramid shape and drooping lower limbs. Small round acorns with thin caps.",
+      also: "Its leaves yellow in summer on alkaline soil, a sign of iron shortage that is common in planted streets and lawns."
+    },
+    {
+      common: "White Oak", aka: ["oak"], sci: "Quercus alba", fam: "Fagaceae", type: "tree", status: "native",
+      win: { s: [10, 28], p: [11, 10], e: [11, 30] },
+      colors: ["#4d6b2f", "#7a3a3a", "#6b2a3a", "#7a5a3a"],
+      colorWords: "Burgundy to purple-brown, the last color of the season",
+      where: "Upland woods and old fields. It turns after nearly everything else, the deep wine color holding into late November. Young trees keep dry tan leaves through winter.",
+      id: "Rounded finger-like lobes with no bristle tips. Light gray, scaly bark. Acorns with warty bowl-shaped caps that sprout the same fall they drop.",
+      also: "White oak acorns are less bitter than red oak acorns, so squirrels and deer eat them first. The wood is watertight, which is why it is used for wine and whiskey barrels."
+    },
+    {
+      common: "Callery Pear", aka: ["bradford pear", "pear", "cleveland pear"], sci: "Pyrus calleryana", fam: "Rosaceae", type: "tree", status: "invasive",
+      win: { s: [10, 28], p: [11, 10], e: [11, 28] },
+      colors: ["#4d6b2f", "#a0341e", "#7a1e3a", "#5a2a3a"],
+      colorWords: "Glossy maroon, purple and orange, very late",
+      where: "Highway interchanges, medians and abandoned fields. In April the thickets are solid white; in November they are wine-red long after the maples are bare. Street trees hold their leaves into December.",
+      id: "Glossy, rounded, finely wavy-toothed leaves on long stalks. Wild seedlings carry long thorns. Tiny brown pear fruits that birds spread.",
+      also: "Planted as a sterile, thornless street tree, but varieties cross-pollinate and the offspring revert to thorny wild trees. New Jersey's 2026 invasive species law puts it on the prohibited list, with sales ending in 2030."
+    },
+    {
+      common: "Eastern White Pine", aka: ["white pine", "pine"], sci: "Pinus strobus", fam: "Pinaceae", type: "tree", status: "native",
+      win: { s: [9, 25], p: [10, 12], e: [10, 30] },
+      colors: ["#2f5a3a", "#4d6b2f", "#c9a227", "#a8862a"],
+      colorWords: "Green outside, yellow inside: normal fall needle drop",
+      where: "It is not dying. Each fall the oldest needles, deep inside the branches, turn yellow and drop, while the newer needles at the tips stay green. Whole stands look golden inside for a week or two.",
+      id: "Soft, flexible needles in bundles of 5 (count the letters in W-H-I-T-E). Long curved cones. Branches grow in level whorls, one ring per year.",
+      also: "The largest conifer in the Northeast. The Crown reserved the biggest ones for ship masts in colonial times, marking them with the King's broad arrow."
+    },
+    {
+      common: "Japanese Barberry", aka: ["barberry"], sci: "Berberis thunbergii", fam: "Berberidaceae", type: "shrub", status: "invasive",
+      win: { s: [10, 10], p: [10, 30], e: [11, 20] },
+      colors: ["#4d6b2f", "#d9781e", "#c0391b", "#8a2a3a"],
+      colorWords: "Orange, scarlet and purple, low in the woods",
+      where: "Forest understory, especially in shade where little else grows. Leafs out early and colors late, so it stands out as a red carpet under bare or turning trees.",
+      id: "Small spoon-shaped leaves in clusters. A single sharp spine at each node. Bright red oblong berries that hang on into winter. Cut stems are bright yellow inside.",
+      also: "Dense barberry thickets hold humidity that helps deer ticks survive, and studies link it to higher Lyme disease risk. It is on New Jersey's prohibited invasive plant list (sales end in 2030), and several other Northeast states already ban it."
+    },
+    {
+      common: "Autumn Olive", aka: ["autumn-olive", "olive"], sci: "Elaeagnus umbellata", fam: "Elaeagnaceae", type: "shrub", status: "invasive",
+      win: { s: [10, 30], p: [11, 15], e: [12, 1] },
+      colors: ["#5a7a5a", "#8a9a7a", "#a8a87a", "#a8946a"],
+      colorWords: "Stays silvery green after almost everything else is bare",
+      where: "Highway banks, old fields and power lines. In November it is the shrub still full of leaves, silvery when the wind turns them over, loaded with small red berries.",
+      id: "Narrow oval leaves, dull green on top and silvery underneath with tiny scales. Red berries speckled with silver dots. Often a little thorny.",
+      also: "Planted for erosion control and wildlife food decades ago. Like black locust it fixes its own nitrogen, so it takes over poor soil. The berries are edible and tart."
+    },
+    {
       common: "Virginia Creeper", sci: "Parthenocissus quinquefolia", fam: "Vitaceae", type: "vine", status: "native",
       win: { s: [9, 12], p: [10, 3], e: [10, 25] },
       colors: ["#4d6b2f", "#c0391b", "#9a1f2a", "#6b2a4a"],
@@ -256,7 +364,7 @@ window.FOLIAGE_DATA = {
       colorWords: "Hot pinkish red, almost fluorescent",
       where: "Escaped from yards into woodland understory. In the woods it still turns vivid pink in deep shade, which no native shrub does that brightly.",
       id: "Opposite small elliptic leaves. Twigs carry corky wings along their sides. Small orange-red berries in pairs.",
-      also: "Banned from sale in several Northeast states. Birds spread the seeds into forests, where it shades out native seedlings."
+      also: "Banned from sale in several Northeast states and on New Jersey's prohibited list (sales end in 2030). Birds spread the seeds into forests, where it shades out native seedlings."
     },
     {
       common: "Red Maple", aka: ["maple", "swamp maple", "soft maple"], sci: "Acer rubrum", fam: "Sapindaceae", type: "tree", status: "native",
@@ -382,7 +490,7 @@ window.FOLIAGE_DATA = {
       colorWords: "Russet red; scarlet oak a true deep red",
       where: "Among the last to turn, carrying the late-season color after the maples are bare. Color creeps in from the outer crown, and many hold dead leaves into winter.",
       id: "Pointed lobes tipped with bristles. Scarlet oak has deep C-shaped notches cut almost to the midrib. Acorns with shallow caps.",
-      also: "White oaks (rounded lobes, no bristles) finish later still, in burgundy-brown."
+      also: "Oaks are the backbone of the late season. See White Oak and Pin Oak for the last of the color."
     },
     {
       common: "Tamarack", aka: ["larch", "eastern larch", "hackmatack"], only: ["north", "mid", "west"], sci: "Larix laricina", fam: "Pinaceae", type: "tree", status: "native",
