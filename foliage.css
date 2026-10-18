@@ -162,3 +162,15 @@ body.fo-mode #foPanel{display:block}
 .fo-off{font-size:12.5px;color:var(--fo-amber);margin:0 0 6px;font-style:italic}
 .fo-b.stage.bare{color:var(--muted);border-color:var(--line);background:#f1e9df}
 .fo-b.naturalized{color:#8a6a2a;border-color:#e3d1a8;background:#f7efdc}
+
+/* live iNaturalist color reports */
+.fo-live{font-family:"Spline Sans Mono",monospace;font-size:9.5px;letter-spacing:.05em;color:var(--muted);margin-top:7px}
+.fo-live.on{color:#4d6b2f}
+.fo-live.on::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:#5d8a2f;margin-right:6px;vertical-align:1px}
+.fo-gaplist{list-style:none;margin:0;padding:0;background:var(--card);border:1px solid var(--line);border-radius:13px;overflow:hidden}
+.fo-gaplist li{display:flex;align-items:center;gap:10px;padding:10px 13px;border-top:1px solid var(--line)}
+.fo-gaplist li:first-child{border-top:0}
+.fo-gaplist a{flex:1;min-width:0;text-decoration:none;color:var(--ink)}
+.fo-gaplist b{display:block;font-family:"Fraunces",serif;font-size:15.5px;font-weight:600}
+.fo-gaplist i{display:block;font-size:12.5px;color:var(--muted)}
+.fo-gaplist span{flex:none;font-family:"Spline Sans Mono",monospace;font-size:11px;color:var(--green);background:#f3dfcc;border-radius:6px;padding:3px 7px}

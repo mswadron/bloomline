@@ -104,7 +104,7 @@
           '<div class="fo-sci">'+esc(sp.sci)+'</div>'+
           '<div class="fo-words">'+esc(sp.colorWords)+'</div></div>'+
           '<div class="fo-chev">&rsaquo;</div></div>'+
-        badges(sp,stg,stageLabel(sp,st.day))+track(sp)+
+        badges(sp,stg,stageLabel(sp,st.day))+track(sp)+liveLine(sp)+
       '</div>'+
       '<div class="fo-body"><div class="fo-inner">'+
         '<div class="fo-layer"><div class="lh">Where it turns first</div><p>'+esc(sp.where)+'</p></div>'+
@@ -222,9 +222,89 @@
       '</div>';
   }
 
+  /* ---------- live color reports (iNaturalist "Leaves: Colored Leaves") ----------
+     One query per region, cached 6 hours. Counts are matched to guide cards by
+     scientific name; anything reported in color that the guide lacks is listed
+     under "Also in color near you", so gaps surface without manual research. */
+  var LIVE={}, LIVE_DAYS=14, LIVE_TTL=6*3600e3, LIVE_RETRY=5*60e3;
+  function isoDay(t){ return new Date(t).toISOString().slice(0,10); }
+  function loadLive(z){
+    if(!z.bbox || !window.fetch) return;
+    var L=LIVE[z.id], now=Date.now();
+    if(L && (L.status==="loading" || (L.status==="ok" && now-L.at<LIVE_TTL) || (L.status==="err" && now-L.at<LIVE_RETRY))) return;
+    var key="bl_fo_live_"+z.id;
+    try{ var c=JSON.parse(localStorage.getItem(key)||"null"); if(c && c.status==="ok" && now-c.at<LIVE_TTL){ LIVE[z.id]=c; return; } }catch(e){}
+    LIVE[z.id]={status:"loading"};
+    var b=z.bbox;
+    var url="https://api.inaturalist.org/v1/observations/species_counts?term_id=36&term_value_id=39&iconic_taxa=Plantae"+
+      "&quality_grade=research&swlat="+b[0]+"&swlng="+b[1]+"&nelat="+b[2]+"&nelng="+b[3]+
+      "&d1="+isoDay(now-LIVE_DAYS*864e5)+"&d2="+isoDay(now)+"&per_page=200";
+    var ctl=window.AbortController?new AbortController():null, to=setTimeout(function(){ if(ctl) ctl.abort(); },12000);
+    fetch(url, ctl?{signal:ctl.signal}:{}).then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); }).then(function(j){
+      clearTimeout(to);
+      var rows=(j.results||[]).map(function(x){ var t=x.taxon||{};
+        return {id:t.id, name:t.name||"", common:t.preferred_common_name||"", rank:t.rank||"", count:x.count||0}; });
+      LIVE[z.id]={status:"ok", at:Date.now(), rows:rows};
+      try{ localStorage.setItem(key, JSON.stringify(LIVE[z.id])); }catch(e){}
+      if(zone().id===z.id && document.body.classList.contains("fo-mode")) render();
+    }).catch(function(){
+      clearTimeout(to); LIVE[z.id]={status:"err", at:Date.now()};
+      if(zone().id===z.id && document.body.classList.contains("fo-mode")) render();
+    });
+  }
+  function sciKeys(sp){
+    if(sp._keys) return sp._keys;
+    var out={species:{}, genera:{}}, genus="";
+    String(sp.sci).split(",").concat(sp.inat||[]).forEach(function(part){
+      var w=part.replace(/\u00d7|×/g," ").trim().split(/\s+/).filter(Boolean); if(!w.length) return;
+      var g=w[0]; if(/^[A-Z]\.$/.test(g)) g=genus; else genus=g;
+      var e=w[1]||"";
+      if(!e || e==="spp." || e==="sp.") out.genera[g.toLowerCase()]=1; else out.species[(g+" "+e).toLowerCase()]=1;
+    });
+    return (sp._keys=out);
+  }
+  function matchSp(name){
+    var w=String(name).replace(/\u00d7|×/g," ").trim().toLowerCase().split(/\s+/);
+    var sp2=w.length>1?w[0]+" "+w[1]:"", g=w[0];
+    for(var i=0;i<D.species.length;i++){ var k=sciKeys(D.species[i]); if(sp2 && k.species[sp2]) return D.species[i]; }
+    for(var j=0;j<D.species.length;j++){ if(sciKeys(D.species[j]).genera[g]) return D.species[j]; }
+    return null;
+  }
+  function liveIndex(z){
+    var L=LIVE[z.id]; if(!L || L.status!=="ok") return null;
+    if(L._idx) return L._idx;
+    var by={}, gaps=[];
+    L.rows.forEach(function(r){
+      var sp=matchSp(r.name);
+      if(sp) by[sp.sci]=(by[sp.sci]||0)+r.count;
+      else if(/^(species|subspecies|variety|hybrid|form)$/.test(r.rank)) gaps.push(r);
+    });
+    gaps.sort(function(a,b){ return b.count-a.count; });
+    return (L._idx={by:by, gaps:gaps});
+  }
+  function liveLine(sp){
+    var idx=liveIndex(zone()); if(!idx) return "";
+    var n=idx.by[sp.sci]||0;
+    return '<div class="fo-live'+(n?' on':'')+'">'+(n? n+' color report'+(n===1?'':'s')+' nearby in the last 2 weeks'
+      : 'No color reports nearby in the last 2 weeks')+'</div>';
+  }
+  function gapSection(z){
+    var L=LIVE[z.id], h='<section class="fo-sec fo-gaps"><h2>Also in color near you</h2>';
+    if(!L || L.status==="loading") return h+'<p class="fo-sub">Checking iNaturalist for other plants in color in '+esc(z.label)+'\u2026</p></section>';
+    if(L.status==="err") return h+'<p class="fo-sub">Could not reach iNaturalist right now. The guide above still works; live reports will return on the next visit.</p></section>';
+    var idx=liveIndex(z), g=idx.gaps.slice(0,15);
+    if(!g.length) return h+'<p class="fo-sub">Every plant reported in fall color in '+esc(z.label)+' over the last 2 weeks is already in this guide.</p></section>';
+    return h+'<p class="fo-sub">Live from iNaturalist: plants people photographed with fall color in '+esc(z.label)+
+      ' in the last 2 weeks that this guide does not cover yet. Tap a name to see photos.</p><ul class="fo-gaplist">'+
+      g.map(function(r){ return '<li><a href="https://www.inaturalist.org/taxa/'+encodeURIComponent(r.id)+'" target="_blank" rel="noopener">'+
+        '<b>'+esc(r.common?r.common.replace(/\b\w/g,function(c){return c.toUpperCase();}):r.name)+'</b><i>'+esc(r.name)+'</i></a><span>'+r.count+'</span></li>'; }).join("")+
+      '</ul></section>';
+  }
+
   function render(){
     var host=document.getElementById("foPanel"); if(!host) return;
     var z=zone(), d=st.day;
+    loadLive(z);
     var groups={peak:[],turning:[],coming:[],dropping:[],bare:[]};
     D.species.forEach(function(sp){ if(sp.only && sp.only.indexOf(z.id)<0) return; groups[stageOf(sp,d)].push(sp); });
     // order within a group by peak date
@@ -280,6 +360,7 @@
       }
     }
 
+    if(!q) h+=gapSection(z);
     h+=colorStory();
     h+='<section class="fo-sec"><h2>The color key</h2><p class="fo-sub">Four pigments make every fall color you see. Only the red is new.</p><div class="fo-pig">'+
        D.pigments.map(function(p){ return '<div class="pc"><i style="background:'+p.c+'"></i><div><b>'+esc(p.name)+'</b><span>'+esc(p.text)+'</span></div></div>'; }).join("")+

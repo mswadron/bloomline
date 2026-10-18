@@ -9,20 +9,23 @@
 
    colors = the sequence a leaf runs through on its way down, left to right.
    That sequence is what draws each card's color line.
-   only = zones where the species is common; omitted means all zones. */
+   only = zones where the species is common; omitted means all zones.
+   inat = extra iNaturalist names (a genus name means the whole genus) used to
+   match live color reports to this card.
+   zones[].bbox = [swlat, swlng, nelat, nelng] for the live iNaturalist query. */
 
 window.FOLIAGE_DATA = {
 
   zones: [
-    { id: "north", label: "VT · NH · ME", shift: -18,
+    { id: "north", label: "VT · NH · ME", bbox: [42.7, -75.8, 47.5, -66.9], shift: -18,
       note: "Northern New England, the Adirondacks and high Catskills. Peak usually early to mid October." },
-    { id: "mid",   label: "CT · MA · Hudson", shift: -9,
+    { id: "mid",   label: "CT · MA · Hudson", bbox: [40.9, -75.8, 42.9, -69.9], shift: -9,
       note: "Southern New England, the Hudson Valley and the Poconos. Peak usually mid to late October." },
-    { id: "west",  label: "PA · Upstate NY", shift: -6,
+    { id: "west",  label: "PA · Upstate NY", bbox: [39.7, -80.6, 43.4, -75.8], shift: -6,
       note: "Central and western Pennsylvania, the Finger Lakes and western New York. The Allegheny ridges and plateau peak mid to late October; the river valleys about a week later." },
-    { id: "south", label: "NJ · NYC · LI", shift: 0,
+    { id: "south", label: "NJ · NYC · LI", bbox: [38.9, -75.6, 41.4, -71.8], shift: 0,
       note: "Lowland coastal plain and Piedmont. Peak usually the last week of October into early November." },
-    { id: "mdva",  label: "MD · DE · DC · VA", shift: 8,
+    { id: "mdva",  label: "MD · DE · DC · VA", bbox: [37.5, -79.5, 39.8, -75.0], shift: 8,
       note: "Maryland, Delaware, DC and northern Virginia. The Blue Ridge and Shenandoah turn around the third week of October, a week or two ahead of the lowlands; the Chesapeake shore peaks into early November." }
   ],
 
@@ -259,7 +262,7 @@ window.FOLIAGE_DATA = {
       also: "Not closely related to black locust despite the name, though both are legumes. The pods have a sweet pulp, the source of the name."
     },
     {
-      common: "Quaking & Bigtooth Aspen", only: ["north", "mid", "west"], aka: ["aspen", "poplar", "popple", "trembling aspen"], sci: "Populus tremuloides, P. grandidentata", fam: "Salicaceae", type: "tree", status: "native",
+      common: "Quaking & Bigtooth Aspen", inat: ["Populus tremuloides", "Populus grandidentata"], only: ["north", "mid", "west"], aka: ["aspen", "poplar", "popple", "trembling aspen"], sci: "Populus tremuloides, P. grandidentata", fam: "Salicaceae", type: "tree", status: "native",
       win: { s: [10, 1], p: [10, 15], e: [10, 30] },
       colors: ["#4d6b2f", "#a8a82c", "#e0c22a", "#d9a521"],
       colorWords: "Bright gold that shimmers in the wind",
@@ -277,7 +280,7 @@ window.FOLIAGE_DATA = {
       also: "Planted heavily in the 1900s because it grows fast. The weak wood drops branches in storms, and the roots crack sidewalks and sewer lines."
     },
     {
-      common: "Sycamore & London Plane", only: ["mid", "west", "south", "mdva"], aka: ["sycamore", "plane tree", "london planetree", "buttonwood"], sci: "Platanus occidentalis, P. × acerifolia", fam: "Platanaceae", type: "tree", status: "native",
+      common: "Sycamore & London Plane", inat: ["Platanus hispanica"], only: ["mid", "west", "south", "mdva"], aka: ["sycamore", "plane tree", "london planetree", "buttonwood"], sci: "Platanus occidentalis, P. × acerifolia", fam: "Platanaceae", type: "tree", status: "native",
       win: { s: [10, 5], p: [10, 25], e: [11, 15] },
       colors: ["#4d6b2f", "#8a8a3a", "#b8862a", "#c9a87a"],
       colorWords: "Yellow-brown to tan; color is not the point",
@@ -349,7 +352,7 @@ window.FOLIAGE_DATA = {
       also: "Easily confused with poison ivy. Count the leaflets: five is creeper, three is ivy."
     },
     {
-      common: "Poison Ivy", sci: "Toxicodendron radicans", fam: "Anacardiaceae", type: "vine", status: "native",
+      common: "Poison Ivy", inat: ["Toxicodendron rydbergii"], sci: "Toxicodendron radicans", fam: "Anacardiaceae", type: "vine", status: "native",
       win: { s: [9, 18], p: [10, 8], e: [10, 28] },
       colors: ["#4d6b2f", "#c9a227", "#d9781e", "#b3261e"],
       colorWords: "Yellow, orange and red, often all on the same vine",
@@ -430,7 +433,7 @@ window.FOLIAGE_DATA = {
       also: "Among the tallest trees in eastern forests. A magnolia relative, not a poplar despite the name yellow poplar."
     },
     {
-      common: "Hickories", aka: ["hickory", "shagbark", "pignut"], sci: "Carya ovata, C. glabra", fam: "Juglandaceae", type: "tree", status: "native",
+      common: "Hickories", inat: ["Carya"], aka: ["hickory", "shagbark", "pignut"], sci: "Carya ovata, C. glabra", fam: "Juglandaceae", type: "tree", status: "native",
       win: { s: [9, 28], p: [10, 14], e: [10, 31] },
       colors: ["#4d6b2f", "#c9a227", "#b8862a", "#8a6a2a"],
       colorWords: "Clear golden yellow, then bronze",
