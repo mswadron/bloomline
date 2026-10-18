@@ -137,3 +137,10 @@ body.fo-mode #foPanel{display:block}
 .fo-step li,.fo-prune li{font-size:14px;color:#3d2a20;margin:3px 0;line-height:1.45}
 .fo-prune{background:#f3ebe0;border:1px dashed #cdb497;border-radius:13px;padding:12px 13px;margin:4px 0 2px}
 .fo-prune b{color:var(--fo-brown)}
+
+/* four-part color story */
+.fo-chap{font-family:"Spline Sans Mono",monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.fo-story.st-green > h2{color:#4d6b2f} .fo-story.st-green .fo-step .n{background:#4d6b2f}
+.fo-story.st-yellow > h2{color:#a8800f} .fo-story.st-yellow .fo-step .n{background:#c9a227}
+.fo-story.st-red > h2{color:var(--fo-scarlet)} .fo-story.st-red .fo-step .n{background:var(--fo-scarlet)}
+.fo-story.st-brown > h2{color:var(--fo-brown)} .fo-story.st-brown .fo-step .n{background:var(--fo-brown)}

@@ -120,10 +120,58 @@
       '<path d="M76 150 L98 160" stroke="#7a6352" stroke-width="1.2"/>'+
     '</svg>';
   }
-  function redSection(){
-    var R=D.redStory; if(!R) return "";
-    var h='<section class="fo-sec fo-red"><h2>'+esc(R.title)+'</h2><p class="fo-sub">'+esc(R.sub)+'</p>'+
-          '<div class="fo-diagwrap">'+redSvg()+'</div>';
+  var F='font-family="Spline Sans Mono, monospace" font-size="9.5" letter-spacing=".04em" fill="#2a1a12"';
+  function cellSvg(mode){
+    /* mode "green": healthy cell, panels full of green with hidden yellow
+       mode "yellow": panels being taken apart, green leaving, yellow left */
+    var y = mode==="yellow";
+    var h='<svg class="fo-diag" viewBox="0 0 320 200" role="img" aria-label="'+(y?
+      'A leaf cell in fall. The green solar panels are being taken apart from inside, their nutrients leave through the stalk to the twig, and the yellow pigments are left behind.':
+      'A leaf cell in summer, full of green chloroplasts. Small yellow pigments sit inside each chloroplast but are hidden by the green.')+'">';
+    h+='<rect x="20" y="30" width="200" height="140" rx="26" fill="'+(y?'#fbf0c9':'#e9f0dc')+'" stroke="'+(y?'#c9a227':'#4d6b2f')+'" stroke-width="3"/>';
+    var pos=[[62,68],[118,60],[176,72],[56,128],[112,122],[170,132],[140,94],[84,98]];
+    pos.forEach(function(q,i){
+      if(!y){
+        h+='<ellipse cx="'+q[0]+'" cy="'+q[1]+'" rx="20" ry="11" fill="#4d6b2f"/>'+
+           '<circle cx="'+(q[0]-7)+'" cy="'+(q[1]-2)+'" r="2.2" fill="#d9b521" opacity=".55"/>'+
+           '<circle cx="'+(q[0]+6)+'" cy="'+(q[1]+3)+'" r="2.2" fill="#d9b521" opacity=".55"/>';
+      } else {
+        h+='<ellipse cx="'+q[0]+'" cy="'+q[1]+'" rx="20" ry="11" fill="none" stroke="#a8a82c" stroke-width="1.5" stroke-dasharray="3 3"/>'+
+           '<circle cx="'+(q[0]-7)+'" cy="'+(q[1]-2)+'" r="3.4" fill="#d9a521"/>'+
+           '<circle cx="'+(q[0]+6)+'" cy="'+(q[1]+3)+'" r="3.4" fill="#d9a521"/>'+
+           (i%2? '<rect x="'+(q[0]+12)+'" y="'+(q[1]-9)+'" width="5" height="3" fill="#4d6b2f" opacity=".7" transform="rotate(30 '+q[0]+' '+q[1]+')"/>':'');
+      }
+    });
+    if(!y){
+      h+='<circle cx="290" cy="34" r="12" fill="#e8b23a"/><path d="M276 44 L224 64" stroke="#e8b23a" stroke-width="2" stroke-dasharray="4 4"/>'+
+         '<g '+F+'><text x="232" y="96">CHLOROPLAST</text><text x="232" y="108">= SOLAR PANEL</text>'+
+         '<text x="232" y="132">GREEN ON TOP,</text><text x="232" y="144">YELLOW HIDDEN</text><text x="232" y="156">UNDERNEATH</text>'+
+         '<text x="20" y="20">A SINGLE LEAF CELL, SUMMER</text></g>'+
+         '<path d="M230 100 L198 76" stroke="#7a6352" stroke-width="1.2"/>';
+    } else {
+      h+='<path d="M222 100 H286" stroke="#4d6b2f" stroke-width="3" stroke-dasharray="6 5"/><path d="M286 100 l-9 -6 v12 z" fill="#4d6b2f"/>'+
+         '<g '+F+'><text x="228" y="86">NITROGEN</text><text x="228" y="122">TO THE TWIG,</text><text x="228" y="134">SAVED FOR</text><text x="228" y="146">SPRING</text>'+
+         '<text x="20" y="20">SAME CELL, FALL</text><text x="20" y="190">PANELS TAKEN APART INSIDE; YELLOW LEFT</text></g>';
+    }
+    return h+'</svg>';
+  }
+  function brownSvg(){
+    var L=[["#4d6b2f","GREEN"],["#d9b521","YELLOW"],["#c0391b","RED"],["#7a5a3a","BROWN"]];
+    var h='<svg class="fo-diag" viewBox="0 0 320 130" role="img" aria-label="The order a leaf changes: green, then yellow, then red, then brown last.">';
+    L.forEach(function(l,i){
+      var x=18+i*76;
+      h+='<path d="M'+(x+10)+' 80 C'+(x+6)+' 44 '+(x+34)+' 20 '+(x+60)+' 22 C'+(x+64)+' 58 '+(x+40)+' 84 '+(x+10)+' 80 Z" fill="'+l[0]+'"/>'+
+         '<path d="M'+(x+10)+' 80 L'+(x+56)+' 26" stroke="rgba(0,0,0,.25)" stroke-width="1.5"/>'+
+         '<text x="'+(x+34)+'" y="104" text-anchor="middle" font-family="Spline Sans Mono, monospace" font-size="10" letter-spacing=".08em" fill="#2a1a12">'+(i+1)+' '+l[1]+'</text>';
+      if(i<3) h+='<path d="M'+(x+64)+' 52 h8" stroke="#7a6352" stroke-width="2"/><path d="M'+(x+74)+' 52 l-5 -4 v8 z" fill="#7a6352"/>';
+    });
+    h+='<text x="160" y="124" text-anchor="middle" font-family="Spline Sans Mono, monospace" font-size="9" letter-spacing=".06em" fill="#7a6352">BROWN IS ALWAYS THE LAST STOP</text>';
+    return h+'</svg>';
+  }
+  function storySection(R, cls, num, svg){
+    if(!R) return "";
+    var h='<section class="fo-sec fo-story '+cls+'"><div class="fo-chap">Part '+num+' of 4</div><h2>'+esc(R.title)+'</h2><p class="fo-sub">'+esc(R.sub)+'</p>'+
+          (svg?'<div class="fo-diagwrap">'+svg+'</div>':'');
     R.parts.forEach(function(p,i){
       h+='<div class="fo-step"><div class="n">'+(i+1)+'</div><div><b>'+esc(p.h)+'</b><ul>'+
          p.pts.map(function(t){return '<li>'+esc(t)+'</li>';}).join("")+'</ul></div></div>';
@@ -131,6 +179,14 @@
     if(R.prune) h+='<div class="fo-prune"><b>'+esc(R.prune.h)+'</b><ul>'+
          R.prune.pts.map(function(t){return '<li>'+esc(t)+'</li>';}).join("")+'</ul></div>';
     return h+'</section>';
+  }
+  function colorStory(){
+    return '<section class="fo-sec"><h2>How a leaf changes color</h2><p class="fo-sub">Four colors, always in the same order. Here is why each one shows up when it does.</p>'+
+           '<div class="fo-diagwrap">'+brownSvg()+'</div></section>'+
+      storySection(D.greenStory,"st-green",1,cellSvg("green"))+
+      storySection(D.yellowStory,"st-yellow",2,cellSvg("yellow"))+
+      storySection(D.redStory,"st-red",3,redSvg())+
+      storySection(D.brownStory,"st-brown",4,"");
   }
 
   function render(){
@@ -176,7 +232,7 @@
          '<p class="fo-bare">'+groups.bare.map(function(s){return esc(s.common);}).join(" · ")+'</p></section>';
     }
 
-    h+=redSection();
+    h+=colorStory();
     h+='<section class="fo-sec"><h2>The color key</h2><p class="fo-sub">Four pigments make every fall color you see. Only the red is new.</p><div class="fo-pig">'+
        D.pigments.map(function(p){ return '<div class="pc"><i style="background:'+p.c+'"></i><div><b>'+esc(p.name)+'</b><span>'+esc(p.text)+'</span></div></div>'; }).join("")+
        '</div></section>';

@@ -38,10 +38,59 @@ window.FOLIAGE_DATA = {
     { md: [11, 30], c: "#8c7d6a" }
   ],
 
-  /* "Why red comes last" explainer: the sugar trap, why red builds late,
-     next year's bud, and the pruning side note */
+  /* "How a leaf changes color": four chapters in the order the colors
+     appear. green first, yellow next, red after, brown always last. */
+  greenStory: {
+    title: "Why green comes first",
+    sub: "All spring and summer the leaf is a solar power plant. Green is the color of the machinery running.",
+    parts: [
+      { h: "Every leaf cell is full of solar panels",
+        pts: [
+          "Zoom into a leaf and you find millions of tiny cells.",
+          "Each cell holds dozens of chloroplasts. Think of them as the cell's solar panels.",
+          "Inside each panel is chlorophyll, the green pigment. It catches sunlight and the leaf turns that energy into sugar."
+        ] },
+      { h: "Why it looks green",
+        pts: [
+          "Chlorophyll soaks up the red and blue parts of sunlight to run the panels.",
+          "It cannot use green light, so it bounces it back. That bounced green is what reaches your eye."
+        ] },
+      { h: "The yellow is already in there",
+        pts: [
+          "The same panels also hold yellow and orange pigments (carotenoids). They help catch light and work like built-in sunscreen.",
+          "There is far more green than yellow, and the tree keeps rebuilding the green all summer as it wears out.",
+          "So the green covers the yellow completely. It is there from day one; you just cannot see it yet."
+        ] }
+    ]
+  },
+
+  yellowStory: {
+    title: "Why yellow comes next",
+    sub: "Yellow is not painted on in fall. It is uncovered when the green is taken apart.",
+    parts: [
+      { h: "The shutdown signal",
+        pts: [
+          "Shorter days and cooler nights tell the tree winter is coming.",
+          "A leaf would freeze and be useless in winter, so the tree gets ready to drop it. But first it saves what it can."
+        ] },
+      { h: "Recycling from the inside",
+        pts: [
+          "The chloroplasts are not peeled off or washed away. The cell takes them apart chemically, from within.",
+          "The green chlorophyll and its proteins hold much of the leaf's nitrogen, a nutrient the tree works hard to get.",
+          "The tree breaks them down and ships the nitrogen back through the stalk into the twigs and roots, stored for next spring.",
+          "And the tree stops rebuilding the green. Once it is dismantled, it is gone."
+        ] },
+      { h: "The yellow is left standing",
+        pts: [
+          "The yellow pigments break down much more slowly than the green.",
+          "So as the green disappears, the yellow that was hiding all year shows through.",
+          "That is why yellow trees (birch, hickory, tulip tree, ginkgo) look about the same every year. The color was already there; weather barely changes it."
+        ] }
+    ]
+  },
+
   redStory: {
-    title: "Why red comes last",
+    title: "Why red comes after",
     sub: "Red is the only fall color the tree makes new. Here is how, and why it keeps building right up to leaf drop.",
     parts: [
       { h: "The sugar trap",
@@ -84,6 +133,30 @@ window.FOLIAGE_DATA = {
         "Dead, broken or dangerous limbs: anytime."
       ]
     }
+  },
+
+  brownStory: {
+    title: "Why brown is always last",
+    sub: "Every leaf ends brown, whatever color it turned first. Brown is what is left when nothing else is.",
+    parts: [
+      { h: "Everything else breaks down first",
+        pts: [
+          "The green is dismantled and shipped out. The yellow fades. The red breaks down too once the leaf stops making it.",
+          "When the cells finally die, nothing is left working inside the leaf."
+        ] },
+      { h: "What remains is brown",
+        pts: [
+          "Tannins, bitter compounds stored in the leaf all along, darken as they react with air.",
+          "Add the dead cell walls and you get brown, tan and russet. No new pigment is made; brown is the leftovers.",
+          "That is why it always comes last: it needs everything else to be gone."
+        ] },
+      { h: "Who stays brown longest",
+        pts: [
+          "Oaks and beeches are loaded with tannin, so they spend more of the season in russet and tan.",
+          "Many young beeches and oaks hold their dry brown leaves all winter, the rattling leaves in a bare January woods.",
+          "On the ground every leaf goes brown, and then it becomes soil for next year."
+        ] }
+    ]
   },
 
   pigments: [
