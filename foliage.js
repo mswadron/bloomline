@@ -34,13 +34,30 @@
     var sh=zone().shift;
     return { s:doy(sp.win.s[0],sp.win.s[1])+sh, p:doy(sp.win.p[0],sp.win.p[1])+sh, e:doy(sp.win.e[0],sp.win.e[1])+sh };
   }
-  function stageOf(sp,d){
+  /* Breathing room: trees of the same kind run about a week apart, so the
+     stage bands are wide and a tree near the edge of a band is labeled with
+     both stages ("At peak, starting to drop") instead of snapping to one. */
+  var SLACK=5, PEAKBAND=7, EDGE=3;
+  function bands(sp){
     var w=win(sp);
-    if(d<w.s) return "coming";
-    if(d<w.p-4) return "turning";
-    if(d<=w.p+5) return "peak";
-    if(d<=w.e) return "dropping";
+    return { s:w.s-SLACK, p0:w.p-PEAKBAND, p1:w.p+PEAKBAND, e:w.e+SLACK };
+  }
+  function stageOf(sp,d){
+    var b=bands(sp);
+    if(d<b.s) return "coming";
+    if(d<b.p0) return "turning";
+    if(d<=b.p1) return "peak";
+    if(d<=b.e) return "dropping";
     return "bare";
+  }
+  function stageLabel(sp,d){
+    var b=bands(sp), k=stageOf(sp,d);
+    if(k==="coming"   && b.s-d<=EDGE)  return "Green, first color soon";
+    if(k==="turning"  && b.p0-d<=EDGE) return "Turning, near peak";
+    if(k==="peak"     && d-b.p0<=EDGE-1 && b.p0-bands(sp).s>EDGE) return "Peak just starting";
+    if(k==="peak"     && b.p1-d<=EDGE) return "At peak, starting to drop";
+    if(k==="dropping" && b.e-d<=EDGE)  return "Dropping, nearly bare";
+    return STAGE_LABEL[k];
   }
 
   /* ---------- tab switch ---------- */
@@ -72,9 +89,9 @@
            '<div class="tk" style="left:'+pct(st.day)+'%"></div></div>'+
            '<div class="fo-axis"><span>Sep</span><span>Oct</span><span>Nov</span></div>';
   }
-  function badges(sp,stg){
+  function badges(sp,stg,lab){
     var cls = sp.status==="invasive"?"invasive":sp.status==="planted"?"planted":"native";
-    return '<div class="fo-badges"><span class="fo-b stage '+stg+'">'+STAGE_LABEL[stg]+'</span>'+
+    return '<div class="fo-badges"><span class="fo-b stage '+stg+'">'+esc(lab||STAGE_LABEL[stg])+'</span>'+
            '<span class="fo-b '+cls+'">'+esc(sp.status)+'</span>'+
            '<span class="fo-b">'+esc(sp.type)+'</span><span class="fo-b">'+esc(sp.fam)+'</span></div>';
   }
@@ -87,13 +104,13 @@
           '<div class="fo-sci">'+esc(sp.sci)+'</div>'+
           '<div class="fo-words">'+esc(sp.colorWords)+'</div></div>'+
           '<div class="fo-chev">&rsaquo;</div></div>'+
-        badges(sp,stg)+track(sp)+
+        badges(sp,stg,stageLabel(sp,st.day))+track(sp)+
       '</div>'+
       '<div class="fo-body"><div class="fo-inner">'+
         '<div class="fo-layer"><div class="lh">Where it turns first</div><p>'+esc(sp.where)+'</p></div>'+
         '<div class="fo-layer"><div class="lh">How to identify it</div><p>'+esc(sp.id)+'</p></div>'+
         '<div class="fo-layer"><div class="lh">Color window here</div><p>First color around '+fromDoy(w.s)+
-          ', peak around '+fromDoy(w.p)+', mostly bare by '+fromDoy(w.e)+'.</p></div>'+
+          ', peak around '+fromDoy(w.p)+', mostly bare by '+fromDoy(w.e)+'. Any single tree can run about a week either side.</p></div>'+
         '<div class="fo-layer"><div class="lh">Worth knowing</div><p>'+esc(sp.also)+'</p></div>'+
       '</div></div></div>';
   }
@@ -234,7 +251,7 @@
          '<div class="mk" style="left:'+pct(d)+'%"></div></div>'+
        '<div class="fo-months"><span>Sep</span><span>Oct</span><span>Nov</span></div>'+
        '<p class="fo-summary">'+summary+'</p>'+
-       '<div class="fo-hint">Drag along the color line to move through the season</div></section>';
+       '<div class="fo-hint">Drag along the color line to move through the season. Trees of the same kind can run about a week ahead or behind each other.</div></section>';
 
     var idx=0, q=norm(st.q);
     if(q){
