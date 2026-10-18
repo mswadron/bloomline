@@ -187,7 +187,7 @@ window.FOLIAGE_DATA = {
 
   species: [
     {
-      common: "Sourwood", only: ["west", "mdva"], sci: "Oxydendrum arboreum", fam: "Ericaceae", type: "tree", status: "native",
+      common: "Sourwood", aka: ["sorrel tree", "lily of the valley tree"], only: ["west", "mdva"], sci: "Oxydendrum arboreum", fam: "Ericaceae", type: "tree", status: "native",
       win: { s: [9, 10], p: [9, 30], e: [10, 20] },
       colors: ["#4d6b2f", "#c0391b", "#9a1f2a", "#6b2a4a"],
       colorWords: "Brilliant scarlet to maroon, among the first",
@@ -196,7 +196,7 @@ window.FOLIAGE_DATA = {
       also: "Its summer flowers make the prized sourwood honey of the southern Appalachians. Rare in New Jersey and north."
     },
     {
-      common: "Black Gum", sci: "Nyssa sylvatica", fam: "Nyssaceae", type: "tree", status: "native",
+      common: "Black Gum", aka: ["tupelo", "sour gum", "black tupelo"], sci: "Nyssa sylvatica", fam: "Nyssaceae", type: "tree", status: "native",
       win: { s: [9, 15], p: [10, 5], e: [10, 25] },
       colors: ["#4d6b2f", "#b3261e", "#7a1e2c", "#5a2a3a"],
       colorWords: "Scarlet to deep wine red, sometimes purple",
@@ -205,7 +205,7 @@ window.FOLIAGE_DATA = {
       also: "Also called tupelo or sour gum. Wood is so interlocked it was used for mallets and wheel hubs."
     },
     {
-      common: "Smooth & Staghorn Sumac", sci: "Rhus glabra, R. typhina", fam: "Anacardiaceae", type: "shrub", status: "native",
+      common: "Smooth & Staghorn Sumac", aka: ["sumac", "staghorn", "smooth sumac"], sci: "Rhus glabra, R. typhina", fam: "Anacardiaceae", type: "shrub", status: "native",
       win: { s: [9, 12], p: [10, 2], e: [10, 22] },
       colors: ["#4d6b2f", "#d9781e", "#c0391b", "#8a2a1e"],
       colorWords: "Orange through flaming scarlet",
@@ -232,7 +232,7 @@ window.FOLIAGE_DATA = {
       also: "The oil (urushiol) stays active on dead leaves and vines all winter. Never burn it."
     },
     {
-      common: "Burning Bush", sci: "Euonymus alatus", fam: "Celastraceae", type: "shrub", status: "invasive",
+      common: "Burning Bush", aka: ["winged euonymus", "euonymus"], sci: "Euonymus alatus", fam: "Celastraceae", type: "shrub", status: "invasive",
       win: { s: [9, 25], p: [10, 15], e: [11, 1] },
       colors: ["#4d6b2f", "#d14a5a", "#d9264a", "#b3263a"],
       colorWords: "Hot pinkish red, almost fluorescent",
@@ -241,7 +241,7 @@ window.FOLIAGE_DATA = {
       also: "Banned from sale in several Northeast states. Birds spread the seeds into forests, where it shades out native seedlings."
     },
     {
-      common: "Red Maple", sci: "Acer rubrum", fam: "Sapindaceae", type: "tree", status: "native",
+      common: "Red Maple", aka: ["maple", "swamp maple", "soft maple"], sci: "Acer rubrum", fam: "Sapindaceae", type: "tree", status: "native",
       win: { s: [9, 25], p: [10, 15], e: [11, 1] },
       colors: ["#4d6b2f", "#d9781e", "#c0391b", "#8a1e1e"],
       colorWords: "Scarlet, sometimes orange or yellow",
@@ -250,7 +250,7 @@ window.FOLIAGE_DATA = {
       also: "The most common tree in the eastern U.S. Red flowers in March and red seeds in spring, then green leaves all summer like any other tree; the red comes back only when the green breaks down in fall."
     },
     {
-      common: "Flowering Dogwood", sci: "Cornus florida", fam: "Cornaceae", type: "tree", status: "native",
+      common: "Flowering Dogwood", aka: ["dogwood"], sci: "Cornus florida", fam: "Cornaceae", type: "tree", status: "native",
       win: { s: [9, 25], p: [10, 15], e: [11, 2] },
       colors: ["#4d6b2f", "#9a3a3a", "#7a1e3a", "#5a2a3a"],
       colorWords: "Burgundy to purple-red",
@@ -259,7 +259,7 @@ window.FOLIAGE_DATA = {
       also: "The berries are a key fall food for migrating thrushes. Already setting gray button-shaped flower buds for spring."
     },
     {
-      common: "White Ash", sci: "Fraxinus americana", fam: "Oleaceae", type: "tree", status: "native",
+      common: "White Ash", aka: ["ash", "american ash"], sci: "Fraxinus americana", fam: "Oleaceae", type: "tree", status: "native",
       win: { s: [9, 25], p: [10, 12], e: [10, 28] },
       colors: ["#4d6b2f", "#c9a227", "#7a3a5a", "#5a2a4a"],
       colorWords: "Purple, maroon or bronze; some trees yellow",
@@ -277,7 +277,7 @@ window.FOLIAGE_DATA = {
       also: "The root bark was the original root beer flavor."
     },
     {
-      common: "Sugar Maple", sci: "Acer saccharum", fam: "Sapindaceae", type: "tree", status: "native",
+      common: "Sugar Maple", aka: ["maple", "hard maple", "rock maple"], sci: "Acer saccharum", fam: "Sapindaceae", type: "tree", status: "native",
       win: { s: [10, 1], p: [10, 20], e: [11, 5] },
       colors: ["#4d6b2f", "#c9a227", "#d9781e", "#c0391b"],
       colorWords: "Brilliant orange, with yellow and red",
@@ -286,7 +286,7 @@ window.FOLIAGE_DATA = {
       also: "The tree behind maple syrup and the New England postcard. Commoner north of NJ; in the south zone mostly planted along roads and in towns."
     },
     {
-      common: "Sweetgum", only: ["south", "mid", "mdva"], sci: "Liquidambar styraciflua", fam: "Altingiaceae", type: "tree", status: "native",
+      common: "Sweetgum", aka: ["sweet gum", "gumball tree", "liquidambar"], only: ["south", "mid", "mdva"], sci: "Liquidambar styraciflua", fam: "Altingiaceae", type: "tree", status: "native",
       win: { s: [10, 10], p: [10, 28], e: [11, 15] },
       colors: ["#4d6b2f", "#c9a227", "#c0391b", "#5a2a4a"],
       colorWords: "Every color on the same tree: yellow, orange, red and deep purple",
@@ -295,7 +295,7 @@ window.FOLIAGE_DATA = {
       also: "Native to South Jersey; widely planted farther north as a street tree."
     },
     {
-      common: "Tulip Tree", only: ["south", "mid", "west", "mdva"], sci: "Liriodendron tulipifera", fam: "Magnoliaceae", type: "tree", status: "native",
+      common: "Tulip Tree", aka: ["tulip poplar", "yellow poplar", "poplar", "tuliptree"], only: ["south", "mid", "west", "mdva"], sci: "Liriodendron tulipifera", fam: "Magnoliaceae", type: "tree", status: "native",
       win: { s: [10, 5], p: [10, 22], e: [11, 5] },
       colors: ["#4d6b2f", "#a8a82c", "#d9b521", "#c99a3a"],
       colorWords: "Clear butter yellow",
@@ -304,7 +304,7 @@ window.FOLIAGE_DATA = {
       also: "Among the tallest trees in eastern forests. A magnolia relative, not a poplar despite the name yellow poplar."
     },
     {
-      common: "Hickories", sci: "Carya ovata, C. glabra", fam: "Juglandaceae", type: "tree", status: "native",
+      common: "Hickories", aka: ["hickory", "shagbark", "pignut"], sci: "Carya ovata, C. glabra", fam: "Juglandaceae", type: "tree", status: "native",
       win: { s: [10, 5], p: [10, 22], e: [11, 5] },
       colors: ["#4d6b2f", "#c9a227", "#b8862a", "#8a6a2a"],
       colorWords: "Golden yellow to bronze",
@@ -313,7 +313,7 @@ window.FOLIAGE_DATA = {
       also: "Shagbark hickory nuts were a major food for Native peoples; pecan is a hickory."
     },
     {
-      common: "Birches", sci: "Betula spp.", fam: "Betulaceae", type: "tree", status: "native",
+      common: "Birches", aka: ["birch", "gray birch", "paper birch", "white birch", "black birch", "yellow birch"], sci: "Betula spp.", fam: "Betulaceae", type: "tree", status: "native",
       win: { s: [10, 1], p: [10, 18], e: [11, 2] },
       colors: ["#4d6b2f", "#a8a82c", "#d9b521", "#c99a3a"],
       colorWords: "Bright yellow",
@@ -331,7 +331,7 @@ window.FOLIAGE_DATA = {
       also: "The seed pods from last year explode, shooting seeds up to 30 feet. The astringent is distilled from its bark."
     },
     {
-      common: "Oriental Bittersweet", sci: "Celastrus orbiculatus", fam: "Celastraceae", type: "vine", status: "invasive",
+      common: "Oriental Bittersweet", aka: ["bittersweet"], sci: "Celastrus orbiculatus", fam: "Celastraceae", type: "vine", status: "invasive",
       win: { s: [10, 10], p: [10, 25], e: [11, 8] },
       colors: ["#4d6b2f", "#a8a82c", "#d9b521", "#d9781e"],
       colorWords: "Yellow leaves, then orange-and-red berries",
@@ -349,7 +349,7 @@ window.FOLIAGE_DATA = {
       also: "A living fossil: the only survivor of a lineage over 200 million years old."
     },
     {
-      common: "American Beech", sci: "Fagus grandifolia", fam: "Fagaceae", type: "tree", status: "native",
+      common: "American Beech", aka: ["beech"], sci: "Fagus grandifolia", fam: "Fagaceae", type: "tree", status: "native",
       win: { s: [10, 15], p: [11, 1], e: [11, 20] },
       colors: ["#4d6b2f", "#c9a227", "#b8862a", "#c9a87a"],
       colorWords: "Gold, then bronze, then papery tan",
@@ -358,7 +358,7 @@ window.FOLIAGE_DATA = {
       also: "Beech leaf disease, a nematode spreading across the region since 2012, shows as dark bands between the veins."
     },
     {
-      common: "Red & Scarlet Oak", sci: "Quercus rubra, Q. coccinea", fam: "Fagaceae", type: "tree", status: "native",
+      common: "Red & Scarlet Oak", aka: ["oak", "red oak", "scarlet oak", "northern red oak"], sci: "Quercus rubra, Q. coccinea", fam: "Fagaceae", type: "tree", status: "native",
       win: { s: [10, 20], p: [11, 5], e: [11, 25] },
       colors: ["#4d6b2f", "#8a5a2a", "#a0341e", "#7a4a2a"],
       colorWords: "Russet red; scarlet oak a true deep red",
@@ -367,7 +367,7 @@ window.FOLIAGE_DATA = {
       also: "White oaks (rounded lobes, no bristles) finish later still, in burgundy-brown."
     },
     {
-      common: "Tamarack", only: ["north", "mid", "west"], sci: "Larix laricina", fam: "Pinaceae", type: "tree", status: "native",
+      common: "Tamarack", aka: ["larch", "eastern larch", "hackmatack"], only: ["north", "mid", "west"], sci: "Larix laricina", fam: "Pinaceae", type: "tree", status: "native",
       win: { s: [10, 20], p: [11, 5], e: [11, 20] },
       colors: ["#4d6b2f", "#8a9a2c", "#d9b521", "#b8862a"],
       colorWords: "Needles turn smoky gold, then drop",
@@ -376,7 +376,7 @@ window.FOLIAGE_DATA = {
       also: "A deciduous conifer: it sheds every needle each fall and regrows them in spring. Also called eastern larch."
     },
     {
-      common: "Norway Maple", sci: "Acer platanoides", fam: "Sapindaceae", type: "tree", status: "invasive",
+      common: "Norway Maple", aka: ["maple"], sci: "Acer platanoides", fam: "Sapindaceae", type: "tree", status: "invasive",
       win: { s: [10, 25], p: [11, 8], e: [11, 22] },
       colors: ["#4d6b2f", "#8a9a2c", "#c9b521", "#b89a3a"],
       colorWords: "Plain yellow, often still green into November",

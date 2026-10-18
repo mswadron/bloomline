@@ -26,7 +26,7 @@
   var realToday = todayDoy();
   var inSeason = realToday>=AX0 && realToday<=AX1;
   var defaultDay = inSeason ? realToday : doy(10,20);
-  var st = { zone: store("bl_fo_zone") || "south", day: defaultDay, open:{} };
+  var st = { zone: store("bl_fo_zone") || "south", day: defaultDay, open:{}, q:"", browse:false };
   if(!D.zones.some(function(z){return z.id===st.zone;})) st.zone="south";
   function zone(){ for(var i=0;i<D.zones.length;i++) if(D.zones[i].id===st.zone) return D.zones[i]; return D.zones[0]; }
 
@@ -189,6 +189,22 @@
       storySection(D.brownStory,"st-brown",4,"");
   }
 
+  function norm(t){ return String(t||"").toLowerCase().replace(/&/g," ").replace(/[^a-z0-9 ]+/g," ").replace(/\s+/g," ").trim(); }
+  function matches(sp,q){
+    var words=[sp.common, sp.sci].concat(sp.aka||[]).map(norm).join(" | ");
+    return q.split(" ").every(function(w){ return (" "+words).indexOf(" "+w)>=0 || words.indexOf(w)===0; });
+  }
+  function searchBox(){
+    var all=D.species.slice().sort(function(a,b){return a.common<b.common?-1:1;});
+    return '<div class="fo-search"><div class="fo-sbar">'+
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>'+
+      '<input id="foQ" type="search" placeholder="Search a tree: maple, oak, ash, poplar\u2026" autocomplete="off" value="'+esc(st.q)+'" aria-label="Search trees">'+
+      (st.q?'<button type="button" id="foQx" aria-label="Clear search">&times;</button>':'')+'</div>'+
+      '<button type="button" class="fo-browse" id="foBrowse" aria-expanded="'+st.browse+'">'+(st.browse?'Hide tree list':'Browse all '+all.length+' trees')+'</button>'+
+      (st.browse?'<div class="fo-chips">'+all.map(function(sp){return '<button type="button" data-tree="'+esc(sp.common)+'">'+esc(sp.common)+'</button>';}).join("")+'</div>':'')+
+      '</div>';
+  }
+
   function render(){
     var host=document.getElementById("foPanel"); if(!host) return;
     var z=zone(), d=st.day;
@@ -204,7 +220,7 @@
     else if(groups.turning.length) summary="Color is coming in. Watch the <b>"+esc(groups.turning[0].common)+"</b> first.";
     else summary="Mostly past. The oaks and beeches carry the last of it.";
 
-    var h='';
+    var h=searchBox();
     h+='<div class="fo-zones" role="tablist" aria-label="Region">'+D.zones.map(function(x){
       return '<button type="button" data-zone="'+x.id+'" class="'+(x.id===z.id?'on':'')+'">'+esc(x.label)+'</button>';
     }).join("")+'</div>';
@@ -220,16 +236,31 @@
        '<p class="fo-summary">'+summary+'</p>'+
        '<div class="fo-hint">Drag along the color line to move through the season</div></section>';
 
-    var idx=0;
-    STAGES.forEach(function(s){
-      var list=groups[s.k]; if(!list.length) return;
-      h+='<section class="fo-sec '+s.k+'"><h2>'+s.title+'<span class="cnt">'+list.length+'</span></h2><p class="fo-sub">'+s.sub+'</p>';
-      list.forEach(function(sp){ h+=card(sp,s.k,idx++); });
+    var idx=0, q=norm(st.q);
+    if(q){
+      var hits=D.species.filter(function(sp){ return matches(sp,q); });
+      h+='<section class="fo-sec fo-results"><h2>Search<span class="cnt">'+hits.length+' match'+(hits.length===1?'':'es')+'</span></h2>';
+      if(!hits.length) h+='<p class="fo-sub">No tree in the guide matches \u201c'+esc(st.q)+'\u201d. Try browsing the full list above.</p>';
+      else h+='<p class="fo-sub">Shown with where each tree stands on '+fromDoy(d)+' in '+esc(z.label)+'.</p>';
+      hits.forEach(function(sp){
+        if(hits.length===1) st.open[sp.sci]=true;
+        var off = sp.only && sp.only.indexOf(z.id)<0;
+        if(off) h+='<p class="fo-off">'+esc(sp.common)+' is not common in '+esc(z.label)+'. Timing below is an estimate.</p>';
+        h+=card(sp,stageOf(sp,d),idx++);
+      });
       h+='</section>';
-    });
-    if(groups.bare.length){
-      h+='<section class="fo-sec dropping"><h2>Already bare<span class="cnt">'+groups.bare.length+'</span></h2>'+
-         '<p class="fo-bare">'+groups.bare.map(function(s){return esc(s.common);}).join(" · ")+'</p></section>';
+    } else {
+      var idx=0;
+      STAGES.forEach(function(s){
+        var list=groups[s.k]; if(!list.length) return;
+        h+='<section class="fo-sec '+s.k+'"><h2>'+s.title+'<span class="cnt">'+list.length+'</span></h2><p class="fo-sub">'+s.sub+'</p>';
+        list.forEach(function(sp){ h+=card(sp,s.k,idx++); });
+        h+='</section>';
+      });
+      if(groups.bare.length){
+        h+='<section class="fo-sec dropping"><h2>Already bare<span class="cnt">'+groups.bare.length+'</span></h2>'+
+           '<p class="fo-bare">'+groups.bare.map(function(s){return esc(s.common);}).join(" · ")+'</p></section>';
+      }
     }
 
     h+=colorStory();
@@ -253,6 +284,10 @@
     var t=e.target.closest ? e.target : null; if(!t) return;
     var tab=t.closest("#tabs button"); if(tab){ setTab(tab.getAttribute("data-tab"),true); return; }
     if(!document.body.classList.contains("fo-mode")) return;
+    if(t.closest("#foQx")){ st.q=""; render(); var qi=document.getElementById("foQ"); if(qi) qi.focus(); return; }
+    if(t.closest("#foBrowse")){ st.browse=!st.browse; render(); return; }
+    var chip=t.closest(".fo-chips button"); if(chip){ st.q=chip.getAttribute("data-tree"); st.browse=false; render();
+      var r=document.querySelector(".fo-results"); if(r) r.scrollIntoView({behavior:"smooth",block:"start"}); return; }
     var zb=t.closest(".fo-zones button"); if(zb){ st.zone=zb.getAttribute("data-zone"); store("bl_fo_zone",st.zone); render(); return; }
     if(t.closest("#foToday")){ setDay(realToday); return; }
     var hd=t.closest(".fo-head"); if(hd){ var c=hd.parentNode, sci=c.getAttribute("data-sci");
@@ -265,6 +300,11 @@
       if(e.key==="ArrowRight"){ e.preventDefault(); setDay(st.day+1); document.getElementById("foLine").focus(); }
       if(e.key==="ArrowLeft"){ e.preventDefault(); setDay(st.day-1); document.getElementById("foLine").focus(); }
     } else if((e.key==="Enter"||e.key===" ") && t.classList && t.classList.contains("fo-head")){ e.preventDefault(); t.click(); }
+  });
+  document.addEventListener("input",function(e){
+    if(e.target.id!=="foQ") return;
+    var pos=e.target.selectionStart; st.q=e.target.value; render();
+    var qi=document.getElementById("foQ"); if(qi){ qi.focus(); try{ qi.setSelectionRange(pos,pos); }catch(x){} }
   });
   var dragging=false;
   document.addEventListener("pointerdown",function(e){
