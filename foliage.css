@@ -174,3 +174,17 @@ body.fo-mode #foPanel{display:block}
 .fo-gaplist b{display:block;font-family:"Fraunces",serif;font-size:15.5px;font-weight:600}
 .fo-gaplist i{display:block;font-size:12.5px;color:var(--muted)}
 .fo-gaplist span{flex:none;font-family:"Spline Sans Mono",monospace;font-size:11px;color:var(--green);background:#f3dfcc;border-radius:6px;padding:3px 7px}
+
+/* jump to the guide + overview */
+.fo-guidebtn{margin:10px 20px 0}
+.fo-guidebtn button{width:100%;font-family:"Spline Sans Mono",monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:#fbf1e6;background:var(--green);border:1px solid var(--green);border-radius:11px;padding:10px 12px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:8px}
+.fo-guidebtn button span{font-size:13px;line-height:1}
+.fo-guidebtn button:hover{background:#6a2610}
+.fo-guide{scroll-margin-top:8px}
+.fo-overview{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:4px 15px}
+.fo-overview p{font-family:"Fraunces",serif;font-size:16px;line-height:1.5;color:#2a1a12;margin:12px 0}
+.fo-overview p:first-child::first-letter{font-size:2.1em;font-weight:600;color:var(--green);float:left;line-height:.85;margin:4px 6px 0 0}
+.fo-totop{margin-top:12px;font-family:"Spline Sans Mono",monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--green);background:none;border:1px solid #d9b89a;border-radius:9px;padding:7px 11px;cursor:pointer}

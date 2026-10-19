@@ -46,6 +46,20 @@ window.FOLIAGE_DATA = {
 
   /* "How a leaf changes color": four chapters in the order the colors
      appear. green first, yellow next, red after, brown always last. */
+  /* The guide opens with this plain overview, then the four detailed parts. */
+  overview: {
+    title: "How fall color works",
+    sub: "The short version, before the details.",
+    paras: [
+      "A leaf is a small sugar factory. All summer it is packed with green chlorophyll, the pigment that catches sunlight and turns it into sugar for the tree. There is so much green that it hides everything else in the leaf.",
+      "In fall, shorter days and cool nights tell the tree that winter is coming and the leaves will not survive it. So the tree shuts the factory down and recycles it: the green is taken apart from inside the cells and its nutrients are pulled back into the twigs and roots for next spring.",
+      "Once the green is gone, the colors that were always there show through. Yellow and orange were in the leaf all along, hidden under the green. That is why birch, hickory and tulip tree go yellow every year regardless of weather.",
+      "Red is different. The tree makes it fresh in fall. As the leaf stalk seals off, sugar gets trapped in the leaf, and on sunny days the leaf turns that sugar into red pigment. Sunny days and cool nights make the most red, which is why some autumns are brilliant and some are dull. Maples, sumacs and dogwoods are the red makers.",
+      "Brown comes last, always. It is what remains when the green, the yellow and the red have all broken down: tannins and the dead walls of the cells. Oaks and beeches, which are rich in tannin, spend the longest in brown and often hold their dry leaves into winter.",
+      "So the order is fixed: green, then yellow, then red, then brown. The timing is not. Wet ground, stressed trees and the sunny top of a crown turn first; oaks turn last; a dry summer brings everything early and a warm, wet fall holds it back. The rest of this guide takes each color in turn."
+    ]
+  },
+
   greenStory: {
     title: "Why green comes first",
     sub: "All spring and summer the leaf is a solar power plant. Green is the color of the machinery running.",

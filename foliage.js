@@ -202,8 +202,11 @@
     return h+'</section>';
   }
   function colorStory(){
-    return '<section class="fo-sec"><h2>How a leaf changes color</h2><p class="fo-sub">Four colors, always in the same order. Here is why each one shows up when it does.</p>'+
-           '<div class="fo-diagwrap">'+brownSvg()+'</div></section>'+
+    var O=D.overview||{title:"How a leaf changes color",sub:"",paras:[]};
+    return '<section class="fo-sec fo-guide" id="foGuide"><div class="fo-chap">The guide</div><h2>'+esc(O.title)+'</h2><p class="fo-sub">'+esc(O.sub)+'</p>'+
+           '<div class="fo-diagwrap">'+brownSvg()+'</div>'+
+           '<div class="fo-overview">'+O.paras.map(function(t){return '<p>'+esc(t)+'</p>';}).join("")+'</div>'+
+           '<button type="button" class="fo-totop" id="foToTop">&uarr; Back to the trees</button></section>'+
       storySection(D.greenStory,"st-green",1,cellSvg("green"))+
       storySection(D.yellowStory,"st-yellow",2,cellSvg("yellow"))+
       storySection(D.redStory,"st-red",3,redSvg())+
@@ -324,6 +327,7 @@
     else summary="Mostly past. The oaks and beeches carry the last of it.";
 
     var h=searchBox();
+    h+='<div class="fo-guidebtn"><button type="button" id="foToGuide">How fall color works <span>&darr;</span> read the guide</button></div>';
     h+='<div class="fo-zones" role="tablist" aria-label="Region">'+D.zones.map(function(x){
       return '<button type="button" data-zone="'+x.id+'" class="'+(x.id===z.id?'on':'')+'">'+esc(x.label)+'</button>';
     }).join("")+'</div>';
@@ -393,6 +397,8 @@
       var r=document.querySelector(".fo-results"); if(r) r.scrollIntoView({behavior:"smooth",block:"start"}); return; }
     var zb=t.closest(".fo-zones button"); if(zb){ st.zone=zb.getAttribute("data-zone"); store("bl_fo_zone",st.zone); render(); return; }
     if(t.closest("#foToday")){ setDay(realToday); return; }
+    if(t.closest("#foToGuide")){ var g=document.getElementById("foGuide"); if(g) g.scrollIntoView({behavior:"smooth",block:"start"}); return; }
+    if(t.closest("#foToTop")){ window.scrollTo({top:0,behavior:"smooth"}); return; }
     var hd=t.closest(".fo-head"); if(hd){ var c=hd.parentNode, sci=c.getAttribute("data-sci");
       st.open[sci]=!st.open[sci]; c.classList.toggle("open",st.open[sci]); hd.setAttribute("aria-expanded",st.open[sci]); }
   });
