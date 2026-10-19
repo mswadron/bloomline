@@ -350,6 +350,51 @@ window.FOLIAGE_DATA = {
       also: "Planted for erosion control and wildlife food decades ago. Like black locust it fixes its own nitrogen, so it takes over poor soil. The berries are edible and tart."
     },
     {
+      common: "Pawpaw", aka: ["paw paw", "asimina"], sci: "Asimina triloba", fam: "Annonaceae", type: "tree", status: "native",
+      win: { s: [10, 5], p: [10, 20], e: [11, 5] },
+      colors: ["#4d6b2f", "#a8a82c", "#e0c22a", "#c9a227"],
+      colorWords: "Clear butter yellow, big tropical-looking leaves",
+      where: "Stream banks and moist bottomland woods, often in patches because it spreads by root suckers. The large leaves turn yellow all at once and hang on for a week or two.",
+      id: "Huge drooping oval leaves, up to a foot long, widest near the tip, that smell like green pepper when crushed. Small understory tree. Green, lumpy, mango-sized fruit in September.",
+      also: "The largest edible fruit native to North America, with custard-like flesh that tastes of banana and mango. The only host plant for the zebra swallowtail butterfly."
+    },
+    {
+      common: "Shining Sumac", aka: ["winged sumac", "dwarf sumac", "flameleaf sumac", "sumac"], sci: "Rhus copallinum", fam: "Anacardiaceae", type: "shrub", status: "native",
+      win: { s: [9, 25], p: [10, 12], e: [10, 30] },
+      colors: ["#4d6b2f", "#c0391b", "#8a1e1e", "#5a2a3a"],
+      colorWords: "Deep glossy red to maroon",
+      where: "Dry sandy roadsides, pine barrens edges and old fields, especially in South Jersey. Colors a little later than staghorn sumac and goes darker red.",
+      id: "Glossy compound leaves with a narrow leafy wing running along the stalk between the leaflets. Leaflet edges smooth (staghorn's are toothed). Upright red fuzzy berry clusters.",
+      also: "The wings on the leaf stalk are the giveaway. Like staghorn sumac the berries make a tart lemonade. Not poison sumac, which grows in swamps with white berries."
+    },
+    {
+      common: "Spicebush", aka: ["northern spicebush", "lindera"], sci: "Lindera benzoin", fam: "Lauraceae", type: "shrub", status: "native",
+      win: { s: [10, 8], p: [10, 22], e: [11, 5] },
+      colors: ["#4d6b2f", "#a8a82c", "#e0c22a", "#d9b521"],
+      colorWords: "Clear lemon yellow lighting up the understory",
+      where: "Moist woods and stream sides, often the dominant shrub under the trees. In mid October the whole understory goes yellow at once, with bright red berries on the female plants.",
+      id: "Smooth oval leaves that smell spicy-citrus when crushed; twigs smell the same. Small red oval berries in fall. Yellow flowers on bare twigs in early April.",
+      also: "A sassafras relative, same family. Host plant for the spicebush swallowtail. The dried berries were used as an allspice substitute."
+    },
+    {
+      common: "Mapleleaf Viburnum", aka: ["viburnum", "maple-leaved viburnum", "dockmackie"], sci: "Viburnum acerifolium", fam: "Adoxaceae", type: "shrub", status: "native",
+      win: { s: [10, 8], p: [10, 25], e: [11, 10] },
+      colors: ["#4d6b2f", "#c9a0a8", "#a8607a", "#6b2a4a"],
+      colorWords: "Pink to dusty purple, unlike anything else in the woods",
+      where: "Dry upland woods, in the deep shade under oaks. The pale pink-purple of its leaves is one of the few shrub colors that reads clearly from a trail in late October.",
+      id: "Opposite, three-lobed leaves that look like a small red maple leaf, but on a thin knee-high to waist-high shrub. Flat clusters of black berries.",
+      also: "Mapleleaf viburnum and red maple leaves are easy to confuse until you look at the plant: the viburnum is a low shrub with opposite leaves and black berries."
+    },
+    {
+      common: "Box Elder", aka: ["boxelder", "ash-leaved maple", "manitoba maple", "maple"], sci: "Acer negundo", fam: "Sapindaceae", type: "tree", status: "native",
+      win: { s: [9, 28], p: [10, 12], e: [10, 28] },
+      colors: ["#4d6b2f", "#8a9a2c", "#c9b521", "#a8862a"],
+      colorWords: "Dull yellow, early and brief",
+      where: "Floodplains, ditches, fence rows and vacant lots. A weedy fast-growing maple that colors early and drops fast; often half bare while other maples are still green.",
+      id: "The only maple with compound leaves: 3 to 7 leaflets, so it is often mistaken for ash or poison ivy. Twigs are smooth and green, sometimes with a white bloom. Paired winged seeds hang all winter.",
+      also: "Box elder bugs, the black and red insects that gather on sunny walls in fall, feed on its seeds. The sap can be tapped for a weak syrup."
+    },
+    {
       common: "Virginia Creeper", sci: "Parthenocissus quinquefolia", fam: "Vitaceae", type: "vine", status: "native",
       win: { s: [9, 12], p: [10, 3], e: [10, 25] },
       colors: ["#4d6b2f", "#c0391b", "#9a1f2a", "#6b2a4a"],

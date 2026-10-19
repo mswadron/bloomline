@@ -230,7 +230,7 @@
      One query per region, cached 6 hours. Counts are matched to guide cards by
      scientific name; anything reported in color that the guide lacks is listed
      under "Also in color near you", so gaps surface without manual research. */
-  var LIVE={}, LIVE_DAYS=14, LIVE_TTL=6*3600e3, LIVE_RETRY=5*60e3;
+  var LIVE={}, LIVE_DAYS=30, LIVE_TTL=6*3600e3, LIVE_RETRY=5*60e3;
   function isoDay(t){ return new Date(t).toISOString().slice(0,10); }
   function loadLive(z){
     if(!z.bbox || !window.fetch) return;
@@ -290,17 +290,17 @@
     var idx=liveIndex(zone()); if(!idx) return "";
     var n=idx.by[sp.sci]||0;
     if(!n && sp.noLive) return "";
-    return '<div class="fo-live'+(n?' on':'')+'">'+(n? n+' color report'+(n===1?'':'s')+' nearby in the last 2 weeks'
-      : 'No color reports nearby in the last 2 weeks')+'</div>';
+    return '<div class="fo-live'+(n?' on':'')+'">'+(n? n+' color report'+(n===1?'':'s')+' nearby in the last 30 days'
+      : 'No color reports nearby in the last 30 days')+'</div>';
   }
   function gapSection(z){
     var L=LIVE[z.id], h='<section class="fo-sec fo-gaps"><h2>Also in color near you</h2>';
     if(!L || L.status==="loading") return h+'<p class="fo-sub">Checking iNaturalist for other plants in color in '+esc(z.label)+'\u2026</p></section>';
     if(L.status==="err") return h+'<p class="fo-sub">Could not reach iNaturalist right now. The guide above still works; live reports will return on the next visit.</p></section>';
     var idx=liveIndex(z), g=idx.gaps.slice(0,15);
-    if(!g.length) return h+'<p class="fo-sub">Every plant reported in fall color in '+esc(z.label)+' over the last 2 weeks is already in this guide.</p></section>';
+    if(!g.length) return h+'<p class="fo-sub">Every plant reported in fall color in '+esc(z.label)+' over the last 30 days is already in this guide.</p></section>';
     return h+'<p class="fo-sub">Live from iNaturalist: plants people photographed with fall color in '+esc(z.label)+
-      ' in the last 2 weeks that this guide does not cover yet. Tap a name to see photos.</p><ul class="fo-gaplist">'+
+      ' in the last 30 days that this guide does not cover yet. Tap a name to see photos.</p><ul class="fo-gaplist">'+
       g.map(function(r){ return '<li><a href="https://www.inaturalist.org/taxa/'+encodeURIComponent(r.id)+'" target="_blank" rel="noopener">'+
         '<b>'+esc(r.common?r.common.replace(/\b\w/g,function(c){return c.toUpperCase();}):r.name)+'</b><i>'+esc(r.name)+'</i></a><span>'+r.count+'</span></li>'; }).join("")+
       '</ul></section>';
