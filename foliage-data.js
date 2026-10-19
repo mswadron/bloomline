@@ -12,7 +12,10 @@
    only = zones where the species is common; omitted means all zones.
    inat = extra iNaturalist names (a genus name means the whole genus) used to
    match live color reports to this card.
-   zones[].bbox = [swlat, swlng, nelat, nelng] for the live iNaturalist query. */
+   zones[].bbox = [swlat, swlng, nelat, nelng] for the live iNaturalist query.
+   stageWords / winText = optional wording overrides for plants that do not
+   "turn and drop" in the usual way (evergreens, shrubs that hold leaves).
+   noLive = skip the "no color reports" line (people rarely tag these). */
 
 window.FOLIAGE_DATA = {
 
@@ -253,7 +256,7 @@ window.FOLIAGE_DATA = {
       also: "Wilted leaves and broken branches carry cyanide compounds that are toxic to livestock. The wood is prized for furniture."
     },
     {
-      common: "Honey Locust", aka: ["honeylocust", "locust", "thornless honey locust"], sci: "Gleditsia triacanthos", fam: "Fabaceae", type: "tree", status: "native",
+      common: "Honey Locust", aka: ["honeylocust", "locust", "thornless honey locust"], sci: "Gleditsia triacanthos", fam: "Fabaceae", type: "tree", status: "planted",
       win: { s: [10, 1], p: [10, 15], e: [10, 30] },
       colors: ["#4d6b2f", "#a8a82c", "#e0c22a", "#c9a227"],
       colorWords: "Clear small-leaf yellow",
@@ -307,7 +310,7 @@ window.FOLIAGE_DATA = {
       also: "White oak acorns are less bitter than red oak acorns, so squirrels and deer eat them first. The wood is watertight, which is why it is used for wine and whiskey barrels."
     },
     {
-      common: "Callery Pear", aka: ["bradford pear", "pear", "cleveland pear"], sci: "Pyrus calleryana", fam: "Rosaceae", type: "tree", status: "invasive",
+      common: "Callery Pear", only: ["mid", "west", "south", "mdva"], aka: ["bradford pear", "pear", "cleveland pear"], sci: "Pyrus calleryana", fam: "Rosaceae", type: "tree", status: "invasive",
       win: { s: [10, 28], p: [11, 10], e: [11, 28] },
       colors: ["#4d6b2f", "#a0341e", "#7a1e3a", "#5a2a3a"],
       colorWords: "Glossy maroon, purple and orange, very late",
@@ -316,7 +319,9 @@ window.FOLIAGE_DATA = {
       also: "Planted as a sterile, thornless street tree, but varieties cross-pollinate and the offspring revert to thorny wild trees. New Jersey's 2026 invasive species law puts it on the prohibited list, with sales ending in 2030."
     },
     {
-      common: "Eastern White Pine", aka: ["white pine", "pine"], sci: "Pinus strobus", fam: "Pinaceae", type: "tree", status: "native",
+      common: "Eastern White Pine", aka: ["white pine", "pine"], sci: "Pinus strobus", fam: "Pinaceae", type: "tree", status: "native", noLive: true,
+      stageWords: { coming: "All green", turning: "Inner needles yellowing", peak: "Inner needle drop", dropping: "Needle drop ending", bare: "Green again" },
+      winText: ["Inner needles yellow around", "needle drop peaks around", "done by"],
       win: { s: [9, 25], p: [10, 12], e: [10, 30] },
       colors: ["#2f5a3a", "#4d6b2f", "#c9a227", "#a8862a"],
       colorWords: "Green outside, yellow inside: normal fall needle drop",
@@ -334,7 +339,9 @@ window.FOLIAGE_DATA = {
       also: "Dense barberry thickets hold humidity that helps deer ticks survive, and studies link it to higher Lyme disease risk. It is on New Jersey's prohibited invasive plant list (sales end in 2030), and several other Northeast states already ban it."
     },
     {
-      common: "Autumn Olive", aka: ["autumn-olive", "olive"], sci: "Elaeagnus umbellata", fam: "Elaeagnaceae", type: "shrub", status: "invasive",
+      common: "Autumn Olive", aka: ["autumn-olive", "olive"], sci: "Elaeagnus umbellata", fam: "Elaeagnaceae", type: "shrub", status: "invasive", noLive: true,
+      stageWords: { coming: "Green, like everything else", turning: "Green while others turn", peak: "Stands out: still in leaf", dropping: "Finally dropping", bare: "Bare" },
+      winText: ["Still green when neighbors turn, around", "most noticeable around", "finally bare by"],
       win: { s: [10, 30], p: [11, 15], e: [12, 1] },
       colors: ["#5a7a5a", "#8a9a7a", "#a8a87a", "#a8946a"],
       colorWords: "Stays silvery green after almost everything else is bare",
@@ -454,7 +461,7 @@ window.FOLIAGE_DATA = {
       common: "Witch Hazel", sci: "Hamamelis virginiana", fam: "Hamamelidaceae", type: "shrub", status: "native",
       win: { s: [10, 5], p: [10, 25], e: [11, 10] },
       colors: ["#4d6b2f", "#a8a82c", "#d9b521", "#b89a3a"],
-      colorWords: "Gold, and it is flowering right now",
+      colorWords: "Gold, and it flowers as the leaves turn",
       where: "Woodland understory. Look closely as the leaves yellow: spidery yellow flowers open on the same twigs, the last native flower of the year.",
       id: "Lopsided wavy-edged oval leaves, unequal at the base. Ribbon-petaled yellow flowers along the twigs in October and November.",
       also: "The seed pods from last year explode, shooting seeds up to 30 feet. The astringent is distilled from its bark."

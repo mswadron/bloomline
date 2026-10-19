@@ -5,6 +5,7 @@
   var D = window.FOLIAGE_DATA;
   if(!D) return;
 
+  var YR=new Date().getFullYear();
   var AX0 = doy(9,1), AX1 = doy(11,30);          // Sep 1 .. Nov 30 axis
   var MON = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
   var STAGES = [
@@ -15,8 +16,8 @@
   ];
   var STAGE_LABEL = {peak:"At peak", turning:"Turning", coming:"Still green", dropping:"Dropping", bare:"Bare"};
 
-  function doy(m,d){ var t=new Date(2025,m-1,d), s=new Date(2025,0,0); return Math.round((t-s)/864e5); }
-  function fromDoy(n){ var t=new Date(2025,0,n); return MON[t.getMonth()]+" "+t.getDate(); }
+  function doy(m,d){ var t=new Date(YR,m-1,d), s=new Date(YR,0,0); return Math.round((t-s)/864e5); }
+  function fromDoy(n){ var t=new Date(YR,0,n); return MON[t.getMonth()]+" "+t.getDate(); }
   function todayDoy(){ var n=new Date(); return doy(n.getMonth()+1,n.getDate()); }
   function pct(n){ return Math.max(0,Math.min(100,(n-AX0)/(AX1-AX0)*100)); }
   function esc(s){ return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
@@ -52,6 +53,7 @@
   }
   function stageLabel(sp,d){
     var b=bands(sp), k=stageOf(sp,d);
+    if(sp.stageWords) return sp.stageWords[k] || STAGE_LABEL[k];
     if(k==="coming"   && b.s-d<=EDGE)  return "Green, first color soon";
     if(k==="turning"  && b.p0-d<=EDGE) return "Turning, near peak";
     if(k==="peak"     && d-b.p0<=EDGE-1 && b.p0-bands(sp).s>EDGE) return "Peak just starting";
@@ -109,8 +111,10 @@
       '<div class="fo-body"><div class="fo-inner">'+
         '<div class="fo-layer"><div class="lh">Where it turns first</div><p>'+esc(sp.where)+'</p></div>'+
         '<div class="fo-layer"><div class="lh">How to identify it</div><p>'+esc(sp.id)+'</p></div>'+
-        '<div class="fo-layer"><div class="lh">Color window here</div><p>First color around '+fromDoy(w.s)+
-          ', peak around '+fromDoy(w.p)+', mostly bare by '+fromDoy(w.e)+'. Any single tree can run about a week either side.</p></div>'+
+        '<div class="fo-layer"><div class="lh">'+(sp.winText?'Timing here':'Color window here')+'</div><p>'+
+          (sp.winText? esc(sp.winText[0])+' '+fromDoy(w.s)+', '+esc(sp.winText[1])+' '+fromDoy(w.p)+', '+esc(sp.winText[2])+' '+fromDoy(w.e)
+                     : 'First color around '+fromDoy(w.s)+', peak around '+fromDoy(w.p)+', mostly bare by '+fromDoy(w.e))+
+          '. Any single tree can run about a week either side.</p></div>'+
         '<div class="fo-layer"><div class="lh">Worth knowing</div><p>'+esc(sp.also)+'</p></div>'+
       '</div></div></div>';
   }
@@ -285,6 +289,7 @@
   function liveLine(sp){
     var idx=liveIndex(zone()); if(!idx) return "";
     var n=idx.by[sp.sci]||0;
+    if(!n && sp.noLive) return "";
     return '<div class="fo-live'+(n?' on':'')+'">'+(n? n+' color report'+(n===1?'':'s')+' nearby in the last 2 weeks'
       : 'No color reports nearby in the last 2 weeks')+'</div>';
   }
@@ -310,9 +315,10 @@
     // order within a group by peak date
     Object.keys(groups).forEach(function(k){ groups[k].sort(function(a,b){ return win(a).p-win(b).p; }); });
 
-    var peakNames = groups.peak.slice(0,3).map(function(s){return s.common;});
+    var peakNames = groups.peak.slice().sort(function(a,b){ return Math.abs(win(a).p-d)-Math.abs(win(b).p-d); })
+                      .slice(0,3).map(function(s){return s.common;});
     var summary;
-    if(d<doy(9,10)+z.shift) summary="Still summer green. The first color comes from black gum, sumac and Virginia creeper.";
+    if(d<doy(9,10)+z.shift) summary="Still summer green. The first color comes from black gum, sumac, Virginia creeper and black walnut.";
     else if(groups.peak.length) summary="Brightest now: <b>"+esc(peakNames.join(", "))+"</b>"+(groups.peak.length>3?" and "+(groups.peak.length-3)+" more":"")+".";
     else if(groups.turning.length) summary="Color is coming in. Watch the <b>"+esc(groups.turning[0].common)+"</b> first.";
     else summary="Mostly past. The oaks and beeches carry the last of it.";
@@ -347,7 +353,6 @@
       });
       h+='</section>';
     } else {
-      var idx=0;
       STAGES.forEach(function(s){
         var list=groups[s.k]; if(!list.length) return;
         h+='<section class="fo-sec '+s.k+'"><h2>'+s.title+'<span class="cnt">'+list.length+'</span></h2><p class="fo-sub">'+s.sub+'</p>';
@@ -375,7 +380,7 @@
   }
 
   /* ---------- interactions ---------- */
-  function setDay(n){ st.day=Math.max(AX0,Math.min(AX1,Math.round(n))); render(); }
+  function setDay(n){ var v=Math.max(AX0,Math.min(AX1,Math.round(n))); if(v===st.day) return; st.day=v; render(); }
   function dayFromX(line,clientX){ var r=line.getBoundingClientRect(); return AX0+(clientX-r.left)/r.width*(AX1-AX0); }
 
   document.addEventListener("click",function(e){
