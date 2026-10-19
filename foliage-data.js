@@ -395,6 +395,114 @@ window.FOLIAGE_DATA = {
       also: "Box elder bugs, the black and red insects that gather on sunny walls in fall, feed on its seeds. The sap can be tapped for a weak syrup."
     },
     {
+      common: "Striped Maple", only: ["north", "mid", "west"], aka: ["moosewood", "goosefoot maple", "maple"], sci: "Acer pensylvanicum", fam: "Sapindaceae", type: "tree", status: "native",
+      win: { s: [9, 20], p: [10, 5], e: [10, 22] },
+      colors: ["#4d6b2f", "#a8a82c", "#e0c22a", "#d9b521"],
+      colorWords: "Clear pale yellow, early, in the shade",
+      where: "Cool mountain woods and trailsides under bigger trees. One of the first understory trees to turn, lighting the forest floor yellow while the canopy is still green. The most-reported fall tree up north on iNaturalist after hickory and sugar maple.",
+      id: "Big three-lobed leaves like a goose's foot, finely toothed. Young bark is smooth green with white vertical stripes, unmistakable. Small understory tree, rarely over 30 feet.",
+      also: "Called moosewood because moose and deer browse the bark in winter. It changes sex from year to year, a rare trick among trees."
+    },
+    {
+      common: "Hobblebush", only: ["north", "mid", "west"], aka: ["witch-hobble", "moosewood viburnum", "viburnum"], sci: "Viburnum lantanoides", fam: "Adoxaceae", type: "shrub", status: "native",
+      win: { s: [9, 15], p: [10, 1], e: [10, 20] },
+      colors: ["#4d6b2f", "#8a3a5a", "#7a1e3a", "#5a2a3a"],
+      colorWords: "Deep wine red to purple, very early",
+      where: "Moist mountain woods and stream banks in northern New England and the Adirondacks. Among the first shrubs to color; the big leaves go burgundy in September while the woods are still green. The most-reported fall shrub in the north on iNaturalist.",
+      id: "Large, round, heart-shaped opposite leaves with fine teeth, up to 8 inches across. Branches that droop and root where they touch the ground (the hobble). Red berries turning black.",
+      also: "The low looping branches trip hikers, hence the name. The naked flower buds are already formed and visible all winter."
+    },
+    {
+      common: "Poison Sumac", aka: ["sumac", "toxicodendron"], sci: "Toxicodendron vernix", fam: "Anacardiaceae", type: "shrub", status: "native",
+      win: { s: [9, 15], p: [10, 1], e: [10, 20] },
+      colors: ["#4d6b2f", "#d9781e", "#c0391b", "#8a1e1e"],
+      colorWords: "Brilliant orange to scarlet, as showy as staghorn sumac and far more dangerous",
+      where: "Swamps, bogs and wet shrubby ground only, never on a dry roadside. From the road you see it across a wetland as an early flame of red. Admire it from there.",
+      id: "Compound leaves with 7 to 13 smooth-edged, glossy leaflets on a red stalk. Hanging clusters of white or gray berries (the harmless sumacs have upright red clusters). A tall shrub or small tree.",
+      also: "Causes a worse rash than poison ivy, and the smoke from burning it can damage lungs. Red stalk, smooth leaflets, white berries, wet ground: four signs it is the poison one."
+    },
+    {
+      common: "Winterberry Holly", aka: ["winterberry", "holly", "black alder"], sci: "Ilex verticillata", fam: "Aquifoliaceae", type: "shrub", status: "native",
+      win: { s: [10, 5], p: [10, 20], e: [11, 5] },
+      colors: ["#4d6b2f", "#8a8a3a", "#8a6a2a", "#c0391b"],
+      colorWords: "Leaves go dull yellow-brown and drop; then the bare twigs blaze with red berries",
+      where: "Swamps, pond edges and wet ditches. The leaf color is nothing, but once the leaves fall in late October the shrub is covered in bright red berries that last into winter, the showiest thing in a bare wetland.",
+      id: "A holly without spines: smooth oval toothed leaves, deciduous. Bright red berries packed along the twigs on female plants. Often a thicket 6 to 10 feet tall.",
+      also: "Cut branches are the classic holiday arrangement. Birds strip the berries after a few hard freezes soften them."
+    },
+    {
+      common: "Highbush Cranberry", only: ["north", "mid", "west"], aka: ["guelder-rose", "cranberry viburnum", "viburnum", "american cranberrybush"], inat: ["Viburnum trilobum"], sci: "Viburnum opulus", fam: "Adoxaceae", type: "shrub", status: "native",
+      win: { s: [9, 25], p: [10, 12], e: [10, 30] },
+      colors: ["#4d6b2f", "#c0391b", "#9a1f2a", "#6b2a4a"],
+      colorWords: "Red to purple leaves with hanging clusters of translucent red berries",
+      where: "Moist woods edges, stream sides and planted hedges in the north. The maple-shaped leaves redden in early October and the juicy red berries hang on after the leaves drop.",
+      id: "Opposite three-lobed leaves like a maple, on a shrub with gray bark. Flat white flower clusters in June, then drooping clusters of glossy red berries that smell musty.",
+      also: "Not a true cranberry, but the tart berries are made into jelly. The European form (guelder-rose) is widely planted and has escaped."
+    },
+    {
+      common: "Gray Dogwood", aka: ["dogwood", "northern swamp dogwood", "panicled dogwood"], sci: "Cornus racemosa", fam: "Cornaceae", type: "shrub", status: "native",
+      win: { s: [9, 25], p: [10, 12], e: [10, 30] },
+      colors: ["#4d6b2f", "#8a4a5a", "#7a2a4a", "#5a2a3a"],
+      colorWords: "Dusty purple-red, with white berries on red stalks",
+      where: "Field edges, roadside thickets and fence rows, often in dense colonies. The leaves go a muted purple while the bright red berry stalks hold white berries, the color combination that gives it away.",
+      id: "Opposite, narrow oval leaves with the curving dogwood veins. Gray bark on older stems. White berries on bright pink-red stalks that stay after the fruit is eaten.",
+      also: "One of the best shrubs for birds; the berries go fast. Spreads by root suckers into a thicket."
+    },
+    {
+      common: "Basswood", aka: ["american linden", "linden", "lime tree", "tilia"], sci: "Tilia americana", fam: "Malvaceae", type: "tree", status: "native",
+      win: { s: [10, 1], p: [10, 15], e: [10, 30] },
+      colors: ["#4d6b2f", "#a8a82c", "#c9b521", "#a8862a"],
+      colorWords: "Yellow to yellow-brown, often dull",
+      where: "Rich moist woods, and planted along streets (usually the European linden). Colors modestly and drops over a couple of weeks.",
+      id: "Large heart-shaped leaves, lopsided at the base, with sharp teeth. Small round nutlets hanging from a long strap-shaped leafy bract that twirls as it falls. Often several trunks from one base.",
+      also: "Bees mob the summer flowers; basswood honey is a classic. The soft wood is the carver's favorite, and the inner bark (bast) was twisted into rope."
+    },
+    {
+      common: "Eastern Redbud", only: ["mid", "west", "south", "mdva"], aka: ["redbud", "judas tree"], sci: "Cercis canadensis", fam: "Fabaceae", type: "tree", status: "native",
+      win: { s: [10, 5], p: [10, 22], e: [11, 5] },
+      colors: ["#4d6b2f", "#a8a82c", "#e0c22a", "#c9a227"],
+      colorWords: "Clear yellow heart-shaped leaves",
+      where: "Woods edges, yards and highway plantings from Pennsylvania south. The heart-shaped leaves turn yellow in mid October; the flat brown pods hang on all winter.",
+      id: "Heart-shaped leaves with smooth edges on a small zigzag-twigged tree. Flat 2 to 4 inch bean pods. In April the bare branches are covered in magenta-pink flowers.",
+      also: "A legume, like black locust. The spring flowers grow straight out of the bark, even on the trunk, and are edible in salads."
+    },
+    {
+      common: "American Persimmon", only: ["west", "south", "mdva"], aka: ["persimmon", "possumwood"], sci: "Diospyros virginiana", fam: "Ebenaceae", type: "tree", status: "native",
+      win: { s: [10, 1], p: [10, 15], e: [10, 30] },
+      colors: ["#4d6b2f", "#c9a227", "#d9781e", "#8a4a3a"],
+      colorWords: "Yellow to orange, sometimes reddish purple; orange fruit after the leaves drop",
+      where: "Old fields, fence rows and sandy roadsides in South Jersey and south. After the leaves fall the orange fruit hangs on the bare tree into November and December.",
+      id: "Glossy oval leaves with smooth edges. Dark bark broken into small square blocks like alligator hide. Round orange fruit about an inch and a half across, with a four-pointed cap.",
+      also: "Unripe fruit is so astringent it turns the mouth inside out; after frost it is sweet as a date. The wood is true ebony and was used for golf club heads."
+    },
+    {
+      common: "American Elm", aka: ["elm"], sci: "Ulmus americana", fam: "Ulmaceae", type: "tree", status: "native",
+      win: { s: [10, 5], p: [10, 20], e: [11, 5] },
+      colors: ["#4d6b2f", "#a8a82c", "#d9b521", "#a8862a"],
+      colorWords: "Yellow, often patchy",
+      where: "Floodplains, fence rows and a few surviving street trees. Young elms are everywhere in hedgerows even though Dutch elm disease kills most before they get big.",
+      id: "Oval leaves with doubly toothed edges, rough on top, lopsided at the base. The classic vase shape on mature trees. Flat round papery seeds in spring.",
+      also: "Once the great American street tree, lost to Dutch elm disease after 1930. A few disease-tolerant varieties are being replanted."
+    },
+    {
+      common: "Amur Honeysuckle", aka: ["bush honeysuckle", "honeysuckle"], inat: ["Lonicera morrowii", "Lonicera tatarica", "Lonicera × bella"], sci: "Lonicera maackii", fam: "Caprifoliaceae", type: "shrub", status: "invasive",
+      win: { s: [11, 1], p: [11, 15], e: [12, 1] },
+      colors: ["#4d6b2f", "#5a7a3a", "#8a9a3a", "#a8a85a"],
+      colorWords: "Stays green into December; the last green shrub in the woods",
+      where: "Woods edges, roadsides and whole forest understories. Easy to spot in November: when every native shrub is bare, the green thickets that remain are bush honeysuckle, with red berries along the stems.",
+      id: "Opposite oval leaves that come out earliest in spring and stay latest in fall. Hollow brown twigs that peel in strips. Paired red berries along the stem in fall.",
+      also: "Leafs out weeks before natives and holds leaves weeks later, shading out everything under it. The berries are junk food for birds, low in fat."
+    },
+    {
+      common: "Sensitive Fern", aka: ["fern", "bead fern"], inat: ["Osmunda", "Osmundastrum cinnamomeum", "Matteuccia struthiopteris", "Dennstaedtia punctilobula", "Amauropelta noveboracensis"], sci: "Onoclea sensibilis", fam: "Onocleaceae", type: "ground", status: "native",
+      win: { s: [9, 20], p: [10, 5], e: [10, 20] },
+      colors: ["#4d6b2f", "#a8a82c", "#d9b521", "#8a6a2a"],
+      colorWords: "Ferns go gold, then brown, at the first cool nights",
+      where: "Wet ditches, meadows and woods edges. Sensitive fern is named for how fast a light frost turns it yellow then brown. Cinnamon, royal, hay-scented and New York fern go gold the same way, carpeting roadsides in yellow before the trees turn.",
+      id: "Sensitive fern: broad, coarse, once-divided fronds with wavy edges, and separate stiff brown bead-covered fertile stalks that stand all winter. Hay-scented fern smells like fresh hay when crushed.",
+      also: "Ferns never flower; they reproduce by spores. The bead stalks of sensitive fern are last year's spore cases, still standing in spring."
+    },
+    {
       common: "Virginia Creeper", sci: "Parthenocissus quinquefolia", fam: "Vitaceae", type: "vine", status: "native",
       win: { s: [9, 12], p: [10, 3], e: [10, 25] },
       colors: ["#4d6b2f", "#c0391b", "#9a1f2a", "#6b2a4a"],
