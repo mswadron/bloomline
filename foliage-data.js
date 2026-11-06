@@ -151,13 +151,30 @@ window.FOLIAGE_DATA = {
           "Trees that drop leaves green or barely yellow (black walnut, black locust, honey locust, tree of heaven) do not bother recycling much. The locusts fix their own nitrogen from the air with root bacteria, so a lost leaf is cheap to replace.",
           "Green straight to brown usually means a hard frost killed the leaf before the tree finished. The nutrients stay in the dead leaf and the tree loses them. A frost in early October makes a dull brown year.",
           "So the color of a tree in fall tells you its strategy: red means careful, slow recovery under sun; yellow means quick recovery; green-to-brown means either a cheap leaf or a tree caught by frost."
-        ] },
-      { h: "Next year's leaf is already there",
+        ] }
+    ]
+  },
+
+  budStory: {
+    title: "Next year's leaf is already there",
+    sub: "Look at any twig in October. The leaf that is about to drop is sitting right under the leaf that will replace it.",
+    parts: [
+      { h: "Find the bud",
         pts: [
-          "Look at where any leaf stalk meets the twig. Just above it sits a small bud.",
-          "Inside that bud, next spring's leaves are already formed, tiny and folded. On many trees the flowers are in there too.",
-          "The tree built that bud over the summer. The seal forms below it, so the old leaf falls and the bud stays on the twig for winter.",
-          "The mark left behind is a leaf scar. Each bud sits right above one."
+          "Follow a leaf stalk to where it meets the twig. Just above that joint is a small bud, often no bigger than a grain of rice.",
+          "It was built this summer, while the leaf above it was still working. By the time the leaf turns color, the bud is finished and sealed."
+        ] },
+      { h: "What is inside",
+        pts: [
+          "Cut a bud open and you find next spring's leaves, complete but tiny, folded and packed like an accordion. On many trees (dogwood, magnolia, redbud) the flowers are in there too.",
+          "The outside is a set of tough overlapping scales, often waxy or hairy, that keep the folded leaves from drying out or freezing all winter.",
+          "Spring does not grow new leaves from scratch. It pumps water into leaves that already exist, and they unfold in days."
+        ] },
+      { h: "The seal forms below the bud",
+        pts: [
+          "The cork layer that cuts the old leaf off forms in the stalk, below the bud, so the leaf falls and the bud stays on the twig.",
+          "It leaves a leaf scar: a small shield or crescent with a few dots in it, the sealed ends of the veins that fed the leaf. Each bud sits right above one.",
+          "Leaf scars are how you identify a bare tree in winter: a horseshoe with many dots is ash, a shield with three dots is maple, a face with a monkey look is walnut."
         ] }
     ],
     prune: {

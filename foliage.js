@@ -202,9 +202,31 @@
         '<text x="196" y="14">NEEDLES</text><text x="172" y="144" fill="#7a6352">NARROW, WAXY: KEPT</text>'+
       '</g></svg>';
   }
+  function budSvg(){
+    return '<svg class="fo-diag" viewBox="0 0 320 200" role="img" aria-label="A twig in October: the old red leaf on its stalk, the bud above it cut open to show next spring\'s leaves folded inside, and last year\'s leaf scar.">'+
+      '<path d="M14 170 C80 162 150 154 306 142" stroke="#6b4a32" stroke-width="10" stroke-linecap="round" fill="none"/>'+
+      '<path d="M96 160 C88 140 76 122 58 110" stroke="#8a5a2a" stroke-width="4" fill="none" stroke-linecap="round"/>'+
+      '<path d="M58 110 C40 82 54 48 84 40 C98 72 84 104 58 110 Z" fill="#c0391b"/><path d="M58 110 C72 92 80 70 82 46" stroke="#8a1e1e" stroke-width="1.5" fill="none"/>'+
+      '<path d="M90 162 C96 152 110 152 116 162" stroke="#2a1a12" stroke-width="2.2" fill="none"/>'+
+      '<path d="M112 156 C106 112 126 72 160 56 C194 72 214 112 208 156 Z" fill="#8a6a3a"/>'+
+      '<path d="M112 156 C106 112 126 72 160 56 L160 156 Z" fill="#a8864a"/>'+
+      '<path d="M160 64 C146 84 136 108 132 140 M160 64 C174 84 184 108 188 140 M160 60 C150 72 142 90 138 110 M160 60 C170 72 178 90 182 110" stroke="#5a3a1a" stroke-width="1.2" fill="none"/>'+
+      '<path d="M160 156 C152 130 148 104 160 72 C172 104 168 130 160 156 Z" fill="#e9f0dc"/>'+
+      '<path d="M160 76 L150 88 L160 94 L150 106 L160 112 L150 124 L160 130 L150 142 L160 150 M160 76 L170 88 L160 94 L170 106 L160 112 L170 124 L160 130 L170 142 L160 150" stroke="#4d6b2f" stroke-width="1.6" fill="none" stroke-linejoin="round"/>'+
+      '<path d="M236 138 C242 130 258 130 264 138 L264 150 C258 158 242 158 236 150 Z" fill="#b89a7a"/>'+
+      '<g fill="#5a3a1a"><circle cx="244" cy="143" r="1.6"/><circle cx="250" cy="142" r="1.6"/><circle cx="256" cy="143" r="1.6"/></g>'+
+      '<g font-family="Spline Sans Mono, monospace" font-size="9.5" letter-spacing=".04em" fill="#2a1a12">'+
+        '<text x="12" y="22">THIS YEAR\'S LEAF,</text><text x="12" y="34">ABOUT TO DROP</text>'+
+        '<text x="196" y="30">THE BUD, CUT OPEN</text><text x="196" y="42">NEXT YEAR\'S LEAVES</text><text x="196" y="54">FOLDED INSIDE</text>'+
+        '<text x="222" y="112">LAST YEAR\'S</text><text x="222" y="124">LEAF SCAR</text>'+
+        '<text x="60" y="192">SEAL FORMS HERE</text>'+
+      '</g>'+
+      '<path d="M200 58 L180 76" stroke="#7a6352" stroke-width="1.2"/><path d="M248 128 L250 136" stroke="#7a6352" stroke-width="1.2"/><path d="M103 182 L103 166" stroke="#7a6352" stroke-width="1.2"/>'+
+    '</svg>';
+  }
   function storySection(R, cls, num, svg){
     if(!R) return "";
-    var h='<section class="fo-sec fo-story '+cls+'"><div class="fo-chap">Part '+num+' of 5</div><h2>'+esc(R.title)+'</h2><p class="fo-sub">'+esc(R.sub)+'</p>'+
+    var h='<section class="fo-sec fo-story '+cls+'"><div class="fo-chap">'+(num==="bud"?"Between the leaves":"Part "+num+" of 5")+'</div><h2>'+esc(R.title)+'</h2><p class="fo-sub">'+esc(R.sub)+'</p>'+
           (svg?'<div class="fo-diagwrap">'+svg+'</div>':'');
     R.parts.forEach(function(p,i){
       h+='<div class="fo-step"><div class="n">'+(i+1)+'</div><div><b>'+esc(p.h)+'</b><ul>'+
@@ -223,6 +245,7 @@
       storySection(D.greenStory,"st-green",1,cellSvg("green"))+
       storySection(D.yellowStory,"st-yellow",2,cellSvg("yellow"))+
       storySection(D.redStory,"st-red",3,redSvg())+
+      storySection(D.budStory,"st-bud","bud",budSvg())+
       storySection(D.brownStory,"st-brown",4,"")+
       storySection(D.evergreenStory,"st-ever",5,needleSvg());
   }
