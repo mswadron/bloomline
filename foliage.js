@@ -189,9 +189,22 @@
     h+='<text x="160" y="124" text-anchor="middle" font-family="Spline Sans Mono, monospace" font-size="9" letter-spacing=".06em" fill="#7a6352">BROWN IS ALWAYS THE LAST STOP</text>';
     return h+'</svg>';
   }
+  function needleSvg(){
+    /* broad leaf vs needle: the shapes explain the strategy */
+    return '<svg class="fo-diag" viewBox="0 0 320 150" role="img" aria-label="A broad maple leaf next to a pine needle. The broad leaf is thin and wide and freezes, so it is dropped. The needle is narrow, thick and waxy and survives winter, so it is kept.">'+
+      '<path d="M78 118 C40 96 40 60 60 40 C70 52 74 56 80 50 C84 36 92 26 102 18 C112 26 120 36 124 50 C130 56 134 52 144 40 C164 60 164 96 126 118 L102 112 Z" fill="#c0391b"/>'+
+      '<path d="M102 112 L102 20 M102 70 L66 48 M102 70 L138 48 M102 96 L74 84 M102 96 L130 84" stroke="#8a1e1e" stroke-width="1.6" fill="none"/>'+
+      '<path d="M102 112 L104 134" stroke="#8a5a2a" stroke-width="3" stroke-linecap="round"/>'+
+      '<g stroke="#2f5a3a" stroke-width="4" stroke-linecap="round"><path d="M236 128 L218 28"/><path d="M236 128 L236 24"/><path d="M236 128 L254 28"/></g>'+
+      '<path d="M226 132 a10 6 0 0 0 20 0 a10 6 0 0 0 -20 0" fill="#7a5a3a"/>'+
+      '<g font-family="Spline Sans Mono, monospace" font-size="9.5" letter-spacing=".04em" fill="#2a1a12">'+
+        '<text x="20" y="14">BROAD LEAF</text><text x="20" y="144" fill="#7a6352">THIN, WIDE: FREEZES</text>'+
+        '<text x="196" y="14">NEEDLES</text><text x="172" y="144" fill="#7a6352">NARROW, WAXY: KEPT</text>'+
+      '</g></svg>';
+  }
   function storySection(R, cls, num, svg){
     if(!R) return "";
-    var h='<section class="fo-sec fo-story '+cls+'"><div class="fo-chap">Part '+num+' of 4</div><h2>'+esc(R.title)+'</h2><p class="fo-sub">'+esc(R.sub)+'</p>'+
+    var h='<section class="fo-sec fo-story '+cls+'"><div class="fo-chap">Part '+num+' of 5</div><h2>'+esc(R.title)+'</h2><p class="fo-sub">'+esc(R.sub)+'</p>'+
           (svg?'<div class="fo-diagwrap">'+svg+'</div>':'');
     R.parts.forEach(function(p,i){
       h+='<div class="fo-step"><div class="n">'+(i+1)+'</div><div><b>'+esc(p.h)+'</b><ul>'+
@@ -210,7 +223,8 @@
       storySection(D.greenStory,"st-green",1,cellSvg("green"))+
       storySection(D.yellowStory,"st-yellow",2,cellSvg("yellow"))+
       storySection(D.redStory,"st-red",3,redSvg())+
-      storySection(D.brownStory,"st-brown",4,"");
+      storySection(D.brownStory,"st-brown",4,"")+
+      storySection(D.evergreenStory,"st-ever",5,needleSvg());
   }
 
   function norm(t){ return String(t||"").toLowerCase().replace(/&/g," ").replace(/[^a-z0-9 ]+/g," ").replace(/\s+/g," ").trim(); }

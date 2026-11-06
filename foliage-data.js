@@ -58,6 +58,7 @@ window.FOLIAGE_DATA = {
       "Why go to the trouble? Red costs the tree energy, and it is made in a leaf that is about to be thrown away, so there must be a payoff. The best-supported idea is sunscreen: while the tree is taking the green apart and pulling nitrogen back into the twigs, the leaf is exposed to bright, cold autumn sun that can damage that recycling. Red pigment shades it, so the tree recovers more of its nutrients before the leaf drops. Trees on poor soil make the most red, which fits: they can least afford to lose the nitrogen.",
       "Not every tree bothers. Yellow trees like birch and hickory recycle quickly without sunscreen and let the leaves go. Trees like black walnut, black locust and honey locust drop their leaves green or barely yellow: the locusts fix their own nitrogen from the air, so a leaf is cheap to lose. And a leaf that goes straight from green to brown was killed by a hard frost before the tree finished recycling it, a real loss for the tree.",
       "Brown comes last, always. It is what remains when the green, the yellow and the red have all broken down: tannins and the dead walls of the cells. Oaks and beeches, which are rich in tannin, spend the longest in brown and often hold their dry leaves into winter.",
+      "Evergreens skip all of this. A needle is built to survive winter, so the tree never shuts it down, never recycles it, and never changes its color. Pines do shed their oldest inner needles each fall, which is the yellow you see deep inside a white pine in October.",
       "So the order is fixed: green, then yellow, then red, then brown. The timing is not. Wet ground, stressed trees and the sunny top of a crown turn first; oaks turn last; a dry summer brings everything early and a warm, wet fall holds it back. The rest of this guide takes each color in turn."
     ]
   },
@@ -170,6 +171,49 @@ window.FOLIAGE_DATA = {
         "Dead, broken or dangerous limbs: anytime."
       ]
     }
+  },
+
+  evergreenStory: {
+    title: "Why evergreens sit this out",
+    sub: "Pines, spruces, hemlocks and hollies keep their leaves through winter. Every reason a maple has to drop its leaves, they have answered another way.",
+    parts: [
+      { h: "The leaf will not freeze or dry out",
+        pts: [
+          "A maple leaf is a thin, wide sheet full of water. In winter it would freeze solid and be shredded by ice, so the tree has to abandon it.",
+          "A needle is narrow, thick and waxy, with a tough skin and its breathing pores sunk into grooves. It loses almost no water and is built to survive freezing.",
+          "Needle cells also stock up on sugars and special proteins in fall that work like antifreeze, so the water inside does not form damaging ice crystals."
+        ] },
+      { h: "No shutdown, so no recycling, so no color",
+        pts: [
+          "Fall color is a side effect of the tree dismantling its green and pulling the nitrogen out. That whole process exists because the leaf is about to be thrown away.",
+          "An evergreen is not throwing the leaf away, so it does not take the green apart. The chlorophyll stays. No unmasked yellow, no new red, no brown.",
+          "There is nothing to recover because nothing is being lost. The nitrogen stays in the needle, where it will be used again next summer."
+        ] },
+      { h: "Winter is a slow season, not a dead one",
+        pts: [
+          "On mild winter days an evergreen still photosynthesizes, slowly. A bare maple earns nothing from November to April.",
+          "The needles are ready on the first warm day of spring, with no need to grow a whole new crown first. On poor, cold or dry sites that head start matters more than a summer of big thin leaves would.",
+          "The trade-off: needles are expensive to build and catch less light than a broad leaf, so in rich, warm soil the deciduous trees usually win."
+        ] },
+      { h: "They do drop leaves, just not all at once",
+        pts: [
+          "Every needle has a lifespan: about 2 to 3 years on white pine, 3 to 5 on hemlock and red pine, 5 to 10 on spruce and fir.",
+          "Old needles are shed each fall from the inside of the branch, after a quiet recycling of their own. That is the yellow you see inside a white pine in October while the branch tips stay green.",
+          "Broadleaf evergreens such as holly, rhododendron and mountain laurel do the same with their oldest leaves, and roll or droop the rest on cold days to cut water loss."
+        ] },
+      { h: "The exceptions prove the rule",
+        pts: [
+          "Tamarack (larch) is a conifer that does drop all its needles. It goes through the full shutdown, turns smoky gold in November, and stands bare all winter.",
+          "Bald cypress, planted in parks here, does the same, turning rust-orange before it sheds.",
+          "Both show that color comes from the shutdown, not from the leaf shape: give a conifer the deciduous habit and it colors like a maple."
+        ] },
+      { h: "Why winter sometimes browns an evergreen anyway",
+        pts: [
+          "Winter burn: on sunny, windy winter days the needles lose water they cannot replace from frozen ground, and the sunny side goes brown by March.",
+          "Road salt spray does the same to pines and hemlocks along highways, browning the side that faces traffic.",
+          "That brown is damage, not the orderly recycling of a deciduous leaf. A healthy evergreen keeps its green all winter long."
+        ] }
+    ]
   },
 
   brownStory: {
