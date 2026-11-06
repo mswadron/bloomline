@@ -55,6 +55,8 @@ window.FOLIAGE_DATA = {
       "In fall, shorter days and cool nights tell the tree that winter is coming and the leaves will not survive it. So the tree shuts the factory down and recycles it: the green is taken apart from inside the cells and its nutrients are pulled back into the twigs and roots for next spring.",
       "Once the green is gone, the colors that were always there show through. Yellow and orange were in the leaf all along, hidden under the green. That is why birch, hickory and tulip tree go yellow every year regardless of weather.",
       "Red is different. The tree makes it fresh in fall. As the leaf stalk seals off, sugar gets trapped in the leaf, and on sunny days the leaf turns that sugar into red pigment. Sunny days and cool nights make the most red, which is why some autumns are brilliant and some are dull. Maples, sumacs and dogwoods are the red makers.",
+      "Why go to the trouble? Red costs the tree energy, and it is made in a leaf that is about to be thrown away, so there must be a payoff. The best-supported idea is sunscreen: while the tree is taking the green apart and pulling nitrogen back into the twigs, the leaf is exposed to bright, cold autumn sun that can damage that recycling. Red pigment shades it, so the tree recovers more of its nutrients before the leaf drops. Trees on poor soil make the most red, which fits: they can least afford to lose the nitrogen.",
+      "Not every tree bothers. Yellow trees like birch and hickory recycle quickly without sunscreen and let the leaves go. Trees like black walnut, black locust and honey locust drop their leaves green or barely yellow: the locusts fix their own nitrogen from the air, so a leaf is cheap to lose. And a leaf that goes straight from green to brown was killed by a hard frost before the tree finished recycling it, a real loss for the tree.",
       "Brown comes last, always. It is what remains when the green, the yellow and the red have all broken down: tannins and the dead walls of the cells. Oaks and beeches, which are rich in tannin, spend the longest in brown and often hold their dry leaves into winter.",
       "So the order is fixed: green, then yellow, then red, then brown. The timing is not. Wet ground, stressed trees and the sunny top of a crown turn first; oaks turn last; a dry summer brings everything early and a warm, wet fall holds it back. The rest of this guide takes each color in turn."
     ]
@@ -133,6 +135,21 @@ window.FOLIAGE_DATA = {
           "Cool nights slow the sugar from leaking out and help the red form. That is why the last two weeks are the reddest.",
           "The red also works as fresh sunscreen. It shades the leaf while the tree finishes pulling the last nutrients out.",
           "What spoils it: cloudy, rainy weeks (less sugar) or a hard freeze (kills the leaf before the red forms)."
+        ] },
+      { h: "What the red is for",
+        pts: [
+          "Making red costs energy, in a leaf the tree is about to drop. So scientists have asked what the tree gets for it.",
+          "The leading answer is sunscreen. During the shutdown the tree is dismantling its green and shipping the nitrogen back to the twigs. That work is fragile, and bright sun on a cold day can wreck it.",
+          "Red pigment sits in the top layer of the leaf and shades the machinery underneath. Plants bred to make no red lost more nutrients when they senesced in bright, cool conditions.",
+          "Field studies agree: red maples and sweetgums on poor, low-nitrogen soil make much more red than the same species on rich soil. The trees that can least afford to lose nitrogen invest the most in protecting the recovery.",
+          "Other ideas are still argued over: that red warns egg-laying aphids off a well-defended tree, that it acts as an antioxidant, and that red leaf litter holds back competing seedlings. The sunscreen idea has the most evidence, but even that is not settled."
+        ] },
+      { h: "Why some trees skip it",
+        pts: [
+          "Yellow trees (birch, hickory, tulip tree, aspen) recycle fast and without sunscreen. Their yellow is only what is left once the green is gone; they do not spend anything on color.",
+          "Trees that drop leaves green or barely yellow (black walnut, black locust, honey locust, tree of heaven) do not bother recycling much. The locusts fix their own nitrogen from the air with root bacteria, so a lost leaf is cheap to replace.",
+          "Green straight to brown usually means a hard frost killed the leaf before the tree finished. The nutrients stay in the dead leaf and the tree loses them. A frost in early October makes a dull brown year.",
+          "So the color of a tree in fall tells you its strategy: red means careful, slow recovery under sun; yellow means quick recovery; green-to-brown means either a cheap leaf or a tree caught by frost."
         ] },
       { h: "Next year's leaf is already there",
         pts: [
