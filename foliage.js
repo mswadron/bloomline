@@ -346,6 +346,8 @@
       '</ul></section>';
   }
 
+  function openCardByName(name){ st.q=name; st.browse=false; render(); var r=document.querySelector('.fo-results'); if(r) r.scrollIntoView({behavior:'smooth',block:'start'}); }
+
   function render(){
     var host=document.getElementById("foPanel"); if(!host) return;
     var z=zone(), d=st.day;
@@ -364,7 +366,7 @@
     else summary="Mostly past. The oaks and beeches carry the last of it.";
 
     var h=searchBox();
-    h+='<div class="fo-guidebtn"><button type="button" id="foToGuide">How fall color works <span>&darr;</span> read the guide</button></div>';
+    h+='<div class="fo-guidebtn"><button type="button" id="foToKey" class="key">Identify a leaf <span>&rarr;</span></button><button type="button" id="foToGuide">How fall color works <span>&darr;</span></button></div>';
     h+='<div class="fo-zones" role="tablist" aria-label="Region">'+D.zones.map(function(x){
       return '<button type="button" data-zone="'+x.id+'" class="'+(x.id===z.id?'on':'')+'">'+esc(x.label)+'</button>';
     }).join("")+'</div>';
@@ -407,6 +409,7 @@
     }
 
     if(!q) h+=gapSection(z);
+    h+='<div id="foKey" class="fo-sec" style="display:none"></div>';
     h+=colorStory();
     h+='<section class="fo-sec"><h2>The color key</h2><p class="fo-sub">Four pigments make every fall color you see. Only the red is new.</p><div class="fo-pig">'+
        D.pigments.map(function(p){ return '<div class="pc"><i style="background:'+p.c+'"></i><div><b>'+esc(p.name)+'</b><span>'+esc(p.text)+'</span></div></div>'; }).join("")+
@@ -418,6 +421,7 @@
        '<div class="legal"><a href="/privacy.html">Privacy</a> &middot; <a href="/terms.html">Community Guidelines</a></div></div>';
 
     host.innerHTML=h;
+    if(window.FoliageKey) window.FoliageKey.setContext({zone:z, day:d, stageOf:stageOf, openCard:openCardByName});
   }
 
   /* ---------- interactions ---------- */

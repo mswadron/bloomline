@@ -286,6 +286,7 @@ window.FOLIAGE_DATA = {
   species: [
     {
       common: "Sourwood", aka: ["sorrel tree", "lily of the valley tree"], only: ["west", "mdva"], sci: "Oxydendrum arboreum", fam: "Ericaceae", type: "tree", status: "native",
+      key: {"leaf": "broad", "arr": "alt", "form": "simple", "edge": "toothed", "sig": ["sour-taste", "seed-strands"]},
       win: { s: [9, 10], p: [9, 30], e: [10, 20] },
       colors: ["#4d6b2f", "#c0391b", "#9a1f2a", "#6b2a4a"],
       colorWords: "Brilliant scarlet to maroon, among the first",
@@ -295,6 +296,7 @@ window.FOLIAGE_DATA = {
     },
     {
       common: "Black Gum", aka: ["tupelo", "sour gum", "black tupelo"], sci: "Nyssa sylvatica", fam: "Nyssaceae", type: "tree", status: "native",
+      key: {"leaf": "broad", "arr": "alt", "form": "simple", "edge": "smooth", "sig": ["right-angle-branches", "blue-berries"]},
       win: { s: [9, 15], p: [10, 5], e: [10, 25] },
       colors: ["#4d6b2f", "#b3261e", "#7a1e2c", "#5a2a3a"],
       colorWords: "Scarlet to deep wine red, sometimes purple",
@@ -304,6 +306,7 @@ window.FOLIAGE_DATA = {
     },
     {
       common: "Smooth & Staghorn Sumac", aka: ["sumac", "staghorn", "smooth sumac"], sci: "Rhus glabra, R. typhina", fam: "Anacardiaceae", type: "shrub", status: "native",
+      key: {"leaf": "broad", "arr": "alt", "form": "pinnate", "edge": "toothed", "sig": ["red-berry-cone", "velvet-twigs"]},
       win: { s: [9, 12], p: [10, 2], e: [10, 22] },
       colors: ["#4d6b2f", "#d9781e", "#c0391b", "#8a2a1e"],
       colorWords: "Orange through flaming scarlet",
@@ -313,6 +316,7 @@ window.FOLIAGE_DATA = {
     },
     {
       common: "Tree of Heaven", aka: ["ailanthus", "heaven tree", "stink tree", "chinese sumac"], sci: "Ailanthus altissima", fam: "Simaroubaceae", type: "tree", status: "invasive",
+      key: {"leaf": "broad", "arr": "alt", "form": "pinnate", "edge": "smooth", "sig": ["smell-peanut", "gland-notch", "seed-clusters"]},
       win: { s: [10, 1], p: [10, 16], e: [11, 1] },
       colors: ["#4d6b2f", "#8a9a2c", "#c9b521", "#a8862a"],
       colorWords: "Dull greenish yellow; the seed clusters are the real show",
@@ -322,6 +326,7 @@ window.FOLIAGE_DATA = {
     },
     {
       common: "Black Locust", aka: ["locust", "yellow locust", "false acacia", "robinia"], sci: "Robinia pseudoacacia", fam: "Fabaceae", type: "tree", status: "naturalized",
+      key: {"leaf": "broad", "arr": "alt", "form": "pinnate", "edge": "smooth", "sig": ["thorns", "pods", "rope-bark"]},
       win: { s: [9, 25], p: [10, 12], e: [10, 28] },
       colors: ["#4d6b2f", "#8a9a2c", "#d9c22a", "#8a6a2a"],
       colorWords: "Pale yellow, often only briefly before the leaflets drop",
@@ -331,6 +336,7 @@ window.FOLIAGE_DATA = {
     },
     {
       common: "Black Walnut", aka: ["walnut"], sci: "Juglans nigra", fam: "Juglandaceae", type: "tree", status: "native",
+      key: {"leaf": "broad", "arr": "alt", "form": "pinnate", "edge": "toothed", "sig": ["round-nut", "smell-citrus", "dark-ridged-bark"]},
       win: { s: [9, 15], p: [9, 30], e: [10, 15] },
       colors: ["#4d6b2f", "#a8a82c", "#d9b521", "#8a7a3a"],
       colorWords: "Yellow, briefly, then among the first trees bare",
@@ -340,6 +346,7 @@ window.FOLIAGE_DATA = {
     },
     {
       common: "Black Cherry", aka: ["cherry", "wild cherry", "wild black cherry"], sci: "Prunus serotina", fam: "Rosaceae", type: "tree", status: "native",
+      key: {"leaf": "broad", "arr": "alt", "form": "simple", "edge": "toothed", "sig": ["smell-almond", "potato-chip-bark", "rusty-midrib"]},
       win: { s: [9, 25], p: [10, 12], e: [10, 30] },
       colors: ["#4d6b2f", "#c9a227", "#d9781e", "#b3261e"],
       colorWords: "Yellow to orange, some trees red",
@@ -349,6 +356,7 @@ window.FOLIAGE_DATA = {
     },
     {
       common: "Honey Locust", aka: ["honeylocust", "locust", "thornless honey locust"], sci: "Gleditsia triacanthos", fam: "Fabaceae", type: "tree", status: "planted",
+      key: {"leaf": "broad", "arr": "alt", "form": "bipinnate", "edge": "smooth", "sig": ["thorns", "pods", "tiny-leaflets"]},
       win: { s: [10, 1], p: [10, 15], e: [10, 30] },
       colors: ["#4d6b2f", "#a8a82c", "#e0c22a", "#c9a227"],
       colorWords: "Clear small-leaf yellow",
@@ -358,6 +366,7 @@ window.FOLIAGE_DATA = {
     },
     {
       common: "Quaking & Bigtooth Aspen", inat: ["Populus tremuloides", "Populus grandidentata"], only: ["north", "mid", "west"], aka: ["aspen", "poplar", "popple", "trembling aspen"], sci: "Populus tremuloides, P. grandidentata", fam: "Salicaceae", type: "tree", status: "native",
+      key: {"leaf": "broad", "arr": "alt", "form": "simple", "edge": "toothed", "sig": ["flat-stalk", "pale-bark"]},
       win: { s: [10, 1], p: [10, 15], e: [10, 30] },
       colors: ["#4d6b2f", "#a8a82c", "#e0c22a", "#d9a521"],
       colorWords: "Bright gold that shimmers in the wind",
@@ -367,6 +376,7 @@ window.FOLIAGE_DATA = {
     },
     {
       common: "Silver Maple", aka: ["maple", "silver-leaf maple"], sci: "Acer saccharinum", fam: "Sapindaceae", type: "tree", status: "native",
+      key: {"leaf": "broad", "arr": "opp", "form": "simple", "edge": "lobed", "lobe": "pointed", "sig": ["silver-underside", "samara", "deep-cut-lobes"]},
       win: { s: [10, 10], p: [10, 28], e: [11, 12] },
       colors: ["#4d6b2f", "#a8a82c", "#d9b521", "#a8862a"],
       colorWords: "Pale yellow, often dull; silver undersides flash in the wind",
@@ -376,6 +386,7 @@ window.FOLIAGE_DATA = {
     },
     {
       common: "Sycamore & London Plane", inat: ["Platanus hispanica"], only: ["mid", "west", "south", "mdva"], aka: ["sycamore", "plane tree", "london planetree", "buttonwood"], sci: "Platanus occidentalis, P. × acerifolia", fam: "Platanaceae", type: "tree", status: "native",
+      key: {"leaf": "broad", "arr": "alt", "form": "simple", "edge": "lobed", "lobe": "pointed", "sig": ["camo-bark", "seed-ball", "stalk-covers-bud"]},
       win: { s: [10, 5], p: [10, 25], e: [11, 15] },
       colors: ["#4d6b2f", "#8a8a3a", "#b8862a", "#c9a87a"],
       colorWords: "Yellow-brown to tan; color is not the point",
@@ -385,6 +396,7 @@ window.FOLIAGE_DATA = {
     },
     {
       common: "Pin Oak", only: ["mid", "west", "south", "mdva"], aka: ["oak"], sci: "Quercus palustris", fam: "Fagaceae", type: "tree", status: "native",
+      key: {"leaf": "broad", "arr": "alt", "form": "simple", "edge": "lobed", "lobe": "pointed", "sig": ["bristle-tips", "acorn", "drooping-lower-limbs"]},
       win: { s: [10, 25], p: [11, 10], e: [11, 30] },
       colors: ["#4d6b2f", "#8a5a2a", "#a0341e", "#7a4a2a"],
       colorWords: "Bronze to russet red, very late",
@@ -394,6 +406,7 @@ window.FOLIAGE_DATA = {
     },
     {
       common: "White Oak", aka: ["oak"], sci: "Quercus alba", fam: "Fagaceae", type: "tree", status: "native",
+      key: {"leaf": "broad", "arr": "alt", "form": "simple", "edge": "lobed", "lobe": "rounded", "sig": ["rounded-lobes", "acorn", "scaly-pale-bark"]},
       win: { s: [10, 28], p: [11, 10], e: [11, 30] },
       colors: ["#4d6b2f", "#7a3a3a", "#6b2a3a", "#7a5a3a"],
       colorWords: "Burgundy to purple-brown, the last color of the season",
@@ -403,6 +416,7 @@ window.FOLIAGE_DATA = {
     },
     {
       common: "Callery Pear", only: ["mid", "west", "south", "mdva"], aka: ["bradford pear", "pear", "cleveland pear"], sci: "Pyrus calleryana", fam: "Rosaceae", type: "tree", status: "invasive",
+      key: {"leaf": "broad", "arr": "alt", "form": "simple", "edge": "toothed", "sig": ["glossy-round-leaf", "thorns", "tiny-pears"]},
       win: { s: [10, 28], p: [11, 10], e: [11, 28] },
       colors: ["#4d6b2f", "#a0341e", "#7a1e3a", "#5a2a3a"],
       colorWords: "Glossy maroon, purple and orange, very late",
@@ -412,6 +426,7 @@ window.FOLIAGE_DATA = {
     },
     {
       common: "Eastern White Pine", aka: ["white pine", "pine"], sci: "Pinus strobus", fam: "Pinaceae", type: "tree", status: "native", noLive: true,
+      key: {"leaf": "needle", "sig": ["needles-5", "long-cone"]},
       stageWords: { coming: "All green", turning: "Inner needles yellowing", peak: "Inner needle drop", dropping: "Needle drop ending", bare: "Green again" },
       winText: ["Inner needles yellow around", "needle drop peaks around", "done by"],
       win: { s: [9, 25], p: [10, 12], e: [10, 30] },
@@ -423,6 +438,7 @@ window.FOLIAGE_DATA = {
     },
     {
       common: "Japanese Barberry", aka: ["barberry"], sci: "Berberis thunbergii", fam: "Berberidaceae", type: "shrub", status: "invasive",
+      key: {"leaf": "broad", "arr": "alt", "form": "simple", "edge": "smooth", "sig": ["single-spine", "yellow-wood", "red-berries"]},
       win: { s: [10, 10], p: [10, 30], e: [11, 20] },
       colors: ["#4d6b2f", "#d9781e", "#c0391b", "#8a2a3a"],
       colorWords: "Orange, scarlet and purple, low in the woods",
@@ -432,6 +448,7 @@ window.FOLIAGE_DATA = {
     },
     {
       common: "Autumn Olive", aka: ["autumn-olive", "olive"], sci: "Elaeagnus umbellata", fam: "Elaeagnaceae", type: "shrub", status: "invasive", noLive: true,
+      key: {"leaf": "broad", "arr": "alt", "form": "simple", "edge": "smooth", "sig": ["silver-underside", "speckled-berries"]},
       stageWords: { coming: "Green, like everything else", turning: "Green while others turn", peak: "Stands out: still in leaf", dropping: "Finally dropping", bare: "Bare" },
       winText: ["Still green when neighbors turn, around", "most noticeable around", "finally bare by"],
       win: { s: [10, 30], p: [11, 15], e: [12, 1] },
@@ -443,6 +460,7 @@ window.FOLIAGE_DATA = {
     },
     {
       common: "Pawpaw", aka: ["paw paw", "asimina"], sci: "Asimina triloba", fam: "Annonaceae", type: "tree", status: "native",
+      key: {"leaf": "broad", "arr": "alt", "form": "simple", "edge": "smooth", "sig": ["huge-leaf", "smell-pepper", "green-fruit"]},
       win: { s: [10, 5], p: [10, 20], e: [11, 5] },
       colors: ["#4d6b2f", "#a8a82c", "#e0c22a", "#c9a227"],
       colorWords: "Clear butter yellow, big tropical-looking leaves",
@@ -452,6 +470,7 @@ window.FOLIAGE_DATA = {
     },
     {
       common: "Shining Sumac", aka: ["winged sumac", "dwarf sumac", "flameleaf sumac", "sumac"], sci: "Rhus copallinum", fam: "Anacardiaceae", type: "shrub", status: "native",
+      key: {"leaf": "broad", "arr": "alt", "form": "pinnate", "edge": "smooth", "sig": ["winged-stalk", "red-berry-cone"]},
       win: { s: [9, 25], p: [10, 12], e: [10, 30] },
       colors: ["#4d6b2f", "#c0391b", "#8a1e1e", "#5a2a3a"],
       colorWords: "Deep glossy red to maroon",
@@ -461,6 +480,7 @@ window.FOLIAGE_DATA = {
     },
     {
       common: "Spicebush", aka: ["northern spicebush", "lindera"], sci: "Lindera benzoin", fam: "Lauraceae", type: "shrub", status: "native",
+      key: {"leaf": "broad", "arr": "alt", "form": "simple", "edge": "smooth", "sig": ["smell-spice", "red-berries"]},
       win: { s: [10, 8], p: [10, 22], e: [11, 5] },
       colors: ["#4d6b2f", "#a8a82c", "#e0c22a", "#d9b521"],
       colorWords: "Clear lemon yellow lighting up the understory",
@@ -470,6 +490,7 @@ window.FOLIAGE_DATA = {
     },
     {
       common: "Mapleleaf Viburnum", aka: ["viburnum", "maple-leaved viburnum", "dockmackie"], sci: "Viburnum acerifolium", fam: "Adoxaceae", type: "shrub", status: "native",
+      key: {"leaf": "broad", "arr": "opp", "form": "simple", "edge": "lobed", "lobe": "pointed", "sig": ["low-shrub", "black-berries"]},
       win: { s: [10, 8], p: [10, 25], e: [11, 10] },
       colors: ["#4d6b2f", "#c9a0a8", "#a8607a", "#6b2a4a"],
       colorWords: "Pink to dusty purple, unlike anything else in the woods",
@@ -479,6 +500,7 @@ window.FOLIAGE_DATA = {
     },
     {
       common: "Box Elder", aka: ["boxelder", "ash-leaved maple", "manitoba maple", "maple"], sci: "Acer negundo", fam: "Sapindaceae", type: "tree", status: "native",
+      key: {"leaf": "broad", "arr": "opp", "form": "pinnate", "edge": "toothed", "sig": ["samara", "green-twigs", "three-leaflets"]},
       win: { s: [9, 28], p: [10, 12], e: [10, 28] },
       colors: ["#4d6b2f", "#8a9a2c", "#c9b521", "#a8862a"],
       colorWords: "Dull yellow, early and brief",
@@ -488,6 +510,7 @@ window.FOLIAGE_DATA = {
     },
     {
       common: "Striped Maple", only: ["north", "mid", "west"], aka: ["moosewood", "goosefoot maple", "maple"], sci: "Acer pensylvanicum", fam: "Sapindaceae", type: "tree", status: "native",
+      key: {"leaf": "broad", "arr": "opp", "form": "simple", "edge": "lobed", "lobe": "pointed", "sig": ["striped-bark", "samara"]},
       win: { s: [9, 20], p: [10, 5], e: [10, 22] },
       colors: ["#4d6b2f", "#a8a82c", "#e0c22a", "#d9b521"],
       colorWords: "Clear pale yellow, early, in the shade",
@@ -497,6 +520,7 @@ window.FOLIAGE_DATA = {
     },
     {
       common: "Hobblebush", only: ["north", "mid", "west"], aka: ["witch-hobble", "moosewood viburnum", "viburnum"], sci: "Viburnum lantanoides", fam: "Adoxaceae", type: "shrub", status: "native",
+      key: {"leaf": "broad", "arr": "opp", "form": "simple", "edge": "toothed", "sig": ["huge-leaf", "naked-buds"]},
       win: { s: [9, 15], p: [10, 1], e: [10, 20] },
       colors: ["#4d6b2f", "#8a3a5a", "#7a1e3a", "#5a2a3a"],
       colorWords: "Deep wine red to purple, very early",
@@ -506,6 +530,7 @@ window.FOLIAGE_DATA = {
     },
     {
       common: "Poison Sumac", aka: ["sumac", "toxicodendron"], sci: "Toxicodendron vernix", fam: "Anacardiaceae", type: "shrub", status: "native",
+      key: {"leaf": "broad", "arr": "alt", "form": "pinnate", "edge": "smooth", "sig": ["white-berries", "red-stalk", "wet-ground"]},
       win: { s: [9, 15], p: [10, 1], e: [10, 20] },
       colors: ["#4d6b2f", "#d9781e", "#c0391b", "#8a1e1e"],
       colorWords: "Brilliant orange to scarlet, as showy as staghorn sumac and far more dangerous",
@@ -515,6 +540,7 @@ window.FOLIAGE_DATA = {
     },
     {
       common: "Winterberry Holly", aka: ["winterberry", "holly", "black alder"], sci: "Ilex verticillata", fam: "Aquifoliaceae", type: "shrub", status: "native",
+      key: {"leaf": "broad", "arr": "alt", "form": "simple", "edge": "toothed", "sig": ["red-berries", "wet-ground"]},
       win: { s: [10, 5], p: [10, 20], e: [11, 5] },
       colors: ["#4d6b2f", "#8a8a3a", "#8a6a2a", "#c0391b"],
       colorWords: "Leaves go dull yellow-brown and drop; then the bare twigs blaze with red berries",
@@ -524,6 +550,7 @@ window.FOLIAGE_DATA = {
     },
     {
       common: "Highbush Cranberry", only: ["north", "mid", "west"], aka: ["guelder-rose", "cranberry viburnum", "viburnum", "american cranberrybush"], inat: ["Viburnum trilobum"], sci: "Viburnum opulus", fam: "Adoxaceae", type: "shrub", status: "native",
+      key: {"leaf": "broad", "arr": "opp", "form": "simple", "edge": "lobed", "lobe": "pointed", "sig": ["red-berries", "three-lobes"]},
       win: { s: [9, 25], p: [10, 12], e: [10, 30] },
       colors: ["#4d6b2f", "#c0391b", "#9a1f2a", "#6b2a4a"],
       colorWords: "Red to purple leaves with hanging clusters of translucent red berries",
@@ -533,6 +560,7 @@ window.FOLIAGE_DATA = {
     },
     {
       common: "Gray Dogwood", aka: ["dogwood", "northern swamp dogwood", "panicled dogwood"], sci: "Cornus racemosa", fam: "Cornaceae", type: "shrub", status: "native",
+      key: {"leaf": "broad", "arr": "opp", "form": "simple", "edge": "smooth", "sig": ["curved-veins", "white-berries", "red-stalks"]},
       win: { s: [9, 25], p: [10, 12], e: [10, 30] },
       colors: ["#4d6b2f", "#8a4a5a", "#7a2a4a", "#5a2a3a"],
       colorWords: "Dusty purple-red, with white berries on red stalks",
@@ -542,6 +570,7 @@ window.FOLIAGE_DATA = {
     },
     {
       common: "Basswood", aka: ["american linden", "linden", "lime tree", "tilia"], sci: "Tilia americana", fam: "Malvaceae", type: "tree", status: "native",
+      key: {"leaf": "broad", "arr": "alt", "form": "simple", "edge": "toothed", "sig": ["heart-leaf", "lopsided-base", "bract-seed"]},
       win: { s: [10, 1], p: [10, 15], e: [10, 30] },
       colors: ["#4d6b2f", "#a8a82c", "#c9b521", "#a8862a"],
       colorWords: "Yellow to yellow-brown, often dull",
@@ -551,6 +580,7 @@ window.FOLIAGE_DATA = {
     },
     {
       common: "Eastern Redbud", only: ["mid", "west", "south", "mdva"], aka: ["redbud", "judas tree"], sci: "Cercis canadensis", fam: "Fabaceae", type: "tree", status: "native",
+      key: {"leaf": "broad", "arr": "alt", "form": "simple", "edge": "smooth", "sig": ["heart-leaf", "pods", "zigzag-twigs"]},
       win: { s: [10, 5], p: [10, 22], e: [11, 5] },
       colors: ["#4d6b2f", "#a8a82c", "#e0c22a", "#c9a227"],
       colorWords: "Clear yellow heart-shaped leaves",
@@ -560,6 +590,7 @@ window.FOLIAGE_DATA = {
     },
     {
       common: "American Persimmon", only: ["west", "south", "mdva"], aka: ["persimmon", "possumwood"], sci: "Diospyros virginiana", fam: "Ebenaceae", type: "tree", status: "native",
+      key: {"leaf": "broad", "arr": "alt", "form": "simple", "edge": "smooth", "sig": ["blocky-bark", "orange-fruit"]},
       win: { s: [10, 1], p: [10, 15], e: [10, 30] },
       colors: ["#4d6b2f", "#c9a227", "#d9781e", "#8a4a3a"],
       colorWords: "Yellow to orange, sometimes reddish purple; orange fruit after the leaves drop",
@@ -569,6 +600,7 @@ window.FOLIAGE_DATA = {
     },
     {
       common: "American Elm", aka: ["elm"], sci: "Ulmus americana", fam: "Ulmaceae", type: "tree", status: "native",
+      key: {"leaf": "broad", "arr": "alt", "form": "simple", "edge": "toothed", "sig": ["lopsided-base", "double-teeth", "rough-top"]},
       win: { s: [10, 5], p: [10, 20], e: [11, 5] },
       colors: ["#4d6b2f", "#a8a82c", "#d9b521", "#a8862a"],
       colorWords: "Yellow, often patchy",
@@ -578,6 +610,7 @@ window.FOLIAGE_DATA = {
     },
     {
       common: "Amur Honeysuckle", aka: ["bush honeysuckle", "honeysuckle"], inat: ["Lonicera morrowii", "Lonicera tatarica", "Lonicera × bella"], sci: "Lonicera maackii", fam: "Caprifoliaceae", type: "shrub", status: "invasive",
+      key: {"leaf": "broad", "arr": "opp", "form": "simple", "edge": "smooth", "sig": ["hollow-twigs", "red-berries", "last-green"]},
       win: { s: [11, 1], p: [11, 15], e: [12, 1] },
       colors: ["#4d6b2f", "#5a7a3a", "#8a9a3a", "#a8a85a"],
       colorWords: "Stays green into December; the last green shrub in the woods",
@@ -587,6 +620,7 @@ window.FOLIAGE_DATA = {
     },
     {
       common: "Sensitive Fern", aka: ["fern", "bead fern"], inat: ["Osmunda", "Osmundastrum cinnamomeum", "Matteuccia struthiopteris", "Dennstaedtia punctilobula", "Amauropelta noveboracensis"], sci: "Onoclea sensibilis", fam: "Onocleaceae", type: "ground", status: "native",
+      key: {"leaf": "fern", "sig": ["bead-stalks"]},
       win: { s: [9, 20], p: [10, 5], e: [10, 20] },
       colors: ["#4d6b2f", "#a8a82c", "#d9b521", "#8a6a2a"],
       colorWords: "Ferns go gold, then brown, at the first cool nights",
@@ -596,6 +630,7 @@ window.FOLIAGE_DATA = {
     },
     {
       common: "Virginia Creeper", sci: "Parthenocissus quinquefolia", fam: "Vitaceae", type: "vine", status: "native",
+      key: {"leaf": "broad", "arr": "alt", "form": "palmate", "edge": "toothed", "sig": ["five-leaflets", "tendrils", "blue-berries"]},
       win: { s: [9, 12], p: [10, 3], e: [10, 25] },
       colors: ["#4d6b2f", "#c0391b", "#9a1f2a", "#6b2a4a"],
       colorWords: "Crimson to burgundy",
@@ -605,6 +640,7 @@ window.FOLIAGE_DATA = {
     },
     {
       common: "Poison Ivy", inat: ["Toxicodendron rydbergii"], sci: "Toxicodendron radicans", fam: "Anacardiaceae", type: "vine", status: "native",
+      key: {"leaf": "broad", "arr": "alt", "form": "trifoliate", "edge": "smooth", "sig": ["three-leaflets", "hairy-vine", "white-berries"]},
       win: { s: [9, 18], p: [10, 8], e: [10, 28] },
       colors: ["#4d6b2f", "#c9a227", "#d9781e", "#b3261e"],
       colorWords: "Yellow, orange and red, often all on the same vine",
@@ -614,6 +650,7 @@ window.FOLIAGE_DATA = {
     },
     {
       common: "Burning Bush", aka: ["winged euonymus", "euonymus"], sci: "Euonymus alatus", fam: "Celastraceae", type: "shrub", status: "invasive",
+      key: {"leaf": "broad", "arr": "opp", "form": "simple", "edge": "toothed", "sig": ["corky-wings", "orange-berries"]},
       win: { s: [9, 25], p: [10, 15], e: [11, 1] },
       colors: ["#4d6b2f", "#d14a5a", "#d9264a", "#b3263a"],
       colorWords: "Hot pinkish red, almost fluorescent",
@@ -623,6 +660,7 @@ window.FOLIAGE_DATA = {
     },
     {
       common: "Red Maple", aka: ["maple", "swamp maple", "soft maple"], sci: "Acer rubrum", fam: "Sapindaceae", type: "tree", status: "native",
+      key: {"leaf": "broad", "arr": "opp", "form": "simple", "edge": "lobed", "lobe": "pointed", "sig": ["red-stalks", "samara", "three-lobes"]},
       win: { s: [9, 25], p: [10, 15], e: [11, 1] },
       colors: ["#4d6b2f", "#d9781e", "#c0391b", "#8a1e1e"],
       colorWords: "Scarlet, sometimes orange or yellow",
@@ -632,6 +670,7 @@ window.FOLIAGE_DATA = {
     },
     {
       common: "Flowering Dogwood", aka: ["dogwood"], sci: "Cornus florida", fam: "Cornaceae", type: "tree", status: "native",
+      key: {"leaf": "broad", "arr": "opp", "form": "simple", "edge": "smooth", "sig": ["curved-veins", "alligator-bark", "red-berries", "stretchy-threads"]},
       win: { s: [9, 25], p: [10, 15], e: [11, 2] },
       colors: ["#4d6b2f", "#9a3a3a", "#7a1e3a", "#5a2a3a"],
       colorWords: "Burgundy to purple-red",
@@ -641,6 +680,7 @@ window.FOLIAGE_DATA = {
     },
     {
       common: "White Ash", aka: ["ash", "american ash"], sci: "Fraxinus americana", fam: "Oleaceae", type: "tree", status: "native",
+      key: {"leaf": "broad", "arr": "opp", "form": "pinnate", "edge": "smooth", "sig": ["diamond-bark", "paddle-seeds"]},
       win: { s: [9, 25], p: [10, 12], e: [10, 28] },
       colors: ["#4d6b2f", "#c9a227", "#7a3a5a", "#5a2a4a"],
       colorWords: "Purple, maroon or bronze; some trees yellow",
@@ -650,6 +690,7 @@ window.FOLIAGE_DATA = {
     },
     {
       common: "Sassafras", sci: "Sassafras albidum", fam: "Lauraceae", type: "tree", status: "native",
+      key: {"leaf": "broad", "arr": "alt", "form": "simple", "edge": ["smooth", "lobed"], "lobe": "rounded", "sig": ["smell-rootbeer", "three-leaf-shapes", "green-twigs"]},
       win: { s: [10, 1], p: [10, 18], e: [11, 2] },
       colors: ["#4d6b2f", "#c9a227", "#d9781e", "#c0391b"],
       colorWords: "Orange, red, yellow and salmon, mixed on the same tree",
@@ -659,6 +700,7 @@ window.FOLIAGE_DATA = {
     },
     {
       common: "Sugar Maple", aka: ["maple", "hard maple", "rock maple"], sci: "Acer saccharum", fam: "Sapindaceae", type: "tree", status: "native",
+      key: {"leaf": "broad", "arr": "opp", "form": "simple", "edge": "lobed", "lobe": "pointed", "sig": ["samara", "clear-sap", "u-notches"]},
       win: { s: [10, 1], p: [10, 20], e: [11, 5] },
       colors: ["#4d6b2f", "#c9a227", "#d9781e", "#c0391b"],
       colorWords: "Brilliant orange, with yellow and red",
@@ -668,6 +710,7 @@ window.FOLIAGE_DATA = {
     },
     {
       common: "Sweetgum", aka: ["sweet gum", "gumball tree", "liquidambar"], only: ["south", "mid", "mdva"], sci: "Liquidambar styraciflua", fam: "Altingiaceae", type: "tree", status: "native",
+      key: {"leaf": "broad", "arr": "alt", "form": "simple", "edge": "lobed", "lobe": "pointed", "sig": ["star-leaf", "gumball", "corky-wings"]},
       win: { s: [10, 10], p: [10, 28], e: [11, 15] },
       colors: ["#4d6b2f", "#c9a227", "#c0391b", "#5a2a4a"],
       colorWords: "Every color on the same tree: yellow, orange, red and deep purple",
@@ -677,6 +720,7 @@ window.FOLIAGE_DATA = {
     },
     {
       common: "Tulip Tree", aka: ["tulip poplar", "yellow poplar", "poplar", "tuliptree"], only: ["south", "mid", "west", "mdva"], sci: "Liriodendron tulipifera", fam: "Magnoliaceae", type: "tree", status: "native",
+      key: {"leaf": "broad", "arr": "alt", "form": "simple", "edge": "lobed", "lobe": "pointed", "sig": ["notched-tip", "straight-trunk"]},
       win: { s: [10, 5], p: [10, 22], e: [11, 5] },
       colors: ["#4d6b2f", "#a8a82c", "#d9b521", "#c99a3a"],
       colorWords: "Clear butter yellow",
@@ -686,6 +730,7 @@ window.FOLIAGE_DATA = {
     },
     {
       common: "Hickories", inat: ["Carya"], aka: ["hickory", "shagbark", "pignut"], sci: "Carya ovata, C. glabra", fam: "Juglandaceae", type: "tree", status: "native",
+      key: {"leaf": "broad", "arr": "alt", "form": "pinnate", "edge": "toothed", "sig": ["husked-nut", "shaggy-bark", "end-leaflet-biggest"]},
       win: { s: [9, 28], p: [10, 14], e: [10, 31] },
       colors: ["#4d6b2f", "#c9a227", "#b8862a", "#8a6a2a"],
       colorWords: "Clear golden yellow, then bronze",
@@ -695,6 +740,7 @@ window.FOLIAGE_DATA = {
     },
     {
       common: "Birches", aka: ["birch", "gray birch", "paper birch", "white birch", "black birch", "yellow birch"], sci: "Betula spp.", fam: "Betulaceae", type: "tree", status: "native",
+      key: {"leaf": "broad", "arr": "alt", "form": "simple", "edge": "toothed", "sig": ["smell-wintergreen", "pale-bark", "catkins", "double-teeth"]},
       win: { s: [10, 1], p: [10, 18], e: [11, 2] },
       colors: ["#4d6b2f", "#a8a82c", "#d9b521", "#c99a3a"],
       colorWords: "Bright yellow",
@@ -704,6 +750,7 @@ window.FOLIAGE_DATA = {
     },
     {
       common: "Witch Hazel", sci: "Hamamelis virginiana", fam: "Hamamelidaceae", type: "shrub", status: "native",
+      key: {"leaf": "broad", "arr": "alt", "form": "simple", "edge": "toothed", "sig": ["lopsided-base", "fall-flowers", "wavy-edge"]},
       win: { s: [10, 5], p: [10, 25], e: [11, 10] },
       colors: ["#4d6b2f", "#a8a82c", "#d9b521", "#b89a3a"],
       colorWords: "Gold, and it flowers as the leaves turn",
@@ -713,6 +760,7 @@ window.FOLIAGE_DATA = {
     },
     {
       common: "Oriental Bittersweet", aka: ["bittersweet"], sci: "Celastrus orbiculatus", fam: "Celastraceae", type: "vine", status: "invasive",
+      key: {"leaf": "broad", "arr": "alt", "form": "simple", "edge": "toothed", "sig": ["orange-berries", "strangling-vine", "glossy-round-leaf"]},
       win: { s: [10, 10], p: [10, 25], e: [11, 8] },
       colors: ["#4d6b2f", "#a8a82c", "#d9b521", "#d9781e"],
       colorWords: "Yellow leaves, then orange-and-red berries",
@@ -722,6 +770,7 @@ window.FOLIAGE_DATA = {
     },
     {
       common: "Ginkgo", sci: "Ginkgo biloba", fam: "Ginkgoaceae", type: "tree", status: "planted",
+      key: {"leaf": "broad", "arr": "alt", "form": "simple", "edge": "smooth", "sig": ["fan-leaf", "smelly-fruit"]},
       win: { s: [10, 25], p: [11, 8], e: [11, 15] },
       colors: ["#4d6b2f", "#a8a82c", "#e0c22a", "#d9b521"],
       colorWords: "Pure lemon-gold",
@@ -731,6 +780,7 @@ window.FOLIAGE_DATA = {
     },
     {
       common: "American Beech", aka: ["beech"], sci: "Fagus grandifolia", fam: "Fagaceae", type: "tree", status: "native",
+      key: {"leaf": "broad", "arr": "alt", "form": "simple", "edge": "toothed", "sig": ["smooth-gray-bark", "straight-veins", "cigar-buds"]},
       win: { s: [10, 15], p: [11, 1], e: [11, 20] },
       colors: ["#4d6b2f", "#c9a227", "#b8862a", "#c9a87a"],
       colorWords: "Gold, then bronze, then papery tan",
@@ -740,6 +790,7 @@ window.FOLIAGE_DATA = {
     },
     {
       common: "Red & Scarlet Oak", aka: ["oak", "red oak", "scarlet oak", "northern red oak"], sci: "Quercus rubra, Q. coccinea", fam: "Fagaceae", type: "tree", status: "native",
+      key: {"leaf": "broad", "arr": "alt", "form": "simple", "edge": "lobed", "lobe": "pointed", "sig": ["bristle-tips", "acorn"]},
       win: { s: [10, 20], p: [11, 5], e: [11, 25] },
       colors: ["#4d6b2f", "#8a5a2a", "#a0341e", "#7a4a2a"],
       colorWords: "Russet red; scarlet oak a true deep red",
@@ -749,6 +800,7 @@ window.FOLIAGE_DATA = {
     },
     {
       common: "Tamarack", aka: ["larch", "eastern larch", "hackmatack"], only: ["north", "mid", "west"], sci: "Larix laricina", fam: "Pinaceae", type: "tree", status: "native",
+      key: {"leaf": "needle", "sig": ["needle-tufts", "small-cones", "wet-ground"]},
       win: { s: [10, 20], p: [11, 5], e: [11, 20] },
       colors: ["#4d6b2f", "#8a9a2c", "#d9b521", "#b8862a"],
       colorWords: "Needles turn smoky gold, then drop",
@@ -758,6 +810,7 @@ window.FOLIAGE_DATA = {
     },
     {
       common: "Norway Maple", aka: ["maple"], sci: "Acer platanoides", fam: "Sapindaceae", type: "tree", status: "invasive",
+      key: {"leaf": "broad", "arr": "opp", "form": "simple", "edge": "lobed", "lobe": "pointed", "sig": ["milky-sap", "samara", "wide-leaf"]},
       win: { s: [10, 25], p: [11, 8], e: [11, 22] },
       colors: ["#4d6b2f", "#8a9a2c", "#c9b521", "#b89a3a"],
       colorWords: "Plain yellow, often still green into November",
