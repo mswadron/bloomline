@@ -58,13 +58,10 @@
     var a=st.ans;
     if(a.type && (sp.type||"")!==a.type) return false;
     if(a.leaf && !has(sp,"leaf",a.leaf)) return false;
-    if(a.leaf && a.leaf!=="broad") { /* conifers and ferns: shape questions do not apply */ }
-    else {
-      if(a.arr && !has(sp,"arr",a.arr)) return false;
-      if(a.form && !has(sp,"form",a.form)) return false;
-      if(a.edge && !has(sp,"edge",a.edge)) return false;
-      if(a.lobe && has(sp,"edge","lobed") && !has(sp,"lobe",a.lobe)) return false;
-    }
+    if(a.arr && !has(sp,"arr",a.arr)) return false;
+    if(a.form && !has(sp,"form",a.form)) return false;
+    if(a.edge && !has(sp,"edge",a.edge)) return false;
+    if(a.lobe && has(sp,"edge","lobed") && !has(sp,"lobe",a.lobe)) return false;
     for(var sid in st.sigs){ if(st.sigs[sid] && (sp.key.sig||[]).indexOf(sid)<0) return false; }
     return true;
   }
